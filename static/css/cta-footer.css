@@ -1,0 +1,68 @@
+/* Final CTA minimalista */
+
+.final-cta {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: calc(var(--spacing-unit) * 12) calc(var(--spacing-unit) * 3);
+  text-align: center;
+}
+
+.final-cta .cta-content {
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid rgba(209, 213, 219, 0.6);
+  padding: calc(var(--spacing-unit) * 8);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.06);
+}
+
+.final-cta h2 {
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: calc(var(--spacing-unit) * 3);
+}
+
+.final-cta p {
+  font-size: 17px;
+  color: var(--color-secondary);
+  margin-bottom: calc(var(--spacing-unit) * 5);
+  line-height: 1.6;
+}
+
+/* Botón azul estilo Apple (#007AFF) */
+
+.cta-button-large {
+  display: inline-block;
+  background: #007aff;
+  color: #ffffff;
+  padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 6);
+  border-radius: 980px;
+  border: none;
+  font-size: 17px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  box-shadow: 0 10px 24px rgba(0, 122, 255, 0.35);
+}
+
+.cta-button-large:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 32px rgba(0, 122, 255, 0.45);
+  background: #0066d6;
+}
+
+/* Footer sencillo y alineado con el resto */
+
+footer {
+  border-top: 1px solid rgba(210, 210, 215, 0.6);
+  padding: calc(var(--spacing-unit) * 5) calc(var(--spacing-unit) * 3);
+  text-align: center;
+  color: var(--color-secondary);
+  font-size: 14px;
+}
+
+.footer-content {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}

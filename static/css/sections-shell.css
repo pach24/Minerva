@@ -1,0 +1,45 @@
+/* Shell y encabezados comunes a How it works, Security y Roadmap */
+.section-shell {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: calc(var(--spacing-unit) * 10) calc(var(--spacing-unit) * 3);
+}
+
+.section-shell.soft-bg {
+  background: linear-gradient(180deg, #fbfbfd 0%, #f5f5f7 100%);
+  border-radius: 32px;
+}
+
+.section-shell-inner {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+/* Encabezados de sección reutilizables */
+.section-header {
+  text-align: center;
+  margin-bottom: calc(var(--spacing-unit) * 6);
+}
+
+.eyebrow {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--color-secondary);
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.section-header h2 {
+  font-size: clamp(32px, 4vw, 44px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.section-subtitle {
+  font-size: 16px;
+  color: var(--color-secondary);
+  max-width: 640px;
+  margin: 0 auto;
+  line-height: 1.7;
+}

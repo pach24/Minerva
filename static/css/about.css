@@ -1,0 +1,28 @@
+.about-minerva {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: calc(var(--spacing-unit) * 12) calc(var(--spacing-unit) * 3);
+  text-align: center;
+}
+
+.about-minerva h2 {
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 700;
+  margin-bottom: calc(var(--spacing-unit) * 4);
+}
+
+.acronym {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0 auto calc(var(--spacing-unit) * 4);
+  max-width: 700px;
+  color: var(--color-secondary);
+}
+
+.about-description {
+  max-width: 700px;
+  margin: 0 auto;
+  font-size: 18px;
+  color: var(--color-secondary);
+  line-height: 1.7;
+}

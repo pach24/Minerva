@@ -1,0 +1,56 @@
+@media (max-width: 768px) {
+  .navbar ul {
+    gap: 20px;
+  }
+
+  .navbar ul li a {
+    font-size: 14px;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+
+  .dashboard-header {
+    overflow-x: auto;
+  }
+
+  .roadmap-timeline::after {
+        left: 1px;
+        bottom: 45px;
+        font-size: 24px;
+    }
+  .menu-item {
+    white-space: nowrap;
+  }
+  
+
+  .about-minerva {
+    padding: calc(var(--spacing-unit) * 8) calc(var(--spacing-unit) * 2);
+  }
+
+  .acronym {
+    font-size: 18px;
+    padding: calc(var(--spacing-unit) * 3);
+  }
+
+  .about-description {
+    font-size: 16px;
+  }
+
+  .section-shell {
+    padding: calc(var(--spacing-unit) * 8) calc(var(--spacing-unit) * 2);
+  }
+
+  .roadmap-timeline::before {
+    left: 10px;
+  }
+
+  .roadmap-item {
+    padding-left: calc(var(--spacing-unit) * 4);
+  }
+
+  .roadmap-dot {
+    left: 1px;
+  }
+}

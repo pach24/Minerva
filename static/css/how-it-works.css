@@ -1,0 +1,144 @@
+/* How it Works - Text Only Style */
+
+.section-title {
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-primary);
+    text-align: center;
+    margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.section-subtitle {
+    font-size: 19px;
+    color: var(--color-secondary);
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto calc(var(--spacing-unit) * 10);
+    line-height: 1.5;
+}
+
+.workflow-text-only {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.workflow-step-text {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: calc(var(--spacing-unit) * 6);
+    align-items: start;
+    padding: calc(var(--spacing-unit) * 6) 0;
+    border-bottom: 1px solid rgba(209, 213, 219, 0.3);
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+.workflow-step-text:nth-child(1) { animation-delay: 0.1s; }
+.workflow-step-text:nth-child(2) { animation-delay: 0.2s; }
+.workflow-step-text:nth-child(3) { animation-delay: 0.3s; }
+.workflow-step-text:nth-child(4) { animation-delay: 0.4s; }
+
+.workflow-step-text:last-child {
+    border-bottom: none;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.step-number {
+    font-size: 80px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--color-accent), rgba(162, 0, 255, 0.7));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    opacity: 0.45;
+    user-select: none;
+    transition: all 0.4s ease;
+}
+
+.workflow-step-text:hover .step-number {
+    opacity: 0.8;
+    transform: scale(1.05);
+}
+
+.step-content h3 {
+    font-size: clamp(24px, 3vw, 32px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-primary);
+    margin-bottom: calc(var(--spacing-unit) * 2);
+    line-height: 1.2;
+    transition: color 0.3s ease;
+}
+
+.workflow-step-text:hover .step-content h3 {
+    color: var(--color-accent);
+}
+
+.step-content p {
+    font-size: 17px;
+    color: var(--color-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 32px;
+    }
+    
+    .section-subtitle {
+        font-size: 17px;
+        margin-bottom: calc(var(--spacing-unit) * 8);
+    }
+    
+    .workflow-text-only {
+        max-width: 100%;
+    }
+    
+    .workflow-step-text {
+        grid-template-columns: 80px 1fr;
+        gap: calc(var(--spacing-unit) * 3);
+        padding: calc(var(--spacing-unit) * 5) 0;
+    }
+    
+    .step-number {
+        font-size: 56px;
+        opacity: 0.3;
+    }
+    
+    .step-content h3 {
+        font-size: 22px;
+    }
+    
+    .step-content p {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .workflow-step-text {
+        grid-template-columns: 1fr;
+        gap: calc(var(--spacing-unit) * 2);
+        padding: calc(var(--spacing-unit) * 4) 0;
+    }
+    
+    .step-number {
+        font-size: 48px;
+        opacity: 0.25;
+    }
+    
+    .step-content h3 {
+        font-size: 20px;
+    }
+}

@@ -1,0 +1,313 @@
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Demo - Minerva</title>
+            <link rel="stylesheet" href="/static/css/profesor.css">
+
+
+            <script src="https://unpkg.com/lucide@latest"></script>
+        </head>
+        <body>
+            <nav class="navbar" id="navbar">
+                <div class="navbar-main">
+                    <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">Minerva</a></div>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="#form" class="active">Demo</a></li>
+                        <li><a href="#listado">Listado</a></li>
+                        <li><a href="index.html#architecture">Tecnología</a></li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="dashboard-container">
+                <aside class="sidebar">
+                    <div class="sidebar-header">
+                        <h3>Demo V0.1</h3>
+                        <p class="user-info">
+                            <i data-lucide="user-circle" class="icon-sm"></i>
+                            Prof. García
+                        </p>
+                    </div>
+                    <a href="index.html" class="nav-item nav-back">
+                        <i data-lucide="arrow-left" class="icon-sm"></i>
+                        Volver al Inicio
+                    </a>
+                    <nav class="sidebar-nav">
+                        <a href="#form" class="nav-item active">
+                            <i data-lucide="user-plus" class="icon-sm"></i>
+                            Nuevo Alumno
+                        </a>
+                        <a href="#listado" class="nav-item">
+                            <i data-lucide="list" class="icon-sm"></i>
+                            Ver Listado
+                        </a>
+                        <a href="#importar" class="nav-item">
+                            <i data-lucide="upload" class="icon-sm"></i>
+                            Importar CSV
+                        </a>
+                        <a href="#reportes" class="nav-item">
+                            <i data-lucide="file-bar-chart" class="icon-sm"></i>
+                            Reportes
+                        </a>
+                        <a href="#configuracion" class="nav-item">
+                            <i data-lucide="sliders" class="icon-sm"></i>
+                            Configuración
+                        </a>
+                    </nav>
+                </aside>
+
+                <main class="main-content">
+                    <section class="form-section" id="form">
+                        <div class="section-header">
+                            <h2>Registrar Nuevo Alumno</h2>
+                            <p>Introduce los datos académicos para calcular la predicción de aprobado</p>
+                        </div>
+
+                        <form class="alumno-form" id="alumnoForm">
+                            <div class="form-group-title">
+                                <h3>Datos Personales</h3>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="nombre">Nombre Completo *</label>
+                                    <input type="text" id="nombre" name="nombre" placeholder="Ej: María García López" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dni">DNI/NIE *</label>
+                                    <input type="text" id="dni" name="dni" placeholder="12345678A" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="curso">Curso *</label>
+                                    <select id="curso" name="curso" required>
+                                        <option value="">Seleccionar curso</option>
+                                        <option value="1DAM">1º DAM</option>
+                                        <option value="2DAM">2º DAM</option>
+                                        <option value="1DAW">1º DAW</option>
+                                        <option value="2DAW">2º DAW</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="asignatura">Asignatura *</label>
+                                    <select id="asignatura" name="asignatura" required>
+                                        <option value="">Seleccionar asignatura</option>
+                                        <option value="programacion">Programación</option>
+                                        <option value="bbdd">Bases de Datos</option>
+                                        <option value="lenguajes">Lenguajes de Marcas</option>
+                                        <option value="sistemas">Sistemas Informáticos</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group-title">
+                                <h3>Datos Académicos</h3>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="notaMedia">Nota Media (0-10) *</label>
+                                    <input type="number" id="notaMedia" name="notaMedia" min="0" max="10" step="0.1" placeholder="7.5" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="asistencia">Asistencia (%) *</label>
+                                    <input type="number" id="asistencia" name="asistencia" min="0" max="100" step="1" placeholder="85" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="notaPracticas">Nota Prácticas (0-10) *</label>
+                                    <input type="number" id="notaPracticas" name="notaPracticas" min="0" max="10" step="0.1" placeholder="8.0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="raCompletados">RA Completados *</label>
+                                    <input type="number" id="raCompletados" name="raCompletados" min="0" max="15" placeholder="8" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="participacion">Participación (1-5) *</label>
+                                    <select id="participacion" name="participacion" required>
+                                        <option value="">Seleccionar</option>
+                                        <option value="1">1 - Muy baja</option>
+                                        <option value="2">2 - Baja</option>
+                                        <option value="3">3 - Media</option>
+                                        <option value="4">4 - Alta</option>
+                                        <option value="5">5 - Muy alta</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="faltas">Faltas Totales *</label>
+                                    <input type="number" id="faltas" name="faltas" min="0" placeholder="5" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group-title">
+                                <h3>Observaciones del Profesor</h3>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="feedback">Comentarios adicionales</label>
+                                <textarea id="feedback" name="feedback" rows="4" placeholder="Ej: Alumno participativo pero con dificultades en programación orientada a objetos"></textarea>
+                                <span class="helper-text">El sistema analizará el texto con NLP para extraer indicadores</span>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn-secondary" onclick="resetForm()">Limpiar</button>
+                                <button type="submit" class="btn-primary">Calcular Predicción</button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <section class="result-section" id="resultSection" style="display:none;">
+                        <div class="result-card">
+                            <div class="result-header">
+                                <h3>
+                                    <i data-lucide="check-circle" style="display:inline-block; width:24px; height:24px; vertical-align:middle; margin-right:8px;"></i>
+                                    Predicción Calculada
+                                </h3>
+                                <button class="btn-close" onclick="closeResult()">
+                                    <i data-lucide="x"></i>
+                                </button>
+                            </div>
+                            <div class="result-body">
+                                <div class="result-main">
+                                    <div class="result-label">Probabilidad de Aprobado</div>
+                                    <div class="result-percentage" id="resultPercentage">78%</div>
+                                    <div class="result-status" id="resultStatus">
+                                        <span class="badge warning">Riesgo Medio</span>
+                                    </div>
+                                </div>
+                                <div class="result-details">
+                                    <h4>Factores Clave</h4>
+                                    <div class="factor-list">
+                                        <div class="factor-item positive">
+                                            <i data-lucide="check" class="factor-icon"></i>
+                                            <span>Buena asistencia (85%)</span>
+                                        </div>
+                                        <div class="factor-item positive">
+                                            <i data-lucide="check" class="factor-icon"></i>
+                                            <span>Nota de prácticas adecuada (8.0)</span>
+                                        </div>
+                                        <div class="factor-item negative">
+                                            <i data-lucide="alert-circle" class="factor-icon"></i>
+                                            <span>RA completados por debajo del promedio</span>
+                                        </div>
+                                        <div class="factor-item negative">
+                                            <i data-lucide="alert-circle" class="factor-icon"></i>
+                                            <span>Participación mejorable</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="result-actions">
+                                <button class="btn-secondary" onclick="closeResult()">Volver</button>
+                                <button class="btn-primary" onclick="goToList()">Ver Listado Completo</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="list-section" id="listado">
+                        <div class="section-header">
+                            <h2>Listado de Alumnos</h2>
+                            <div class="header-actions">
+                                <input type="search" placeholder="Buscar alumno..." class="search-input">
+                                <button class="btn-filter">
+                                    <i data-lucide="search" class="btn-icon-inline"></i>
+                                    Filtrar
+                                </button>
+                                <button class="btn-export">
+                                    <i data-lucide="download" class="btn-icon-inline"></i>
+                                    Exportar CSV
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-wrapper">
+                            <table class="students-table">
+                                <thead>
+                                    <tr>
+                                        <th>Alumno</th>
+                                        <th>DNI</th>
+                                        <th>Curso</th>
+                                        <th>Nota Media</th>
+                                        <th>Asistencia</th>
+                                        <th>Prob. Aprobado</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Ana García López</td>
+                                        <td>12345678A</td>
+                                        <td>2º DAM</td>
+                                        <td>4.2</td>
+                                        <td>68%</td>
+                                        <td><strong class="prob-low">32%</strong></td>
+                                        <td><span class="badge danger">Riesgo Alto</span></td>
+                                        <td>
+                                            <button class="btn-icon" title="Ver detalle">
+                                                <i data-lucide="eye"></i>
+                                            </button>
+                                            <button class="btn-icon" title="Editar">
+                                                <i data-lucide="pencil"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Carlos Ruiz Pérez</td>
+                                        <td>87654321B</td>
+                                        <td>1º DAW</td>
+                                        <td>8.7</td>
+                                        <td>95%</td>
+                                        <td><strong class="prob-high">94%</strong></td>
+                                        <td><span class="badge success">Aprobado</span></td>
+                                        <td>
+                                            <button class="btn-icon" title="Ver detalle">
+                                                <i data-lucide="eye"></i>
+                                            </button>
+                                            <button class="btn-icon" title="Editar">
+                                                <i data-lucide="pencil"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Laura Pérez Martín</td>
+                                        <td>45678912C</td>
+                                        <td>2º DAM</td>
+                                        <td>5.8</td>
+                                        <td>82%</td>
+                                        <td><strong class="prob-medium">58%</strong></td>
+                                        <td><span class="badge warning">Riesgo Medio</span></td>
+                                        <td>
+                                            <button class="btn-icon" title="Ver detalle">
+                                                <i data-lucide="eye"></i>
+                                            </button>
+                                            <button class="btn-icon" title="Editar">
+                                                <i data-lucide="pencil"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </main>
+            </div>
+
+            <footer>
+                <p>© 2025 Minerva - Francisco Pacheco Gómez | Daniel Flores Jiménez</p>
+            </footer>
+
+            <script src="script.js"></script>
+            <script src="profesor.js"></script>
+        </body>
+        </html>
