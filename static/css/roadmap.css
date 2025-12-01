@@ -219,3 +219,44 @@
         font-size: 14px;
     }
 }
+
+.roadmap-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+
+.roadmap-header .roadmap-phase {
+    margin-bottom: 0;
+}
+
+
+.status-pulse {
+    
+    width: 15px;
+    height: 15px;
+    background-color: var(--color-success, #34c759);
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.7);
+    animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.7);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba(52, 199, 89, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(52, 199, 89, 0);
+    }
+}
+
+
