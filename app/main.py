@@ -1,20 +1,41 @@
+import os
+from pathlib import Path
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 
+# Importamos la configuración de BD y Modelos
+from app.core.database import engine, Base
+from app.models import models
+
+# --- CREACIÓN DE TABLAS ---
+# Crea las tablas en la BD si no existen al arrancar la app
+models.Base.metadata.create_all(bind=engine)
+
 app = FastAPI()
 
-# --- CONFIGURACIÓN ---
+# --- CONFIGURACIÓN DE RUTAS (Pathlib para evitar errores) ---
+# Obtenemos la ruta base del proyecto (carpeta 'Minerva')
+# app/main.py -> parent = app -> parent = Minerva
+BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Rutas absolutas a static y templates
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
+
+# --- MIDDLEWARE & MONTURA ---
 app.add_middleware(SessionMiddleware, secret_key="latararallevaunvestidoblancollenodecascabeles")
 
-# Servir archivos estáticos desde /static
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# Montamos static files
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
-# Templates HTML
-templates = Jinja2Templates(directory="templates")
+# Configuramos Templates
+templates = Jinja2Templates(directory=TEMPLATES_DIR)
+
+
+# --- RUTAS / ENDPOINTS ---
 
 @app.get("/", response_class=HTMLResponse)
 def read_root(request: Request):
