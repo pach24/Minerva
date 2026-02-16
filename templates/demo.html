@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Profesor - Minerva</title>
-    <!-- Usamos demo.css para los estilos específicos -->
     <link rel="stylesheet" href="/static/css/demo.css">
-    <!-- Iconos Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <!-- Navbar Superior Minimalista -->
     <nav class="navbar">
         <div class="navbar-content">
             <div class="brand">
@@ -25,24 +22,16 @@
         </div>
     </nav>
 
-    <!-- Contenedor Principal -->
     <main class="main-container">
-
-        <!-- HEADER DE ACCIONES (Título y Botones) -->
         <header class="page-header">
             <div class="header-left">
                 <h1>Panel de Predicción</h1>
                 <p>Gestiona tus clases y detecta riesgos académicos</p>
             </div>
-
-            <!-- Controles Globales (Inicialmente ocultos hasta importar) -->
             <div class="header-controls" id="controls-area" style="display: none;">
                 <div class="select-wrapper">
-                    <select id="subject-select">
-                        <option value="" disabled selected>Seleccionar Asignatura</option>
-                        <option value="matematicas">Matemáticas II</option>
-                        <option value="historia">Historia del Arte</option>
-                        <option value="fisica">Física Aplicada</option>
+                    <select id="subject-select" disabled style="background-color: #f3f4f6; cursor: not-allowed; opacity: 1;">
+                        <option value="programacion" selected>Programación (2025/26)</option>
                     </select>
                 </div>
                 <button class="btn-primary" id="btn-predict">
@@ -51,21 +40,16 @@
             </div>
         </header>
 
-        <!-- ESTADO VACÍO (Empty State) -->
         <div id="empty-state" class="empty-state">
-            <div class="empty-icon">
-                <i data-lucide="upload-cloud"></i>
-            </div>
+            <div class="empty-icon"><i data-lucide="upload-cloud"></i></div>
             <h2>Importar Datos de Clase</h2>
-            <p>Sube un archivo CSV con el listado de alumnos y sus métricas académicas para comenzar el análisis.</p>
+            <p>Sube un archivo CSV con el listado de alumnos.</p>
             <button class="btn-outline" onclick="document.getElementById('csv-input').click()">
                 Seleccionar Archivo CSV
             </button>
             <input type="file" id="csv-input" accept=".csv" style="display: none;" onchange="handleFileUpload(this)">
-            <p class="file-hint">Formato requerido: Nombre, ID, Notas, Asistencia...</p>
         </div>
 
-        <!-- TABLA DE ALUMNOS (Oculta inicialmente) -->
         <div id="data-view" class="data-view" style="display: none;">
             <div class="table-container">
                 <table class="students-table">
@@ -76,20 +60,17 @@
                             <th>Asistencia</th>
                             <th>Nota Media</th>
                             <th>Participación</th>
-                            <th>Riesgo (Predicción)</th>
+                            <th>Riesgo</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody id="students-tbody">
-                        <!-- Se llena con JS -->
-                    </tbody>
+                    <tbody id="students-tbody"></tbody>
                 </table>
             </div>
         </div>
-
     </main>
 
-    <!-- MODAL / DRAWER DE DETALLE (Oculto) -->
+    <!-- DRAWER / PANEL LATERAL -->
     <div id="student-drawer" class="drawer-overlay">
         <div class="drawer-content">
             <div class="drawer-header">
@@ -100,123 +81,182 @@
                 <div class="metric-summary">
                     <div class="metric-box">
                         <span class="label">Riesgo Actual</span>
-                        <span class="value high" id="drawer-risk">Alto</span>
-                    </div>
-                    <div class="metric-box">
-                        <span class="label">Tendencia</span>
-                        <span class="value">▼ 12%</span>
+                        <span class="value" id="drawer-risk">--</span>
                     </div>
                 </div>
 
                 <div class="comments-section">
                     <h3>Observaciones del Profesor</h3>
-                    <textarea placeholder="Añade una nota sobre este alumno..."></textarea>
-                    <button class="btn-small">Guardar Nota</button>
+                    <!-- AÑADIDO ID PARA LEER EL TEXTO -->
+                    <textarea id="feedback-input" placeholder="Añade una nota sobre este alumno..."></textarea>
+                    <!-- AÑADIDO ONCLICK -->
+                    <button class="btn-small" onclick="saveFeedback()">Guardar Nota</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- SCRIPTS SIMULADOS -->
     <script>
-        // Inicializar iconos
-        lucide.createIcons();
+    lucide.createIcons();
+    let currentStudents = [];
+    let currentStudentId = null; // Para saber a quién editamos
 
-        // Datos simulados que "vendrían" del CSV
-        const mockStudents = [
-            { id: "001", name: "Ana García", attendance: "92%", grade: "8.5", participation: "Alta", risk: null },
-            { id: "002", name: "Carlos Ruiz", attendance: "65%", grade: "4.2", participation: "Baja", risk: null },
-            { id: "003", name: "Elena Web", attendance: "88%", grade: "7.0", participation: "Media", risk: null },
-            { id: "004", name: "David Dev", attendance: "45%", grade: "3.5", participation: "Nula", risk: null },
-        ];
-
-        function handleFileUpload(input) {
-            const file = input.files[0];
-            if (!file) return;
-
-            // Validación simple de extensión
-            if (!file.name.endsWith('.csv')) {
-                alert("Error: Por favor sube un archivo .csv válido.");
-                return;
-            }
-
-            // Simular carga
-            document.getElementById('empty-state').style.display = 'none';
-            document.getElementById('data-view').style.display = 'block';
-            document.getElementById('controls-area').style.display = 'flex'; // Mostrar select y botón predecir
-
-            renderTable(mockStudents);
+    function handleFileUpload(input) {
+        const file = input.files[0];
+        if (!file || !file.name.endsWith('.csv')) {
+            alert("Sube un archivo .csv válido.");
+            return;
         }
+        const reader = new FileReader();
+        reader.onload = function(e) { processCSV(e.target.result); };
+        reader.readAsText(file);
+    }
 
-        function renderTable(data) {
-            const tbody = document.getElementById('students-tbody');
-            tbody.innerHTML = "";
+    function processCSV(csvText) {
+        const lines = csvText.split('\n');
+        const students = [];
 
-            data.forEach(student => {
-                const riskBadge = student.risk
-                    ? `<span class="badge badge-${student.risk.toLowerCase()}">${student.risk}</span>`
-                    : '<span class="badge badge-pending">Pendiente</span>';
+        for (let i = 1; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
+            const cols = line.split(',');
 
-                const row = `
-                    <tr onclick="openDrawer('${student.name}', '${student.risk || 'Pendiente'}')">
-                        <td>${student.id}</td>
-                        <td class="font-medium">${student.name}</td>
-                        <td>${student.attendance}</td>
-                        <td>${student.grade}</td>
-                        <td>${student.participation}</td>
-                        <td>${riskBadge}</td>
-                        <td><button class="btn-icon"><i data-lucide="more-horizontal"></i></button></td>
-                    </tr>
-                `;
-                tbody.innerHTML += row;
+            if (cols.length < 6) continue;
+
+            const fixedStart = 5;
+            const fixedEnd = 1;
+            const raRaw = cols.slice(fixedStart, cols.length - fixedEnd);
+            const raVector = raRaw.map(val => parseFloat(val.trim()) || 0);
+            const feedbackVal = cols[cols.length - 1];
+
+            students.push({
+                id: cols[0].trim(),
+                name: cols[1].trim(),
+                attendance: cols[2].trim(),
+                grade: cols[3].trim(),
+                participation: cols[4].trim(),
+                subject: "Programación",
+                ra_vector: raVector,
+                feedback: feedbackVal ? feedbackVal.trim() : "",
+                risk: null
             });
-            lucide.createIcons();
         }
 
-        // Simular Predicción
-        document.getElementById('btn-predict').addEventListener('click', function() {
-            const btn = this;
-            const originalText = btn.innerHTML;
+        if (students.length === 0) {
+            alert("Archivo sin datos válidos.");
+            return;
+        }
 
-            // Estado Loading
-            btn.innerHTML = "Analizando...";
-            btn.disabled = true;
+        currentStudents = students;
+        renderTable(currentStudents);
 
-            setTimeout(() => {
-                // Actualizar datos con riesgos simulados
-                mockStudents[0].risk = "Bajo";
-                mockStudents[1].risk = "Alto";
-                mockStudents[2].risk = "Medio";
-                mockStudents[3].risk = "Crítico";
+        document.getElementById('empty-state').style.display = 'none';
+        document.getElementById('data-view').style.display = 'block';
+        document.getElementById('controls-area').style.display = 'flex';
 
-                renderTable(mockStudents);
+        saveToDatabase(currentStudents);
+    }
 
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                alert("Análisis completado con éxito");
-            }, 1500);
+    function saveToDatabase(data) {
+        fetch('/upload_data', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(r => r.json())
+        .then(d => console.log("Guardado:", d))
+        .catch(e => console.error("Error:", e));
+    }
+
+    function renderTable(data) {
+        const tbody = document.getElementById('students-tbody');
+        tbody.innerHTML = "";
+        data.forEach(s => {
+            let riskBadge = '<span class="badge badge-pending">Pendiente</span>';
+            if (s.risk) riskBadge = `<span class="badge badge-${s.risk.toLowerCase()}">${s.risk}</span>`;
+
+            // PASAMOS EL ID EN EL ONCLICK
+            const row = `
+                <tr onclick="openDrawer('${s.id}')">
+                    <td>${s.id}</td>
+                    <td class="font-medium">${s.name}</td>
+                    <td>${s.attendance}</td>
+                    <td>${s.grade}</td>
+                    <td>${s.participation}</td>
+                    <td>${riskBadge}</td>
+                    <td><button class="btn-icon"><i data-lucide="more-horizontal"></i></button></td>
+                </tr>`;
+            tbody.innerHTML += row;
         });
+        lucide.createIcons();
+    }
 
-        // Drawer (Panel Lateral)
-        function openDrawer(name, risk) {
-            document.getElementById('drawer-student-name').innerText = name;
-            document.getElementById('drawer-risk').innerText = risk;
+    document.getElementById('btn-predict').addEventListener('click', function() {
+        if (currentStudents.length === 0) return;
+        const btn = this;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = "Analizando...";
+        btn.disabled = true;
 
-            // Colorear riesgo en el drawer
-            const riskEl = document.getElementById('drawer-risk');
-            riskEl.className = `value ${risk.toLowerCase()}`;
+        setTimeout(() => {
+            currentStudents.forEach(s => {
+                const n = parseFloat(s.grade);
+                if (n < 5) s.risk = "Alto";
+                else if (n < 7) s.risk = "Medio";
+                else s.risk = "Bajo";
+            });
+            renderTable(currentStudents);
+            saveToDatabase(currentStudents);
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }, 1500);
+    });
 
-            document.getElementById('student-drawer').classList.add('open');
+    // --- FUNCIONES DEL DRAWER (CORREGIDAS) ---
+    function openDrawer(id) {
+        currentStudentId = id;
+        const student = currentStudents.find(s => s.id === id);
+        if (!student) return;
+
+        document.getElementById('drawer-student-name').innerText = student.name;
+        document.getElementById('drawer-risk').innerText = student.risk || "Pendiente";
+
+        // Cargar feedback en el textarea
+        document.getElementById('feedback-input').value = student.feedback || "";
+
+        const riskEl = document.getElementById('drawer-risk');
+        riskEl.className = 'value';
+        if (student.risk && student.risk !== 'Pendiente') {
+            riskEl.classList.add(student.risk.toLowerCase());
         }
+        document.getElementById('student-drawer').classList.add('open');
+    }
 
-        function closeDrawer() {
-            document.getElementById('student-drawer').classList.remove('open');
+    function saveFeedback() {
+        if (!currentStudentId) return;
+
+        const text = document.getElementById('feedback-input').value;
+        const studentIndex = currentStudents.findIndex(s => s.id === currentStudentId);
+
+        if (studentIndex !== -1) {
+            // Actualizar local
+            currentStudents[studentIndex].feedback = text;
+
+            // Guardar en BBDD (enviamos array con 1 solo elemento)
+            saveToDatabase([currentStudents[studentIndex]]);
+
+            alert("Nota guardada correctamente.");
+            closeDrawer();
         }
+    }
 
-        // Cerrar drawer si clic fuera
-        document.getElementById('student-drawer').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('student-drawer')) closeDrawer();
-        });
+    function closeDrawer() {
+        document.getElementById('student-drawer').classList.remove('open');
+    }
+
+    document.getElementById('student-drawer').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('student-drawer')) closeDrawer();
+    });
     </script>
 </body>
 </html>
