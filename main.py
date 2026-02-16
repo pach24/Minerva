@@ -9,7 +9,8 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 from pydantic import BaseModel
 
-app = FastAPI()
+# Importar routers
+from app.routers import predictions, admin
 
 # --- 1. CONFIGURACIÓN DE RUTAS ABSOLUTAS ---
 # Obtenemos la ruta de la carpeta donde está este archivo (Raíz del proyecto)
@@ -176,6 +177,10 @@ init_db()
 
 
 # --- 5. RUTAS DE VISTAS (HTML) ---
+
+# Incluir routers
+app.include_router(predictions.router)
+app.include_router(admin.router)
 
 @app.get("/", response_class=HTMLResponse)
 def read_root(request: Request):
