@@ -8,7 +8,6 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar">
         <div class="navbar-content">
             <div class="brand">
@@ -24,30 +23,16 @@
     </nav>
 
     <main class="main-container">
-        <!-- HEADER -->
         <header class="page-header">
             <div class="header-left">
                 <h1>Panel de Predicción con IA</h1>
                 <p>Importa un CSV con alumnos o analiza individualmente</p>
             </div>
-        </header>
-
-        <!-- TABS -->
-        <div class="tabs">
-            <button class="tab active" onclick="switchTab('csv')">
-                <i data-lucide="upload"></i> Importar CSV
-            </button>
-            <button class="tab" onclick="switchTab('individual')">
-                <i data-lucide="user"></i> Predicción Individual
-            </button>
-        </div>
-
-        <!-- TAB: CSV UPLOAD -->
-        <div id="tab-csv" class="tab-content active">
-            <!-- Empty State -->
-            <div id="empty-state" class="empty-state">
-                <div class="empty-icon">
-                    <i data-lucide="upload-cloud"></i>
+            <div class="header-controls" id="controls-area" style="display: none;">
+                <div class="select-wrapper">
+                    <select id="subject-select" disabled style="background-color: #f3f4f6; cursor: not-allowed; opacity: 1;">
+                        <option value="programacion" selected>Programación (2025/26)</option>
+                    </select>
                 </div>
                 <h2>Importar Listado de Alumnos</h2>
                 <p>Sube un archivo CSV con los datos académicos de tus estudiantes</p>
@@ -57,321 +42,221 @@
                 </button>
                 <input type="file" id="csv-input" accept=".csv" style="display: none;">
 
-                <div class="csv-format-info">
-                    <h4>📋 Formato requerido del CSV:</h4>
-                    <code>nombre,nota_media,asistencia,nota_practicas,ra_completados,participacion</code>
-                    <p>Ejemplo:</p>
-                    <pre>Ana García,8.5,95,9.0,18,9
-Carlos López,4.0,60,4.5,8,3</pre>
-                </div>
-            </div>
-
-            <!-- Tabla de Resultados -->
-            <div id="data-view" class="data-view" style="display: none;">
-                <div class="results-header">
-                    <h2>Resultados del Análisis</h2>
-                    <div class="summary-cards" id="summary-cards"></div>
-                </div>
-
-                <div class="table-container">
-                    <table class="students-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Alumno</th>
-                                <th>Nota Media</th>
-                                <th>Asistencia</th>
-                                <th>Probabilidad</th>
-                                <th>Riesgo</th>
-                                <th>Predicción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="students-tbody"></tbody>
-                    </table>
-                </div>
-
-                <button class="btn-outline" onclick="resetCSV()">
-                    <i data-lucide="refresh-cw"></i> Nuevo Análisis
-                </button>
-            </div>
+        <div id="empty-state" class="empty-state">
+            <div class="empty-icon"><i data-lucide="upload-cloud"></i></div>
+            <h2>Importar Datos de Clase</h2>
+            <p>Sube un archivo CSV con el listado de alumnos.</p>
+            <button class="btn-outline" onclick="document.getElementById('csv-input').click()">
+                Seleccionar Archivo CSV
+            </button>
+            <input type="file" id="csv-input" accept=".csv" style="display: none;" onchange="handleFileUpload(this)">
         </div>
 
-        <!-- TAB: PREDICCIÓN INDIVIDUAL -->
-        <div id="tab-individual" class="tab-content" style="display: none;">
-            <div class="card-form">
-                <h2>📊 Analizar Estudiante Individual</h2>
-
-                <form id="alumnoForm">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Nombre</label>
-                            <input type="text" name="nombre" placeholder="Ana García" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Nota Media (0-10)</label>
-                            <input type="number" name="notaMedia" min="0" max="10" step="0.1" placeholder="7.5" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Asistencia (%)</label>
-                            <input type="number" name="asistencia" min="0" max="100" placeholder="85" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Nota Prácticas (0-10)</label>
-                            <input type="number" name="notaPracticas" min="0" max="10" step="0.1" placeholder="8.0" required>
-                        </div>
-                        <div class="form-group">
-                            <label>RAs Completados (0-20)</label>
-                            <input type="number" name="raCompletados" min="0" max="20" placeholder="15" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Participación (0-10)</label>
-                            <input type="number" name="participacion" min="0" max="10" placeholder="7" required>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn-primary btn-large">
-                        <i data-lucide="brain"></i> Predecir con IA
-                    </button>
-                </form>
-
-                <!-- Resultado Individual -->
-                <div id="resultSection" class="result-section" style="display: none;">
-                    <div class="result-card">
-                        <h2>Resultado</h2>
-                        <div class="result-main">
-                            <div class="probability-circle">
-                                <span id="resultPercentage" class="percentage">0%</span>
-                                <span class="label">Probabilidad</span>
-                            </div>
-                            <div class="risk-info">
-                                <h3>Nivel de Riesgo</h3>
-                                <div id="resultStatus"></div>
-                            </div>
-                        </div>
-                        <button class="btn-outline" onclick="resetIndividual()">Nueva Predicción</button>
-                    </div>
-                </div>
+        <div id="data-view" class="data-view" style="display: none;">
+            <div class="table-container">
+                <table class="students-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Alumno</th>
+                            <th>Asistencia</th>
+                            <th>Nota Media</th>
+                            <th>Participación</th>
+                            <th>Riesgo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="students-tbody"></tbody>
+                </table>
             </div>
-        </div>
-
-        <!-- INFO DEL MODELO -->
-        <div class="info-card">
-            <h3>🧠 Sobre el Modelo</h3>
-            <p>Sistema de Machine Learning entrenado con 1000 estudiantes sintéticos.</p>
-            <ul>
-                <li><strong>Algoritmo:</strong> SGDClassifier (Gradient Descent)</li>
-                <li><strong>Precisión:</strong> ~98% en test</li>
-                <li><strong>Features:</strong> 6 variables académicas</li>
-            </ul>
         </div>
     </main>
 
-    <script>
-        lucide.createIcons();
-
-        // === GESTIÓN DE TABS ===
-        function switchTab(tab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
-
-            event.target.closest('.tab').classList.add('active');
-            document.getElementById(`tab-${tab}`).style.display = 'block';
-            lucide.createIcons();
-        }
-
-        // === CSV UPLOAD ===
-        function initCSVUpload() {
-            const csvInput = document.getElementById('csv-input');
-            if (!csvInput) return;
-
-            csvInput.replaceWith(csvInput.cloneNode(true));
-
-            document.getElementById('csv-input').addEventListener('change', async function(e) {
-                const file = e.target.files[0];
-                if (!file) return;
-
-                if (!file.name.endsWith('.csv')) {
-                    alert('❌ Por favor, sube un archivo CSV válido');
-                    return;
-                }
-
-                const formData = new FormData();
-                formData.append('file', file);
-
-                document.getElementById('empty-state').innerHTML = `
-                    <div class="loading">
-                        <i data-lucide="loader"></i>
-                        <p>Analizando ${file.name}...</p>
+    <!-- DRAWER / PANEL LATERAL -->
+    <div id="student-drawer" class="drawer-overlay">
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <h2 id="drawer-student-name">Nombre Alumno</h2>
+                <button class="btn-close" onclick="closeDrawer()"><i data-lucide="x"></i></button>
+            </div>
+            <div class="drawer-body">
+                <div class="metric-summary">
+                    <div class="metric-box">
+                        <span class="label">Riesgo Actual</span>
+                        <span class="value" id="drawer-risk">--</span>
                     </div>
-                `;
-                lucide.createIcons();
 
-                try {
-                    const response = await fetch('/api/predict/batch', {
-                        method: 'POST',
-                        body: formData
-                    });
+                <div class="comments-section">
+                    <h3>Observaciones del Profesor</h3>
+                    <!-- AÑADIDO ID PARA LEER EL TEXTO -->
+                    <textarea id="feedback-input" placeholder="Añade una nota sobre este alumno..."></textarea>
+                    <!-- AÑADIDO ONCLICK -->
+                    <button class="btn-small" onclick="saveFeedback()">Guardar Nota</button>
+                </div>
+            </div>
+        </div>
 
-                    if (!response.ok) {
-                        const error = await response.json();
-                        throw new Error(error.detail || 'Error al procesar CSV');
-                    }
+    <script>
+    lucide.createIcons();
+    let currentStudents = [];
+    let currentStudentId = null; // Para saber a quién editamos
 
-                    const result = await response.json();
-                    console.log('✅ Resultados CSV:', result);
-                    mostrarResultadosCSV(result);
+    function handleFileUpload(input) {
+        const file = input.files[0];
+        if (!file || !file.name.endsWith('.csv')) {
+            alert("Sube un archivo .csv válido.");
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function(e) { processCSV(e.target.result); };
+        reader.readAsText(file);
+    }
 
-                } catch (error) {
-                    console.error('❌ Error CSV:', error);
-                    alert('❌ Error: ' + error.message);
-                    resetCSV();
-                }
+    function processCSV(csvText) {
+        const lines = csvText.split('\n');
+        const students = [];
+
+        for (let i = 1; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
+            const cols = line.split(',');
+
+            if (cols.length < 6) continue;
+
+            const fixedStart = 5;
+            const fixedEnd = 1;
+            const raRaw = cols.slice(fixedStart, cols.length - fixedEnd);
+            const raVector = raRaw.map(val => parseFloat(val.trim()) || 0);
+            const feedbackVal = cols[cols.length - 1];
+
+            students.push({
+                id: cols[0].trim(),
+                name: cols[1].trim(),
+                attendance: cols[2].trim(),
+                grade: cols[3].trim(),
+                participation: cols[4].trim(),
+                subject: "Programación",
+                ra_vector: raVector,
+                feedback: feedbackVal ? feedbackVal.trim() : "",
+                risk: null
             });
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            initCSVUpload();
+        if (students.length === 0) {
+            alert("Archivo sin datos válidos.");
+            return;
+        }
+
+        currentStudents = students;
+        renderTable(currentStudents);
+
+        document.getElementById('empty-state').style.display = 'none';
+        document.getElementById('data-view').style.display = 'block';
+        document.getElementById('controls-area').style.display = 'flex';
+
+        saveToDatabase(currentStudents);
+    }
+
+    function saveToDatabase(data) {
+        fetch('/upload_data', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(r => r.json())
+        .then(d => console.log("Guardado:", d))
+        .catch(e => console.error("Error:", e));
+    }
+
+    function renderTable(data) {
+        const tbody = document.getElementById('students-tbody');
+        tbody.innerHTML = "";
+        data.forEach(s => {
+            let riskBadge = '<span class="badge badge-pending">Pendiente</span>';
+            if (s.risk) riskBadge = `<span class="badge badge-${s.risk.toLowerCase()}">${s.risk}</span>`;
+
+            // PASAMOS EL ID EN EL ONCLICK
+            const row = `
+                <tr onclick="openDrawer('${s.id}')">
+                    <td>${s.id}</td>
+                    <td class="font-medium">${s.name}</td>
+                    <td>${s.attendance}</td>
+                    <td>${s.grade}</td>
+                    <td>${s.participation}</td>
+                    <td>${riskBadge}</td>
+                    <td><button class="btn-icon"><i data-lucide="more-horizontal"></i></button></td>
+                </tr>`;
+            tbody.innerHTML += row;
         });
+        lucide.createIcons();
+    }
 
-        function mostrarResultadosCSV(data) {
-            document.getElementById('empty-state').style.display = 'none';
-            document.getElementById('data-view').style.display = 'block';
+    document.getElementById('btn-predict').addEventListener('click', function() {
+        if (currentStudents.length === 0) return;
+        const btn = this;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = "Analizando...";
+        btn.disabled = true;
 
-            const summary = data.summary;
-            document.getElementById('summary-cards').innerHTML = `
-                <div class="summary-card success">
-                    <span class="number">${summary.bajo_riesgo || 0}</span>
-                    <span class="label">Bajo Riesgo</span>
-                </div>
-                <div class="summary-card warning">
-                    <span class="number">${summary.medio_riesgo || 0}</span>
-                    <span class="label">Medio Riesgo</span>
-                </div>
-                <div class="summary-card danger">
-                    <span class="number">${(summary.alto_riesgo || 0) + (summary.critico_riesgo || 0)}</span>
-                    <span class="label">Alto/Crítico</span>
-                </div>
-            `;
-
-            const tbody = document.getElementById('students-tbody');
-            tbody.innerHTML = data.predictions.map(student => {
-                const probPercent = Math.round(student.probabilidad_aprobado * 100);
-                const riskClass = {
-                    'Bajo': 'success',
-                    'Medio': 'warning',
-                    'Alto': 'danger',
-                    'Crítico': 'danger'
-                }[student.riesgo] || 'secondary';
-
-                return `
-                    <tr>
-                        <td>${student.id}</td>
-                        <td class="font-medium">${student.nombre}</td>
-                        <td>${student.nota_media}</td>
-                        <td>${student.asistencia}%</td>
-                        <td><strong>${probPercent}%</strong></td>
-                        <td><span class="badge badge-${riskClass}">${student.riesgo}</span></td>
-                        <td>${student.aprobado_predicho ? '✅ Aprobará' : '❌ Suspenderá'}</td>
-                    </tr>
-                `;
-            }).join('');
-        }
-
-        function resetCSV() {
-            location.reload(); // Simple reload para resetear todo
-        }
-
-        // === PREDICCIÓN INDIVIDUAL ===
-        const alumnoForm = document.getElementById('alumnoForm');
-        if (alumnoForm) {
-            alumnoForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-
-                const formData = new FormData(e.target);
-
-                const studentData = {
-                    nombre: formData.get('nombre') || '',
-                    nota_media: parseFloat(formData.get('notaMedia')) || 0,
-                    asistencia: parseFloat(formData.get('asistencia')) || 0,
-                    nota_practicas: parseFloat(formData.get('notaPracticas')) || 0,
-                    ra_completados: parseInt(formData.get('raCompletados')) || 0,
-                    participacion: parseInt(formData.get('participacion')) || 0
-                };
-
-                console.log('📤 Datos a enviar:', studentData);
-
-                const submitBtn = this.querySelector('button[type="submit"]');
-                const originalText = submitBtn.innerHTML;
-                submitBtn.innerHTML = '<i data-lucide="loader" class="spinning"></i> Analizando...';
-                submitBtn.disabled = true;
-                lucide.createIcons();
-
-                try {
-                    const response = await fetch('/api/predict', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify(studentData)
-                    });
-
-                    const responseText = await response.text();
-                    console.log('📥 Respuesta raw:', responseText);
-
-                    if (!response.ok) {
-                        let errorMsg = 'Error en la predicción';
-                        try {
-                            const errorData = JSON.parse(responseText);
-                            errorMsg = errorData.detail || errorMsg;
-                        } catch (e) {
-                            errorMsg = responseText;
-                        }
-                        throw new Error(errorMsg);
-                    }
-
-                    const result = JSON.parse(responseText);
-                    console.log('✅ Predicción exitosa:', result);
-                    mostrarResultadoIndividual(result);
-
-                } catch (error) {
-                    console.error('❌ Error completo:', error);
-                    alert('❌ Error: ' + error.message);
-                } finally {
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                    lucide.createIcons();
-                }
+        setTimeout(() => {
+            currentStudents.forEach(s => {
+                const n = parseFloat(s.grade);
+                if (n < 5) s.risk = "Alto";
+                else if (n < 7) s.risk = "Medio";
+                else s.risk = "Bajo";
             });
+            renderTable(currentStudents);
+            saveToDatabase(currentStudents);
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }, 1500);
+    });
+
+    // --- FUNCIONES DEL DRAWER (CORREGIDAS) ---
+    function openDrawer(id) {
+        currentStudentId = id;
+        const student = currentStudents.find(s => s.id === id);
+        if (!student) return;
+
+        document.getElementById('drawer-student-name').innerText = student.name;
+        document.getElementById('drawer-risk').innerText = student.risk || "Pendiente";
+
+        // Cargar feedback en el textarea
+        document.getElementById('feedback-input').value = student.feedback || "";
+
+        const riskEl = document.getElementById('drawer-risk');
+        riskEl.className = 'value';
+        if (student.risk && student.risk !== 'Pendiente') {
+            riskEl.classList.add(student.risk.toLowerCase());
         }
+        document.getElementById('student-drawer').classList.add('open');
+    }
 
-        function mostrarResultadoIndividual(result) {
-            const probabilidad = Math.round(result.probabilidad_aprobado * 100);
-            document.getElementById('resultPercentage').textContent = probabilidad + '%';
+    function saveFeedback() {
+        if (!currentStudentId) return;
 
-            const riskConfig = {
-                'Bajo': { class: 'success', icon: '✅' },
-                'Medio': { class: 'warning', icon: '⚠️' },
-                'Alto': { class: 'danger', icon: '🔴' },
-                'Crítico': { class: 'danger', icon: '🚨' }
-            };
+        const text = document.getElementById('feedback-input').value;
+        const studentIndex = currentStudents.findIndex(s => s.id === currentStudentId);
 
-            const config = riskConfig[result.riesgo] || riskConfig['Medio'];
+        if (studentIndex !== -1) {
+            // Actualizar local
+            currentStudents[studentIndex].feedback = text;
 
-            document.getElementById('resultStatus').innerHTML =
-                `<span class="badge badge-${config.class}">${config.icon} ${result.riesgo}</span>`;
+            // Guardar en BBDD (enviamos array con 1 solo elemento)
+            saveToDatabase([currentStudents[studentIndex]]);
 
-            document.getElementById('resultSection').style.display = 'block';
-            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+            alert("Nota guardada correctamente.");
+            closeDrawer();
         }
+    }
 
-        function resetIndividual() {
-            const form = document.getElementById('alumnoForm');
-            if (form) form.reset();
+    function closeDrawer() {
+        document.getElementById('student-drawer').classList.remove('open');
+    }
 
-            const resultSection = document.getElementById('resultSection');
-            if (resultSection) resultSection.style.display = 'none';
-        }
+    document.getElementById('student-drawer').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('student-drawer')) closeDrawer();
+    });
     </script>
 
     <style>
