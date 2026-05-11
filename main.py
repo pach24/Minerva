@@ -8,11 +8,12 @@ SUPABASE_KEY = os.environ["SUPABASE_KEY"]
 SESSION_SECRET = os.environ["SESSION_SECRET"]
 
 from fastapi import FastAPI, Request, Form
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 from supabase import create_client
+from ml.predict import predict_students
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
@@ -57,6 +58,17 @@ async def login_submit(request: Request, email: str = Form(...), password: str =
 def logout(request: Request):
     request.session.clear()
     return RedirectResponse(url="/login")
+
+
+# --- API: PREDICCIÓN ML ---
+@app.post("/api/predecir")
+async def api_predecir(request: Request):
+    user = request.session.get("user")
+    if not user:
+        return JSONResponse({"error": "No autorizado"}, status_code=401)
+    data = await request.json()
+    results = predict_students(data)
+    return JSONResponse(results)
 
 
 # --- RUTA PROTEGIDA (DEMO) ---

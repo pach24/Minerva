@@ -3,23 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Profesor - Minerva</title>
+    <title>Minerva · Insights Académicos</title>
     <link rel="stylesheet" href="/static/css/demo.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
-    <!-- Loading Overlay -->
+    <!-- Loading Overlay (Intelligence Style) -->
     <div id="loading-overlay" class="loading-overlay">
         <div class="loading-card">
             <div class="loading-logo">M</div>
-            <div class="loading-dots">
-                <span></span><span></span><span></span>
-            </div>
-            <p class="loading-text" id="loading-text">Procesando datos académicos...</p>
-            <div class="loading-bar-track">
-                <div class="loading-bar-fill" id="loading-bar"></div>
-            </div>
+            <p class="loading-text" id="loading-text">Análisis Inteligente</p>
             <span class="loading-percent" id="loading-percent">0%</span>
         </div>
     </div>
@@ -30,11 +24,11 @@
             <div class="brand">
                 <span class="logo-icon">M</span>
                 <span class="logo-text">Minerva</span>
-                <span class="badge-poc">PoC v0.1</span>
+                <span class="badge-poc">Insight</span>
             </div>
             <div class="user-profile">
-                <span class="user-name">Prof. Admin</span>
-                <div class="avatar">A</div>
+                <span class="user-name">Profesor Admin</span>
+                <div class="avatar">PA</div>
             </div>
         </div>
     </nav>
@@ -43,31 +37,30 @@
 
         <header class="page-header">
             <div class="header-left">
-                <h1>Panel de Predicción</h1>
-                <p>Detecta riesgos académicos antes de que sea tarde</p>
+                <h1>Insights</h1>
+                <p>Análisis predictivo de rendimiento académico</p>
             </div>
             <div class="header-controls" id="controls-area" style="display:none;">
                 <div class="subject-pill">
-                    <i data-lucide="book-open" style="width:15px;height:15px;"></i>
+                    <i data-lucide="brain" style="width:15px;height:15px;"></i>
                     Programación
                 </div>
                 <button class="btn-primary" id="btn-predict">
-                    <i data-lucide="zap"></i> Analizar Riesgo
+                    <i data-lucide="sparkles" style="width:16px;height:16px;"></i> Generar Predicción
                 </button>
             </div>
         </header>
 
         <!-- Empty State -->
         <div id="empty-state" class="empty-state">
-            <div class="empty-icon"><i data-lucide="upload-cloud"></i></div>
-            <h2>Importar listado de alumnos</h2>
-            <p>Sube el CSV con los datos académicos para comenzar el análisis predictivo de <strong>Programación</strong>.</p>
+            <div class="empty-icon"><i data-lucide="layers"></i></div>
+            <h2>Comienza el análisis</h2>
+            <p>Sube los datos académicos de tus alumnos para identificar patrones de riesgo y oportunidades de mejora de forma inteligente.</p>
             <button class="btn-outline" onclick="document.getElementById('csv-input').click()">
-                <i data-lucide="file-up" style="width:15px;height:15px;vertical-align:middle;margin-right:6px;"></i>
                 Seleccionar CSV
             </button>
             <input type="file" id="csv-input" accept=".csv" style="display:none;" onchange="handleFileUpload(this)">
-            <p class="file-hint">Columnas: ID · Nombre · Asistencia · Nota_Media · Participacion</p>
+            <p class="file-hint">Formato sugerido: ID · Alumno · Asistencia · Nota · Participación</p>
         </div>
 
         <!-- Data View -->
@@ -80,7 +73,7 @@
                     </span>
                     <span id="student-count" class="count-tag">0 alumnos</span>
                 </div>
-                <span class="hint-text" id="hint-text">Pulsa "Analizar Riesgo" para ver la predicción</span>
+                <span class="hint-text" id="hint-text">Listo para el análisis inteligente</span>
             </div>
 
             <div class="table-container">
@@ -90,9 +83,9 @@
                             <th>ID</th>
                             <th>Alumno</th>
                             <th>Asistencia</th>
-                            <th>Nota Media</th>
+                            <th>Media</th>
                             <th>Participación</th>
-                            <th>% Aprobado</th>
+                            <th>% Éxito</th>
                             <th>Riesgo</th>
                             <th></th>
                         </tr>
@@ -104,7 +97,7 @@
 
     </main>
 
-    <!-- Drawer -->
+    <!-- Drawer (Sheet) -->
     <div id="student-drawer" class="drawer-overlay">
         <div class="drawer-content">
             <div class="drawer-header">
@@ -112,20 +105,20 @@
                     <h2 id="drawer-student-name">—</h2>
                     <span class="subject-tag-sm">Programación</span>
                 </div>
-                <button class="btn-close" onclick="closeDrawer()"><i data-lucide="x"></i></button>
+                <button class="btn-close" onclick="closeDrawer()"><i data-lucide="x" style="width:20px;height:20px;"></i></button>
             </div>
             <div class="drawer-body">
                 <div class="metric-summary">
                     <div class="metric-box">
-                        <span class="label">Nivel de Riesgo</span>
+                        <span class="label">Predicción de Riesgo</span>
                         <span class="value" id="drawer-risk">—</span>
                     </div>
                     <div class="metric-box">
-                        <span class="label">% Aprobado</span>
+                        <span class="label">Probabilidad de Éxito</span>
                         <span class="value" id="drawer-approval">—</span>
                     </div>
                     <div class="metric-box">
-                        <span class="label">Asistencia</span>
+                        <span class="label">Asistencia Actual</span>
                         <span class="value" id="drawer-attendance">—</span>
                     </div>
                     <div class="metric-box">
@@ -134,9 +127,11 @@
                     </div>
                 </div>
                 <div class="comments-section">
-                    <h3>Observaciones del Profesor</h3>
-                    <textarea placeholder="Añade una nota sobre este alumno..."></textarea>
-                    <button class="btn-small">Guardar Nota</button>
+                    <h3>Observaciones y Notas</h3>
+                    <textarea placeholder="Añade una nota personalizada para el seguimiento..."></textarea>
+                    <div style="display:flex; justify-content:flex-end;">
+                        <button class="btn-small">Guardar</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -145,139 +140,173 @@
     <script>
         lucide.createIcons();
 
-        const mockStudents = [
-            { id:"001", name:"Blas",       attendance:"78%", grade:"6.5", participation:"Media",  approval:null, risk:null, pApproval:62, pRisk:"Medio"   },
-            { id:"002", name:"Samuel",     attendance:"91%", grade:"7.8", participation:"Alta",   approval:null, risk:null, pApproval:81, pRisk:"Bajo"    },
-            { id:"003", name:"Pablo",      attendance:"55%", grade:"4.1", participation:"Baja",   approval:null, risk:null, pApproval:28, pRisk:"Crítico" },
-            { id:"004", name:"Daniel",     attendance:"85%", grade:"7.2", participation:"Media",  approval:null, risk:null, pApproval:73, pRisk:"Bajo"    },
-            { id:"005", name:"Francisco",  attendance:"70%", grade:"5.8", participation:"Media",  approval:null, risk:null, pApproval:54, pRisk:"Medio"   },
-            { id:"006", name:"Alejandro",  attendance:"42%", grade:"3.4", participation:"Nula",   approval:null, risk:null, pApproval:18, pRisk:"Crítico" },
-            { id:"007", name:"Salvador",   attendance:"88%", grade:"8.1", participation:"Alta",   approval:null, risk:null, pApproval:85, pRisk:"Bajo"    },
-            { id:"008", name:"José",       attendance:"62%", grade:"5.0", participation:"Baja",   approval:null, risk:null, pApproval:41, pRisk:"Alto"    },
-            { id:"009", name:"David",      attendance:"95%", grade:"9.2", participation:"Alta",   approval:null, risk:null, pApproval:94, pRisk:"Bajo"    },
-            { id:"010", name:"Dmytro",     attendance:"48%", grade:"3.9", participation:"Baja",   approval:null, risk:null, pApproval:24, pRisk:"Crítico" },
-            { id:"011", name:"Ismael",     attendance:"75%", grade:"6.1", participation:"Media",  approval:null, risk:null, pApproval:58, pRisk:"Medio"   },
-            { id:"012", name:"Victor Joel",attendance:"33%", grade:"2.8", participation:"Nula",   approval:null, risk:null, pApproval:12, pRisk:"Crítico" },
-        ];
+        let students = [];
 
         function riskSlug(r) {
-            return { Bajo:'bajo', Medio:'medio', Alto:'alto', Crítico:'critico' }[r] || '';
+            return { Bajo:'bajo', Medio:'medio', Alto:'alto', 'Crítico':'critico' }[r] || '';
         }
 
-        function approvalClass(pct) {
-            if (pct === null) return '';
-            if (pct >= 70) return 'high';
-            if (pct >= 50) return 'medium';
-            if (pct >= 30) return 'low';
+        function approvalClass(p) {
+            if (p === null) return '';
+            if (p >= 70) return 'high';
+            if (p >= 50) return 'medium';
+            if (p >= 30) return 'low';
             return 'critical';
+        }
+
+        // ── Parseo real del CSV ──────────────────────────────────────
+        function parseCSV(text) {
+            const lines = text.trim().split('\n').map(l => l.trim()).filter(Boolean);
+            if (lines.length < 2) return [];
+            const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+            return lines.slice(1).map(line => {
+                const vals = line.split(',').map(v => v.trim());
+                const obj = {};
+                headers.forEach((h, i) => obj[h] = vals[i] ?? '');
+                return {
+                    id:             obj['id'] || '',
+                    nombre:         obj['nombre'] || obj['alumno'] || obj['name'] || '',
+                    asistencia:     parseFloat(obj['asistencia']) || 0,
+                    nota_media:     parseFloat(obj['nota_media'] || obj['media'] || obj['nota']) || 0,
+                    participacion:  obj['participacion'] || obj['participación'] || 'Media',
+                    nota_practicas: parseFloat(obj['nota_practicas']) || parseFloat(obj['nota_media'] || obj['nota']) || 0,
+                    approval: null,
+                    risk: null,
+                };
+            });
         }
 
         function handleFileUpload(input) {
             const file = input.files[0];
             if (!file || !file.name.endsWith('.csv')) {
-                alert("Por favor sube un archivo .csv válido.");
+                alert('Por favor sube un archivo .csv válido.');
                 return;
             }
-            document.getElementById('empty-state').style.display = 'none';
-            document.getElementById('data-view').style.display = 'block';
-            document.getElementById('controls-area').style.display = 'flex';
-            document.getElementById('student-count').textContent = mockStudents.length + ' alumnos';
-            renderTable(mockStudents);
+            const reader = new FileReader();
+            reader.onload = e => {
+                students = parseCSV(e.target.result);
+                if (!students.length) { alert('El CSV está vacío o tiene formato incorrecto.'); return; }
+                document.getElementById('empty-state').style.display   = 'none';
+                document.getElementById('data-view').style.display     = 'block';
+                document.getElementById('controls-area').style.display = 'flex';
+                document.getElementById('student-count').textContent   = students.length + ' alumnos';
+                renderTable(students);
+            };
+            reader.readAsText(file, 'UTF-8');
         }
 
+        // ── Render ───────────────────────────────────────────────────
         function renderTable(data) {
             const tbody = document.getElementById('students-tbody');
             tbody.innerHTML = '';
-
             data.forEach((s, i) => {
                 const riskBadge = s.risk
                     ? `<span class="badge badge-${riskSlug(s.risk)}">${s.risk}</span>`
                     : '<span class="badge badge-pending">—</span>';
 
+                const ac = approvalClass(s.approval);
                 const approvalCell = s.approval !== null
                     ? `<div class="approval-bar">
                            <div class="approval-track">
-                               <div class="approval-fill ${approvalClass(s.approval)}" style="width:${s.approval}%"></div>
+                               <div class="approval-fill ${ac}" style="width:${s.approval}%"></div>
                            </div>
-                           <span class="approval-label ${approvalClass(s.approval)}">${s.approval}%</span>
+                           <span class="approval-label ${ac}">${s.approval}%</span>
                        </div>`
                     : '<span class="text-muted">—</span>';
 
-                const partSlug = s.participation.toLowerCase();
-
+                const partSlug = (s.participacion || '').toLowerCase();
                 const tr = document.createElement('tr');
                 tr.className = 'row-in';
                 tr.style.animationDelay = `${i * 35}ms`;
                 tr.onclick = () => openDrawer(i);
                 tr.innerHTML = `
                     <td class="text-muted">${s.id}</td>
-                    <td class="font-medium">${s.name}</td>
-                    <td>${s.attendance}</td>
-                    <td>${s.grade}</td>
-                    <td><span class="part-badge part-${partSlug}">${s.participation}</span></td>
+                    <td class="font-medium">${s.nombre}</td>
+                    <td>${s.asistencia}%</td>
+                    <td>${s.nota_media}</td>
+                    <td><span class="part-badge part-${partSlug}">${s.participacion}</span></td>
                     <td>${approvalCell}</td>
                     <td>${riskBadge}</td>
                     <td><button class="btn-icon" onclick="event.stopPropagation();openDrawer(${i})">
-                        <i data-lucide="chevron-right"></i>
+                        <i data-lucide="chevron-right" style="width:18px;height:18px;"></i>
                     </button></td>
                 `;
                 tbody.appendChild(tr);
             });
-
             lucide.createIcons();
         }
 
-        document.getElementById('btn-predict').addEventListener('click', function () {
-            const overlay  = document.getElementById('loading-overlay');
-            const bar      = document.getElementById('loading-bar');
+        // ── Predicción real vía API ──────────────────────────────────
+        document.getElementById('btn-predict').addEventListener('click', async function () {
+            if (!students.length) return;
+
+            const overlay   = document.getElementById('loading-overlay');
             const percentEl = document.getElementById('loading-percent');
-            const textEl   = document.getElementById('loading-text');
-            const btn      = this;
+            const textEl    = document.getElementById('loading-text');
+            const btn       = this;
 
             const messages = [
-                "Procesando datos académicos...",
-                "Calculando correlaciones de riesgo...",
-                "Aplicando modelo predictivo...",
-                "Generando resultados..."
+                'Procesando datos académicos...',
+                'Calculando correlaciones...',
+                'Aplicando modelo predictivo...',
+                'Generando resultados...'
             ];
 
             overlay.classList.add('visible');
             btn.disabled = true;
-            bar.style.width = '0%';
             percentEl.textContent = '0%';
             textEl.textContent = messages[0];
 
             let progress = 0;
             const interval = setInterval(() => {
-                progress += Math.random() * 12 + 4;
-                if (progress > 100) progress = 100;
-
-                bar.style.width = progress + '%';
-                percentEl.textContent = Math.round(progress) + '%';
-
-                const idx = Math.min(Math.floor((progress / 100) * messages.length), messages.length - 1);
-                textEl.textContent = messages[idx];
-
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        overlay.classList.remove('visible');
-                        mockStudents.forEach(s => {
-                            s.approval = s.pApproval;
-                            s.risk     = s.pRisk;
-                        });
-                        const now = new Date().toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit' });
-                        document.getElementById('hint-text').textContent = `Análisis completado · ${now}`;
-                        renderTable(mockStudents);
-                        btn.disabled = false;
-                    }, 350);
+                if (progress < 85) {
+                    progress += Math.random() * 10 + 3;
+                    if (progress > 85) progress = 85;
+                    percentEl.textContent = Math.round(progress) + '%';
+                    const idx = Math.min(Math.floor((progress / 100) * messages.length), messages.length - 1);
+                    textEl.textContent = messages[idx];
                 }
-            }, 180);
+            }, 200);
+
+            try {
+                const res = await fetch('/api/predecir', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(students),
+                });
+                clearInterval(interval);
+                if (!res.ok) throw new Error('Error del servidor: ' + res.status);
+                const results = await res.json();
+
+                percentEl.textContent = '100%';
+                textEl.textContent = 'Análisis completado';
+
+                setTimeout(() => {
+                    overlay.classList.remove('visible');
+                    results.forEach((r, i) => {
+                        if (students[i]) {
+                            students[i].approval = r.prob_aprobado;
+                            students[i].risk     = r.nivel_riesgo;
+                        }
+                    });
+                    const now = new Date().toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit' });
+                    document.getElementById('hint-text').textContent = `Análisis completado · ${now}`;
+                    renderTable(students);
+                    btn.disabled = false;
+                }, 400);
+
+            } catch (err) {
+                clearInterval(interval);
+                overlay.classList.remove('visible');
+                btn.disabled = false;
+                alert('Error al conectar con el modelo: ' + err.message);
+            }
         });
 
+        // ── Drawer ───────────────────────────────────────────────────
         function openDrawer(i) {
-            const s = mockStudents[i];
-            document.getElementById('drawer-student-name').textContent = s.name;
+            const s = students[i];
+            document.getElementById('drawer-student-name').textContent = s.nombre;
 
             const riskEl = document.getElementById('drawer-risk');
             riskEl.textContent = s.risk || 'Sin analizar';
@@ -287,8 +316,8 @@
             approvalEl.textContent = s.approval !== null ? s.approval + '%' : '—';
             approvalEl.className   = `value ${approvalClass(s.approval)}`;
 
-            document.getElementById('drawer-attendance').textContent = s.attendance;
-            document.getElementById('drawer-grade').textContent      = s.grade;
+            document.getElementById('drawer-attendance').textContent = s.asistencia + '%';
+            document.getElementById('drawer-grade').textContent      = s.nota_media;
 
             document.getElementById('student-drawer').classList.add('open');
         }
