@@ -1,62 +1,50 @@
-// ✨ NUEVO: Llamar al backend ML en lugar de cálculo local
-document.getElementById('alumnoForm').addEventListener('submit', async function(e) {
+// Simulación de cálculo de predicción
+document.getElementById('alumnoForm').addEventListener('submit', function(e) {
     e.preventDefault();
-
+    
     // Obtener datos del formulario
     const formData = new FormData(e.target);
-    const studentData = {
-        nombre: formData.get('nombre') || 'Estudiante ' + Date.now(),
-        nota_media: parseFloat(formData.get('notaMedia')),
-        asistencia: parseFloat(formData.get('asistencia')),
-        nota_practicas: parseFloat(formData.get('notaPracticas')),
-        ra_completados: parseInt(formData.get('raCompletados')),
-        participacion: parseInt(formData.get('participacion'))
-    };
-
-    try {
-        // 🎯 LLAMADA AL BACKEND ML
-        const response = await fetch('/api/predict', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(studentData)
-        });
-
-        if (!response.ok) {
-            throw new Error('Error en la predicción');
-        }
-
-        const result = await response.json();
-
-        // Mostrar resultado del ML
-        const probabilidad = Math.round(result.probabilidad_aprobado * 100);
-        document.getElementById('resultPercentage').textContent = probabilidad + '%';
-
-        // Badge según riesgo del ML
-        const badgeClasses = {
-            'Bajo': 'success',
-            'Medio': 'warning',
-            'Alto': 'danger',
-            'Crítico': 'danger'
-        };
-
-        const badgeClass = badgeClasses[result.riesgo] || 'secondary';
-        document.getElementById('resultStatus').innerHTML =
-            `<span class="badge ${badgeClass}">${result.riesgo}</span>`;
-
-        // Ocultar formulario y mostrar resultado
-        document.getElementById('form').style.display = 'none';
-        document.getElementById('resultSection').style.display = 'block';
-        document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
-
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Error al realizar la predicción. ¿Está el modelo entrenado?');
+    const notaMedia = parseFloat(formData.get('notaMedia'));
+    const asistencia = parseFloat(formData.get('asistencia'));
+    const notaPracticas = parseFloat(formData.get('notaPracticas'));
+    const raCompletados = parseInt(formData.get('raCompletados'));
+    const participacion = parseInt(formData.get('participacion'));
+    
+    // Algoritmo simulado de predicción
+    let probabilidad = 0;
+    probabilidad += notaMedia * 10;
+    probabilidad += asistencia * 0.3;
+    probabilidad += notaPracticas * 5;
+    probabilidad += raCompletados * 2;
+    probabilidad += participacion * 3;
+    probabilidad = Math.min(Math.round(probabilidad / 2), 99);
+    
+    // Determinar estado
+    let estado = '';
+    let badgeClass = '';
+    if (probabilidad >= 75) {
+        estado = 'Aprobado';
+        badgeClass = 'success';
+    } else if (probabilidad >= 50) {
+        estado = 'Riesgo Medio';
+        badgeClass = 'warning';
+    } else {
+        estado = 'Riesgo Alto';
+        badgeClass = 'danger';
     }
+    
+    // Mostrar resultado
+    document.getElementById('resultPercentage').textContent = probabilidad + '%';
+    document.getElementById('resultStatus').innerHTML = `<span class="badge ${badgeClass}">${estado}</span>`;
+    
+    // Ocultar formulario y mostrar resultado
+    document.getElementById('form').style.display = 'none';
+    document.getElementById('resultSection').style.display = 'block';
+    
+    // Scroll al resultado
+    document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
 });
 
-// Funciones auxiliares (mantener igual)
 function resetForm() {
     document.getElementById('alumnoForm').reset();
 }
