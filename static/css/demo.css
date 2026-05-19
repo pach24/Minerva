@@ -556,5 +556,110 @@ textarea {
 }
 textarea:focus { outline: none; border-color: var(--color-accent); background: white; box-shadow: 0 0 0 4px rgba(0,113,227,0.1); }
 
+/* ─── Approval bar color states ───────────────── */
+.approval-fill.high,   .approval-label.high     { background: var(--risk-low);      color: var(--risk-low); }
+.approval-fill.medium, .approval-label.medium   { background: var(--risk-medium);   color: var(--risk-medium); }
+.approval-fill.low,    .approval-label.low      { background: var(--risk-high);     color: var(--risk-high); }
+.approval-fill.critical, .approval-label.critical { background: var(--risk-critical); color: var(--risk-critical); }
+
+/* approval-fill is a bar, so only background applies; label gets text color */
+.approval-fill.high     { background: var(--risk-low);      color: inherit; }
+.approval-fill.medium   { background: var(--risk-medium);   color: inherit; }
+.approval-fill.low      { background: var(--risk-high);     color: inherit; }
+.approval-fill.critical { background: var(--risk-critical); color: inherit; }
+
+/* ─── Drawer value color states ───────────────── */
+.value.bajo     { color: var(--risk-low); }
+.value.medio    { color: var(--risk-medium); }
+.value.alto     { color: var(--risk-high); }
+.value.critico  { color: var(--risk-critical); }
+.value.high     { color: var(--risk-low); }
+.value.medium   { color: var(--risk-medium); }
+.value.low      { color: var(--risk-high); }
+.value.critical { color: var(--risk-critical); }
+
+/* ─── Drawer section title ────────────────────── */
+.section-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-muted);
+    margin: 0 0 16px;
+}
+
+/* ─── RA Section ──────────────────────────────── */
+.ra-section {
+    margin-bottom: 32px;
+}
+
+.ra-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ra-item {
+    display: grid;
+    grid-template-columns: 100px 1fr 36px;
+    align-items: center;
+    gap: 12px;
+}
+
+.ra-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text);
+    white-space: nowrap;
+}
+
+.ra-bar-track {
+    height: 6px;
+    background: #f2f2f7;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.ra-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ra-bar-fill.ra-high     { background: var(--risk-low); }
+.ra-bar-fill.ra-med      { background: var(--risk-medium); }
+.ra-bar-fill.ra-low      { background: var(--risk-high); }
+.ra-bar-fill.ra-none     { background: #d1d1d6; }
+
+.ra-value {
+    font-size: 13px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    color: var(--color-text);
+}
+
+/* ─── Feedback Section ────────────────────────── */
+.feedback-section {
+    background: #f5f5f7;
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+}
+
+.feedback-text {
+    margin: 0;
+    font-size: 15px;
+    color: var(--color-text);
+    line-height: 1.6;
+    font-style: italic;
+}
+
+/* ─── Comments section title ─────────────────── */
+.comments-section {
+    margin-top: 0;
+}
+
 /* Utility Classes */
 .text-accent { color: var(--color-accent); }

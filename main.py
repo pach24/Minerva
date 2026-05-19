@@ -71,6 +71,31 @@ async def api_predecir(request: Request):
     return JSONResponse(results)
 
 
+# --- API: REENTRENAR MODELO (CU-2) ---
+@app.post("/api/entrenar")
+async def api_entrenar(request: Request):
+    user = request.session.get("user")
+    if not user:
+        return JSONResponse({"error": "No autorizado"}, status_code=401)
+    from ml.train import train
+    import ml.predict as mp
+    acc = train()
+    mp._model = None  # invalida caché
+    return JSONResponse({"accuracy": round(acc, 3), "ok": True})
+
+
+# --- API: ACTUALIZAR INCREMENTAL (partial_fit) ---
+@app.post("/api/actualizar")
+async def api_actualizar(request: Request):
+    user = request.session.get("user")
+    if not user:
+        return JSONResponse({"error": "No autorizado"}, status_code=401)
+    from ml.predict import partial_update
+    data = await request.json()
+    partial_update(data)
+    return JSONResponse({"ok": True})
+
+
 # --- RUTA PROTEGIDA (DEMO) ---
 @app.get("/demo", response_class=HTMLResponse)
 def demo(request: Request):

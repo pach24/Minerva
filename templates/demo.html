@@ -126,9 +126,40 @@
                         <span class="value" id="drawer-grade">—</span>
                     </div>
                 </div>
+                <div class="ra-section">
+                    <h3 class="section-title">Resultados de Aprendizaje</h3>
+                    <div class="ra-list">
+                        <div class="ra-item">
+                            <span class="ra-label">Herencia</span>
+                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-herencia"></div></div>
+                            <span class="ra-value" id="ra-herencia-val">—</span>
+                        </div>
+                        <div class="ra-item">
+                            <span class="ra-label">Polimorfismo</span>
+                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-polimorfismo"></div></div>
+                            <span class="ra-value" id="ra-polimorfismo-val">—</span>
+                        </div>
+                        <div class="ra-item">
+                            <span class="ra-label">Ficheros</span>
+                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-ficheros"></div></div>
+                            <span class="ra-value" id="ra-ficheros-val">—</span>
+                        </div>
+                        <div class="ra-item">
+                            <span class="ra-label">Interfaces</span>
+                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-interfaces"></div></div>
+                            <span class="ra-value" id="ra-interfaces-val">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feedback-section" id="feedback-section">
+                    <h3 class="section-title">Observación del Profesor</h3>
+                    <p class="feedback-text" id="drawer-feedback">—</p>
+                </div>
+
                 <div class="comments-section">
-                    <h3>Observaciones y Notas</h3>
-                    <textarea placeholder="Añade una nota personalizada para el seguimiento..."></textarea>
+                    <h3 class="section-title">Notas de Seguimiento</h3>
+                    <textarea placeholder="Añade una nota personalizada..."></textarea>
                     <div style="display:flex; justify-content:flex-end;">
                         <button class="btn-small">Guardar</button>
                     </div>
@@ -164,12 +195,17 @@
                 const obj = {};
                 headers.forEach((h, i) => obj[h] = vals[i] ?? '');
                 return {
-                    id:             obj['id'] || '',
-                    nombre:         obj['nombre'] || obj['alumno'] || obj['name'] || '',
-                    asistencia:     parseFloat(obj['asistencia']) || 0,
-                    nota_media:     parseFloat(obj['nota_media'] || obj['media'] || obj['nota']) || 0,
-                    participacion:  obj['participacion'] || obj['participación'] || 'Media',
-                    nota_practicas: parseFloat(obj['nota_practicas']) || parseFloat(obj['nota_media'] || obj['nota']) || 0,
+                    id:              obj['id'] || '',
+                    nombre:          obj['nombre'] || obj['alumno'] || obj['name'] || '',
+                    asistencia:      parseFloat(obj['asistencia']) || 0,
+                    nota_media:      parseFloat(obj['nota_media'] || obj['media'] || obj['nota']) || 0,
+                    participacion:   obj['participacion'] || obj['participación'] || 'Media',
+                    nota_practicas:  parseFloat(obj['nota_practicas']) || 0,
+                    ra_herencia:     parseFloat(obj['ra_herencia'])     || 0,
+                    ra_polimorfismo: parseFloat(obj['ra_polimorfismo']) || 0,
+                    ra_ficheros:     parseFloat(obj['ra_ficheros'])     || 0,
+                    ra_interfaces:   parseFloat(obj['ra_interfaces'])   || 0,
+                    feedback_profesor: obj['feedback'] || obj['feedback_profesor'] || '',
                     approval: null,
                     risk: null,
                 };
@@ -304,6 +340,16 @@
         });
 
         // ── Drawer ───────────────────────────────────────────────────
+        function setRA(id, value) {
+            const pct = value > 0 ? (value / 10) * 100 : 0;
+            const fill = document.getElementById(id);
+            const val  = document.getElementById(id + '-val');
+            if (!fill || !val) return;
+            fill.style.width = pct + '%';
+            fill.className = 'ra-bar-fill ' + (value >= 7 ? 'ra-high' : value >= 5 ? 'ra-med' : value > 0 ? 'ra-low' : 'ra-none');
+            val.textContent = value > 0 ? value : '—';
+        }
+
         function openDrawer(i) {
             const s = students[i];
             document.getElementById('drawer-student-name').textContent = s.nombre;
@@ -318,6 +364,22 @@
 
             document.getElementById('drawer-attendance').textContent = s.asistencia + '%';
             document.getElementById('drawer-grade').textContent      = s.nota_media;
+
+            // RA
+            setRA('ra-herencia',     s.ra_herencia     || 0);
+            setRA('ra-polimorfismo', s.ra_polimorfismo || 0);
+            setRA('ra-ficheros',     s.ra_ficheros     || 0);
+            setRA('ra-interfaces',   s.ra_interfaces   || 0);
+
+            // Feedback
+            const fbSection = document.getElementById('feedback-section');
+            const fbText    = document.getElementById('drawer-feedback');
+            if (s.feedback_profesor && s.feedback_profesor.trim()) {
+                fbText.textContent    = s.feedback_profesor;
+                fbSection.style.display = 'block';
+            } else {
+                fbSection.style.display = 'none';
+            }
 
             document.getElementById('student-drawer').classList.add('open');
         }
