@@ -1,367 +1,360 @@
 <div align="center">
 
-# 🧠 Minerva
+# Minerva
 
-### *Educational Intelligence Platform powered by Machine Learning*
+### *Plataforma de Inteligencia Educativa con Machine Learning*
 
-Predict academic risk, analyze student performance, and empower educators with intelligent educational analytics.
-
-<br>
-
-![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.109-009688?style=for-the-badge&logo=fastapi&logoColor=white)
-![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-ML-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)
-![SQLite](https://img.shields.io/badge/SQLite-Database-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supported-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+Predice el riesgo académico, analiza el rendimiento de los estudiantes y apoya a los docentes con analítica inteligente.
 
 <br>
 
-![Status](https://img.shields.io/badge/Status-Active-success?style=flat-square)
-![License](https://img.shields.io/badge/License-Educational-blue?style=flat-square)
-![Architecture](https://img.shields.io/badge/Architecture-Modular-informational?style=flat-square)
-![ML](https://img.shields.io/badge/Machine%20Learning-SGDClassifier-orange?style=flat-square)
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.124-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.8-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-Auth-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
+
+<br>
+
+![Status](https://img.shields.io/badge/Estado-Funcional-success?style=flat-square)
+![License](https://img.shields.io/badge/Licencia-Académica-blue?style=flat-square)
+![ML](https://img.shields.io/badge/Modelo-SGDClassifier-orange?style=flat-square)
+![Accuracy](https://img.shields.io/badge/Accuracy-~82%25-brightgreen?style=flat-square)
 
 </div>
 
 ---
 
-# ✨ Overview
+## Descripción general
 
-**Minerva** is an educational analytics platform designed to predict student academic risk using Machine Learning.
+**Minerva** es una plataforma web de analítica educativa que predice el riesgo de suspenso de los estudiantes usando Machine Learning. Está pensada para profesores que quieren identificar alumnos en riesgo académico antes de que el problema sea irreversible.
 
-The platform combines:
-
-- 📊 Predictive analytics
-- 🧠 Machine Learning models
-- 🏫 Educational performance tracking
-- 📁 CSV batch processing
-- 🎨 Modern dashboard UI
-- ⚡ FastAPI backend architecture
-
-Minerva helps educators identify students at risk before academic failure occurs.
+El sistema combina un modelo de clasificación entrenado con datos sintéticos realistas, un pipeline de NLP ligero para interpretar el feedback del docente, y un dashboard interactivo con carga de datos vía CSV.
 
 ---
 
-# 🚀 Features
+## Características
 
-## 📈 Predictive Analytics
-- Student risk prediction
-- Pass probability estimation
-- Risk classification system
-- Historical prediction storage
+**Predicción de riesgo académico**
+- Clasifica a cada estudiante en cuatro niveles: Bajo, Medio, Alto y Crítico
+- Calcula la probabilidad de aprobado como porcentaje
+- Procesa hasta un grupo completo de alumnos en una sola petición
 
-## 🤖 Machine Learning
-- Synthetic educational dataset generation
-- Feature engineering pipeline
-- SGDClassifier training
-- Cross-validation metrics
-- Persistent trained models
+**Machine Learning**
+- Modelo SGDClassifier entrenado con 1 000 estudiantes sintéticos
+- 9 features que incluyen asistencia, notas, resultados de aprendizaje (RA) y participación
+- Reentrenamiento completo y actualización incremental (partial fit) disponibles vía API
+- NLP ligero: convierte el feedback textual del profesor en un score numérico (0–1)
 
-## 🌐 Web Platform
-- FastAPI REST API
-- Interactive dashboard
-- CSV upload support
-- Authentication system
-- Responsive Apple-inspired UI
+**Dashboard web**
+- Carga de datos mediante archivo CSV
+- Tabla de resultados con colores por nivel de riesgo
+- Panel lateral (drawer) con el detalle completo de cada estudiante
+- Visualización de barras de progreso por resultado de aprendizaje
 
-## 🗄️ Database Support
-- SQLite integration
-- PostgreSQL compatibility
-- Relational data model
-- Prediction persistence
+**Autenticación**
+- Login y gestión de sesiones con Supabase Auth
+- Rutas protegidas con `SessionMiddleware`
 
 ---
 
-# 🏗️ Architecture
+## Stack tecnológico
 
-```text
-                ┌────────────────────┐
-                │     Frontend UI    │
-                │ HTML • CSS • JS    │
-                └─────────┬──────────┘
-                          │
-                          ▼
-                ┌────────────────────┐
-                │      FastAPI       │
-                │   REST Endpoints   │
-                └─────────┬──────────┘
-                          │
-        ┌─────────────────┼─────────────────┐
-        ▼                 ▼                 ▼
-┌──────────────┐ ┌────────────────┐ ┌────────────────┐
-│ Authentication│ │ ML Prediction │ │ Database Layer │
-│   Sessions    │ │    Engine      │ │ SQLite/Postgres│
-└──────────────┘ └────────────────┘ └────────────────┘
-```
-
----
-
-# 🛠️ Tech Stack
-
-## Backend
-| Technology | Purpose |
+| Capa | Tecnología |
 |---|---|
-| FastAPI | API Framework |
-| SQLAlchemy | ORM |
-| Pydantic | Data validation |
-| Uvicorn | ASGI server |
-
-## Machine Learning
-| Technology | Purpose |
-|---|---|
-| Scikit-learn | ML model training |
-| Pandas | Data processing |
-| NumPy | Numerical operations |
-| Joblib | Model persistence |
-
-## Frontend
-| Technology | Purpose |
-|---|---|
-| HTML5 | Structure |
-| CSS3 | Styling |
-| JavaScript | Interaction |
-| Jinja2 | Templating |
+| Servidor web | FastAPI 0.124 + Uvicorn |
+| Plantillas | Jinja2 |
+| Sesiones | Starlette `SessionMiddleware` |
+| Autenticación | Supabase Auth (SDK 2.30) |
+| Machine Learning | scikit-learn 1.8 (SGDClassifier, StandardScaler) |
+| Datos | pandas 3.0 + NumPy 2.4 |
+| Persistencia del modelo | joblib (`.pkl`) |
+| Frontend | HTML5, CSS3 (15 módulos), Vanilla JS |
 
 ---
 
-# 📂 Project Structure
+## Estructura del proyecto
 
-```bash
-pach24-minerva/
+```
+Minerva/
+├── main.py                  # Punto de entrada: rutas FastAPI, auth, sesiones
+├── .env                     # Variables de entorno (no se sube al repo)
 │
-├── app/
-│   ├── config/          # App configuration
-│   ├── core/            # Core services
-│   ├── database/        # CRUD & models
-│   ├── ml/              # Machine Learning logic
-│   ├── routers/         # API endpoints
-│   └── schemas/         # Pydantic schemas
+├── ml/
+│   ├── train.py             # Generación de datos sintéticos y entrenamiento
+│   ├── predict.py           # Predicción por lotes y actualización incremental
+│   └── feedback.py          # NLP: texto del profesor → score 0–1
 │
-├── static/
-│   ├── css/             # Frontend styling
-│   └── scripts/         # Frontend scripts
+├── models/
+│   └── minerva_model.pkl    # Modelo serializado (scaler + clf + lista de features)
 │
-├── templates/           # Jinja2 templates
+├── templates/
+│   ├── index.html           # Landing page
+│   ├── login.html           # Formulario de acceso
+│   └── demo.html            # Dashboard principal (protegido)
 │
-├── main.py              # Entry point
-└── requirements.txt
+└── static/
+    ├── css/                 # 15 hojas de estilo modulares
+    ├── scripts/             # script.js (landing) y profesor.js (dashboard)
+    └── media/               # Imágenes y fondos
 ```
 
 ---
 
-# ⚙️ Installation
+## Instalación
 
-## 1️⃣ Clone the repository
+### Requisitos previos
+
+- Python 3.12
+- Una cuenta en [Supabase](https://supabase.com) con un proyecto creado
+
+### Pasos
 
 ```bash
-git clone https://github.com/yourusername/minerva.git
-cd minerva
+# 1. Clonar el repositorio
+git clone https://github.com/pach24/Minerva.git
+cd Minerva
+
+# 2. Crear y activar el entorno virtual
+python -m venv .venv
+
+# Windows
+.venv\Scripts\activate
+
+# Linux / macOS
+source .venv/bin/activate
+
+# 3. Instalar dependencias
+pip install fastapi uvicorn jinja2 python-dotenv python-multipart \
+            supabase PyJWT scikit-learn pandas numpy joblib
 ```
+
+### Variables de entorno
+
+Crea un archivo `.env` en la raíz con el siguiente contenido:
+
+```env
+SUPABASE_URL=https://<tu-proyecto>.supabase.co
+SUPABASE_KEY=<tu-anon-key>
+SUPABASE_SECRET_KEY=<tu-service-role-key>
+SESSION_SECRET=<cadena-aleatoria-larga>
+
+MODEL_PATH=models/minerva_model.pkl
+MIN_ACCURACY=0.80
+TEST_SIZE=0.2
+RANDOM_STATE=42
+NUM_SYNTHETIC_STUDENTS=1000
+```
+
+### Entrenar el modelo inicial
+
+El repositorio no incluye el archivo `.pkl` (está en `.gitignore`). Antes de arrancar el servidor por primera vez, genera el modelo:
+
+```bash
+python ml/train.py
+```
+
+Esto crea `models/minerva_model.pkl` con una accuracy aproximada del 82 %.
 
 ---
 
-## 2️⃣ Create a virtual environment
-
-### Windows
-
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
-### Linux / macOS
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
----
-
-## 3️⃣ Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-# ▶️ Running the Project
-
-Start the FastAPI server:
+## Ejecución
 
 ```bash
 uvicorn main:app --reload
 ```
 
-Application URL:
+La aplicación queda disponible en `http://127.0.0.1:8000`.
 
-```text
-http://127.0.0.1:8000
+---
+
+## Flujo de uso
+
+```
+1. Acceder a /         → Landing page con descripción de la plataforma
+2. Clic en "Acceder"   → Formulario de login (/login)
+3. Autenticarse        → Supabase valida credenciales y crea sesión
+4. Dashboard (/demo)   → Subir CSV con datos del grupo
+5. "Generar predicción"→ POST /api/predecir → tabla con niveles de riesgo
+6. Clic en alumno      → Drawer lateral con desglose completo
 ```
 
 ---
 
-# 🔐 Default Credentials
+## Endpoints de la API
 
-```text
-Username: admin
-Password: admin
-```
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET` | `/` | Landing page |
+| `GET` | `/login` | Formulario de login |
+| `POST` | `/login` | Autenticación vía Supabase |
+| `GET` | `/logout` | Cierra sesión y redirige a `/login` |
+| `GET` | `/demo` | Dashboard (requiere sesión activa) |
+| `POST` | `/api/predecir` | Predicción de riesgo para un grupo de estudiantes |
+| `POST` | `/api/entrenar` | Reentrenamiento completo del modelo |
+| `POST` | `/api/actualizar` | Actualización incremental del modelo (`partial_fit`) |
 
----
+### POST `/api/predecir`
 
-# 📡 API Endpoints
+Recibe una lista de estudiantes en JSON y devuelve las predicciones.
 
-# 🎯 Prediction API
-
-## Predict a single student
-
-```http
-POST /api/predict
-```
-
-### Example Request
-
+**Cuerpo de la petición:**
 ```json
-{
-  "nombre": "John Doe",
-  "nota_media": 7.8,
-  "asistencia": 85,
-  "nota_practicas": 8.1,
-  "ra_completados": 16,
-  "participacion": 7
-}
+[
+  {
+    "nombre": "Ana García",
+    "asistencia": 78,
+    "nota_media": 6.4,
+    "participacion": "Media",
+    "nota_practicas": 5.8,
+    "ra_herencia": 7,
+    "ra_polimorfismo": 5,
+    "ra_ficheros": 6,
+    "ra_interfaces": 4,
+    "feedback": "Participa pero se distrae con facilidad"
+  }
+]
 ```
 
----
-
-## Batch prediction from CSV
-
-```http
-POST /api/predict/batch
+**Respuesta:**
+```json
+[
+  {
+    "nombre": "Ana García",
+    "asistencia": 78,
+    "nota_media": 6.4,
+    "prob_aprobado": 0.61,
+    "nivel_riesgo": "Medio"
+  }
+]
 ```
 
-Required CSV columns:
+Los niveles de riesgo se asignan según la probabilidad de aprobado:
 
-```text
-nombre,nota_media,asistencia,nota_practicas,ra_completados,participacion
-```
-
----
-
-# 🧠 Machine Learning API
-
-## Train model
-
-```http
-POST /api/admin/train
-```
-
-## Training status
-
-```http
-GET /api/admin/train/status
-```
-
-## Generate synthetic dataset
-
-```http
-POST /api/admin/data/generate
-```
-
-## Model information
-
-```http
-GET /api/admin/model/info
-```
-
----
-
-# 🧪 Machine Learning Pipeline
-
-Minerva uses a complete ML workflow:
-
-```text
-Synthetic Data
-      ↓
-Feature Engineering
-      ↓
-Normalization
-      ↓
-Model Training
-      ↓
-Prediction Service
-```
-
-## Features Used
-
-| Feature | Description |
+| Nivel | Probabilidad |
 |---|---|
-| nota_media | Average grade |
-| asistencia | Attendance |
-| nota_practicas | Practical assignments |
-| ra_completados | Completed learning outcomes |
-| participacion | Participation score |
-| engagement | Derived engagement metric |
+| Bajo | ≥ 70 % |
+| Medio | 50 – 69 % |
+| Alto | 30 – 49 % |
+| Crítico | < 30 % |
 
 ---
 
-# 🗄️ Database Design
+## Formato del CSV
 
-Main tables:
+El CSV que se sube en el dashboard debe tener exactamente estas columnas (con cabecera):
 
-| Table | Purpose |
+```
+ID,Nombre,Asistencia,Nota_Media,Participacion,Nota_Practicas,RA_Herencia,RA_Polimorfismo,RA_Ficheros,RA_Interfaces,Feedback
+```
+
+| Columna | Tipo | Rango / Valores |
+|---|---|---|
+| `ID` | Entero | Identificador del alumno |
+| `Nombre` | Texto | Nombre completo |
+| `Asistencia` | Número | 0 – 100 (%) |
+| `Nota_Media` | Número | 0 – 10 |
+| `Participacion` | Texto | `Alta`, `Media`, `Baja`, `Nula` |
+| `Nota_Practicas` | Número | 0 – 10 |
+| `RA_Herencia` | Número | 0 – 10 |
+| `RA_Polimorfismo` | Número | 0 – 10 |
+| `RA_Ficheros` | Número | 0 – 10 |
+| `RA_Interfaces` | Número | 0 – 10 |
+| `Feedback` | Texto | Observación libre del profesor (opcional) |
+
+---
+
+## Modelo de Machine Learning
+
+### Features del modelo
+
+| Feature | Rango | Peso en síntesis |
+|---|---|---|
+| `asistencia` | 0 – 100 | 25 % |
+| `nota_media` | 0 – 10 | 30 % |
+| `participacion_score` | 0 – 1 | 8 % |
+| `nota_practicas` | 0 – 10 | 12 % |
+| `ra_herencia` | 0 – 10 | 3.75 % |
+| `ra_polimorfismo` | 0 – 10 | 3.75 % |
+| `ra_ficheros` | 0 – 10 | 3.75 % |
+| `ra_interfaces` | 0 – 10 | 3.75 % |
+| `feedback_score` | 0 – 1 | 10 % |
+
+### Pipeline
+
+```
+Generación de datos sintéticos (1 000 alumnos)
+           ↓
+   Train / Test split (80 / 20)
+           ↓
+   StandardScaler (normalización)
+           ↓
+ SGDClassifier(loss="log_loss", max_iter=1000)
+           ↓
+   Evaluación completa (accuracy, classification report,
+   matriz de confusión, validación de umbrales)
+           ↓
+   Serialización en .pkl (scaler + clf + features)
+           ↓
+   predict_proba() → nivel de riesgo
+```
+
+### Evaluación del modelo
+
+Al entrenar (`python ml/train.py`), el script ejecuta una evaluación completa antes de guardar el modelo. La salida incluye:
+
+1. **Accuracy** en train y test, con la diferencia entre ambos para detectar overfitting
+2. **Classification report** (precision, recall, F1-score por clase)
+3. **Matriz de confusión** en formato texto
+4. **Validación de umbrales mínimos** con veredicto PASS/FAIL por cada check:
+
+| Métrica | Umbral mínimo |
 |---|---|
-| users | Authentication |
-| students | Student records |
-| academic_data | Educational metrics |
-| predictions | Prediction history |
+| Accuracy (test) | ≥ 0.80 |
+| Recall (mínimo por clase) | ≥ 0.75 |
+| F1-score (mínimo por clase) | ≥ 0.75 |
+| Diferencia train-test | < 0.05 |
+
+Resultados actuales (seed 42, 1 000 alumnos sintéticos):
+
+```
+Accuracy:  train 0.855 / test 0.820
+Recall:    Suspende 0.84 — Aprueba 0.81
+F1-score:  Suspende 0.78 — Aprueba 0.85
+Overfit:   0.035 (dentro del margen)
+Veredicto: MODELO APTO
+```
+
+### NLP para feedback del profesor
+
+El módulo `ml/feedback.py` convierte el texto libre del docente en un score numérico:
+
+- Sin texto → `0.5` (neutro)
+- Detecta palabras positivas (esfuerza, participa, excelente…) y negativas (distraído, falta, abandona…)
+- Score = `positivas / (positivas + negativas)`
+- Sin palabras reconocidas → `0.5`
 
 ---
 
-# 🎨 Frontend Experience
+## Pendiente / Roadmap
 
-Minerva includes a modern educational dashboard inspired by Apple's design philosophy.
-
-### UI Highlights
-- Glassmorphism components
-- Smooth transitions
-- Responsive layout
-- Risk visualization badges
-- Interactive student drawer
-- Minimalist design system
+- [ ] Diagramas UML y wireframes del sistema
+- [ ] Suite de tests (pytest)
+- [ ] Generación de `requirements.txt`
+- [ ] Gráficos de evolución temporal por alumno
+- [ ] Ajuste de pesos del modelo por parte del profesor (CU-5)
+- [ ] Exportación de informes en PDF
+- [ ] Dockerización de la aplicación
 
 ---
 
+## Licencia
 
-# 👨‍💻 Development Notes
-
-Minerva follows a modular architecture approach:
-
-- Clean separation of concerns
-- Independent ML layer
-- Reusable schemas
-- Database abstraction
-- Config-driven settings
-- Scalable API structure
-
----
-
-# 📜 License
-
-This project was developed for educational and academic purposes.
+Proyecto desarrollado con fines académicos.
 
 ---
 
 <div align="center">
 
-## 🌟 Minerva
-
-### *Predicting educational outcomes through intelligent systems.*
-
-<br>
-
-Made with ❤️ using FastAPI & Machine Learning
+**Minerva** — *Predicting educational outcomes through intelligent systems.*
 
 </div>

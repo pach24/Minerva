@@ -9,7 +9,7 @@ import os
 from sklearn.linear_model import SGDClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
 RANDOM_STATE = int(os.getenv("RANDOM_STATE", 42))
 N            = int(os.getenv("NUM_SYNTHETIC_STUDENTS", 1000))
@@ -82,8 +82,75 @@ def train() -> float:
     clf = SGDClassifier(loss="log_loss", max_iter=1000, random_state=RANDOM_STATE)
     clf.fit(X_train_sc, y_train)
 
-    acc = accuracy_score(y_test, clf.predict(X_test_sc))
-    print(f"Accuracy: {acc:.3f} ({int(acc * 100)}%)")
+    # --- Evaluación del modelo ---
+    y_pred_train = clf.predict(X_train_sc)
+    y_pred_test  = clf.predict(X_test_sc)
+
+    acc_train = accuracy_score(y_train, y_pred_train)
+    acc_test  = accuracy_score(y_test, y_pred_test)
+    acc_diff  = abs(acc_train - acc_test)
+
+    print("=" * 55)
+    print("         EVALUACIÓN DEL MODELO")
+    print("=" * 55)
+
+    print(f"\n--- Accuracy ---")
+    print(f"  Train:      {acc_train:.4f}")
+    print(f"  Test:       {acc_test:.4f}")
+    print(f"  Diferencia: {acc_diff:.4f}")
+
+    target_names = ["Suspende (0)", "Aprueba (1)"]
+    report = classification_report(
+        y_test, y_pred_test,
+        target_names=target_names,
+        zero_division=0,
+        output_dict=True,
+    )
+
+    print(f"\n--- Classification Report ---")
+    print(classification_report(
+        y_test, y_pred_test,
+        target_names=target_names,
+        zero_division=0,
+    ))
+
+    cm = confusion_matrix(y_test, y_pred_test)
+    print(f"--- Matriz de Confusión ---")
+    print(f"{'':>18} Pred:Susp  Pred:Aprob")
+    print(f"  Real: Suspende   {cm[0][0]:>5}       {cm[0][1]:>5}")
+    print(f"  Real: Aprueba    {cm[1][0]:>5}       {cm[1][1]:>5}")
+
+    recall_min = min(report["Suspende (0)"]["recall"], report["Aprueba (1)"]["recall"])
+    f1_min     = min(report["Suspende (0)"]["f1-score"], report["Aprueba (1)"]["f1-score"])
+
+    MIN_ACC    = float(os.getenv("MIN_ACCURACY", 0.80))
+    MIN_RECALL = 0.75
+    MIN_F1     = 0.75
+    MAX_DIFF   = 0.05
+
+    checks = [
+        ("Accuracy  >= {:.2f}".format(MIN_ACC),    acc_test   >= MIN_ACC),
+        ("Recall    >= {:.2f} (min clase)".format(MIN_RECALL), recall_min >= MIN_RECALL),
+        ("F1-score  >= {:.2f} (min clase)".format(MIN_F1),     f1_min     >= MIN_F1),
+        ("Diff T/T  <  {:.2f} (overfit)".format(MAX_DIFF),     acc_diff   <  MAX_DIFF),
+    ]
+
+    print(f"\n--- Validación de Umbrales ---")
+    all_pass = True
+    for label, passed in checks:
+        tag = "PASS" if passed else "FAIL"
+        print(f"  [{tag}] {label}")
+        if not passed:
+            all_pass = False
+
+    if all_pass:
+        print(f"\n>>> VEREDICTO: MODELO APTO — cumple todos los umbrales <<<")
+    else:
+        print(f"\n>>> VEREDICTO: MODELO NO APTO — revisa las métricas FAIL <<<")
+
+    print("=" * 55)
+
+    acc = acc_test
 
     os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
     with open(MODEL_PATH, "wb") as f:
