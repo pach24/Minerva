@@ -18,6 +18,18 @@
         </div>
     </div>
 
+    <!-- Error Modal (Apple Alert Dialog Style) -->
+    <div id="error-modal" class="error-modal-overlay">
+        <div class="error-modal-card">
+            <div class="error-icon-container">
+                <i data-lucide="alert-circle" style="width:24px; height:24px;"></i>
+            </div>
+            <h3 id="error-title">Error de importación</h3>
+            <p id="error-message">El archivo seleccionado no cumple con los requisitos del sistema.</p>
+            <button class="btn-error-primary" onclick="closeErrorModal()">Aceptar</button>
+        </div>
+    </div>
+
     <!-- Navbar -->
     <nav class="navbar">
         <div class="navbar-content">
@@ -42,7 +54,7 @@
             </div>
             <div class="header-controls" id="controls-area" style="display:none;">
                 <div class="subject-pill">
-                    <i data-lucide="brain" style="width:15px;height:15px;"></i>
+                    <i data-lucide="code" style="width:15px;height:15px;"></i>
                     Programación
                 </div>
                 <button class="btn-primary" id="btn-predict">
@@ -68,7 +80,7 @@
             <div class="table-meta">
                 <div class="meta-left">
                     <span class="subject-tag">
-                        <i data-lucide="book-open" style="width:13px;height:13px;"></i>
+                        <i data-lucide="code" style="width:13px;height:13px;"></i>
                         Programación
                     </span>
                     <span id="student-count" class="count-tag">0 alumnos</span>
@@ -95,7 +107,7 @@
             </div>
         </div>
 
-    </main>
+       
 
     <!-- Drawer (Sheet) -->
     <div id="student-drawer" class="drawer-overlay">
@@ -130,26 +142,56 @@
                     <h3 class="section-title">Resultados de Aprendizaje</h3>
                     <div class="ra-list">
                         <div class="ra-item">
-                            <span class="ra-label">Herencia</span>
-                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-herencia"></div></div>
-                            <span class="ra-value" id="ra-herencia-val">—</span>
+                            <span class="ra-label">RA1 · Estructura de programas</span>
+                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-1"></div></div>
+                            <span class="ra-value" id="ra-1-val">—</span>
                         </div>
                         <div class="ra-item">
-                            <span class="ra-label">Polimorfismo</span>
-                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-polimorfismo"></div></div>
-                            <span class="ra-value" id="ra-polimorfismo-val">—</span>
+                            <span class="ra-label">RA2 · POO básica</span>
+                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-2"></div></div>
+                            <span class="ra-value" id="ra-2-val">—</span>
                         </div>
                         <div class="ra-item">
-                            <span class="ra-label">Ficheros</span>
-                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-ficheros"></div></div>
-                            <span class="ra-value" id="ra-ficheros-val">—</span>
+                            <span class="ra-label">RA3 · Estructuras de datos</span>
+                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-3"></div></div>
+                            <span class="ra-value" id="ra-3-val">—</span>
                         </div>
                         <div class="ra-item">
-                            <span class="ra-label">Interfaces</span>
-                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-interfaces"></div></div>
-                            <span class="ra-value" id="ra-interfaces-val">—</span>
+                            <span class="ra-label">RA4 · Algoritmos y eficiencia</span>
+                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-4"></div></div>
+                            <span class="ra-value" id="ra-4-val">—</span>
+                        </div>
+                        <div class="ra-item">
+                            <span class="ra-label">RA5 · Tratamiento de ficheros</span>
+                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-5"></div></div>
+                            <span class="ra-value" id="ra-5-val">—</span>
+                        </div>
+                        <div class="ra-item">
+                            <span class="ra-label">RA6 · Interfaces gráficas</span>
+                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-6"></div></div>
+                            <span class="ra-value" id="ra-6-val">—</span>
+                        </div>
+                        <div class="ra-item">
+                            <span class="ra-label">RA7 · Herencia y polimorfismo</span>
+                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-7"></div></div>
+                            <span class="ra-value" id="ra-7-val">—</span>
+                        </div>
+                        <div class="ra-item">
+                            <span class="ra-label">RA8 · Acceso a bases de datos</span>
+                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-8"></div></div>
+                            <span class="ra-value" id="ra-8-val">—</span>
+                        </div>
+                        <div class="ra-item">
+                            <span class="ra-label">RA9 · Desarrollo de proyectos</span>
+                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-9"></div></div>
+                            <span class="ra-value" id="ra-9-val">—</span>
                         </div>
                     </div>
+                </div>
+
+                <div class="disclaimer">
+                    Las predicciones se basan en datos sintéticos y tienen carácter orientativo.
+                    La fiabilidad aumentará progresivamente al incorporar datos históricos reales.
                 </div>
 
                 <div class="feedback-section" id="feedback-section">
@@ -194,17 +236,29 @@
                 const vals = line.split(',').map(v => v.trim());
                 const obj = {};
                 headers.forEach((h, i) => obj[h] = vals[i] ?? '');
+                const raw_asistencia = parseFloat(obj['asistencia']) || 0;
+                const ratio_asistencia = raw_asistencia > 1 ? raw_asistencia / 100 : raw_asistencia;
                 return {
                     id:              obj['id'] || '',
                     nombre:          obj['nombre'] || obj['alumno'] || obj['name'] || '',
-                    asistencia:      parseFloat(obj['asistencia']) || 0,
+                    asistencia:      raw_asistencia,
+                    ratio_asistencia: ratio_asistencia,
                     nota_media:      parseFloat(obj['nota_media'] || obj['media'] || obj['nota']) || 0,
                     participacion:   obj['participacion'] || obj['participación'] || 'Media',
-                    nota_practicas:  parseFloat(obj['nota_practicas']) || 0,
-                    ra_herencia:     parseFloat(obj['ra_herencia'])     || 0,
-                    ra_polimorfismo: parseFloat(obj['ra_polimorfismo']) || 0,
-                    ra_ficheros:     parseFloat(obj['ra_ficheros'])     || 0,
-                    ra_interfaces:   parseFloat(obj['ra_interfaces'])   || 0,
+                    nota_practicas:  parseFloat(obj['nota_practicas'] || obj['nota_practicas']) || null,
+                    nota_ra1: parseFloat(obj['ra1'] || obj['nota_ra1']) || null,
+                    nota_ra2: parseFloat(obj['ra2'] || obj['nota_ra2']) || null,
+                    nota_ra3: parseFloat(obj['ra3'] || obj['nota_ra3']) || null,
+                    nota_ra4: parseFloat(obj['ra4'] || obj['nota_ra4']) || null,
+                    nota_ra5: parseFloat(obj['ra5'] || obj['nota_ra5']) || null,
+                    nota_ra6: parseFloat(obj['ra6'] || obj['nota_ra6']) || null,
+                    nota_ra7: parseFloat(obj['ra7'] || obj['nota_ra7']) || null,
+                    nota_ra8: parseFloat(obj['ra8'] || obj['nota_ra8']) || null,
+                    nota_ra9: parseFloat(obj['ra9'] || obj['nota_ra9']) || null,
+                    confianza:               obj['confianza'] !== '' ? parseInt(obj['confianza']) || null : null,
+                    motivacion_escolar:      obj['motivacion'] !== '' ? parseInt(obj['motivacion'] || obj['motivacion_escolar']) || null : null,
+                    recursos_casa:           obj['recursos'] !== '' ? parseInt(obj['recursos'] || obj['recursos_casa']) || null : null,
+                    nivel_educativo_familia: obj['nivel_educativo'] !== '' ? parseInt(obj['nivel_educativo'] || obj['nivel_educativo_familia']) || null : null,
                     feedback_profesor: obj['feedback'] || obj['feedback_profesor'] || '',
                     approval: null,
                     risk: null,
@@ -214,19 +268,41 @@
 
         function handleFileUpload(input) {
             const file = input.files[0];
-            if (!file || !file.name.endsWith('.csv')) {
-                alert('Por favor sube un archivo .csv válido.');
+            if (!file) return;
+
+            if (!file.name.endsWith('.csv')) {
+                showErrorModal('Formato no compatible', 'Minerva requiere un archivo con formato CSV (.csv) para realizar el análisis de datos.');
+                input.value = '';
                 return;
             }
+
             const reader = new FileReader();
             reader.onload = e => {
-                students = parseCSV(e.target.result);
-                if (!students.length) { alert('El CSV está vacío o tiene formato incorrecto.'); return; }
-                document.getElementById('empty-state').style.display   = 'none';
-                document.getElementById('data-view').style.display     = 'block';
-                document.getElementById('controls-area').style.display = 'flex';
-                document.getElementById('student-count').textContent   = students.length + ' alumnos';
-                renderTable(students);
+                try {
+                    students = parseCSV(e.target.result);
+                    if (!students.length) {
+                        showErrorModal('Archivo sin registros', 'El archivo CSV cargado no contiene filas de datos válidas o el formato está dañado.');
+                        input.value = '';
+                        return;
+                    }
+
+                    // Strict structure checking
+                    const hasInvalidStructure = students.every(s => !s.nombre);
+                    if (hasInvalidStructure) {
+                        showErrorModal('Estructura incorrecta', 'No se ha podido localizar la columna obligatoria "Alumno" o "Nombre". Revisa el formato sugerido.');
+                        input.value = '';
+                        return;
+                    }
+
+                    document.getElementById('empty-state').style.display   = 'none';
+                    document.getElementById('data-view').style.display     = 'block';
+                    document.getElementById('controls-area').style.display = 'flex';
+                    document.getElementById('student-count').textContent   = students.length + ' alumnos';
+                    renderTable(students);
+                } catch (err) {
+                    showErrorModal('Error de lectura', 'Ocurrió un fallo al intentar interpretar el archivo: ' + err.message);
+                    input.value = '';
+                }
             };
             reader.readAsText(file, 'UTF-8');
         }
@@ -335,7 +411,7 @@
                 clearInterval(interval);
                 overlay.classList.remove('visible');
                 btn.disabled = false;
-                alert('Error al conectar con el modelo: ' + err.message);
+                showErrorModal('Fallo de conexión', 'No se pudo establecer conexión con el modelo predictivo de Minerva: ' + err.message);
             }
         });
 
@@ -365,11 +441,16 @@
             document.getElementById('drawer-attendance').textContent = s.asistencia + '%';
             document.getElementById('drawer-grade').textContent      = s.nota_media;
 
-            // RA
-            setRA('ra-herencia',     s.ra_herencia     || 0);
-            setRA('ra-polimorfismo', s.ra_polimorfismo || 0);
-            setRA('ra-ficheros',     s.ra_ficheros     || 0);
-            setRA('ra-interfaces',   s.ra_interfaces   || 0);
+            // RA1-RA9
+            setRA('ra-1', s.nota_ra1 || 0);
+            setRA('ra-2', s.nota_ra2 || 0);
+            setRA('ra-3', s.nota_ra3 || 0);
+            setRA('ra-4', s.nota_ra4 || 0);
+            setRA('ra-5', s.nota_ra5 || 0);
+            setRA('ra-6', s.nota_ra6 || 0);
+            setRA('ra-7', s.nota_ra7 || 0);
+            setRA('ra-8', s.nota_ra8 || 0);
+            setRA('ra-9', s.nota_ra9 || 0);
 
             // Feedback
             const fbSection = document.getElementById('feedback-section');
@@ -390,6 +471,22 @@
 
         document.getElementById('student-drawer').addEventListener('click', e => {
             if (e.target === document.getElementById('student-drawer')) closeDrawer();
+        });
+
+        // ── Error Modal Control ──────────────────────────────────────
+        function showErrorModal(title, message) {
+            document.getElementById('error-title').textContent = title;
+            document.getElementById('error-message').textContent = message;
+            document.getElementById('error-modal').classList.add('open');
+            lucide.createIcons();
+        }
+
+        function closeErrorModal() {
+            document.getElementById('error-modal').classList.remove('open');
+        }
+
+        document.getElementById('error-modal').addEventListener('click', e => {
+            if (e.target === document.getElementById('error-modal')) closeErrorModal();
         });
     </script>
 </body>

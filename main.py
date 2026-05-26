@@ -96,6 +96,18 @@ async def api_actualizar(request: Request):
     return JSONResponse({"ok": True})
 
 
+# --- API: MÉTRICAS DEL MODELO ---
+@app.get("/modelo/metricas")
+async def api_metricas():
+    import json
+    metrics_path = os.getenv("METRICS_PATH", "model_metrics.json")
+    try:
+        with open(metrics_path, "r", encoding="utf-8") as f:
+            return JSONResponse(json.load(f))
+    except FileNotFoundError:
+        return JSONResponse({"error": "model_metrics.json no encontrado. Ejecuta /api/entrenar primero."}, status_code=404)
+
+
 # --- RUTA PROTEGIDA (DEMO) ---
 @app.get("/demo", response_class=HTMLResponse)
 def demo(request: Request):
