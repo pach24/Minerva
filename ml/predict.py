@@ -30,10 +30,10 @@ def _build_row(s: dict) -> dict:
         "nota_media":          float(s.get("nota_media", 0)),
         "participacion_score": PART_MAP.get(s.get("participacion", "Media"), 0.67),
         "nota_practicas":      float(s.get("nota_practicas", s.get("nota_media", 0))),
-        "ra_herencia":         float(s.get("ra_herencia", 0)),
-        "ra_polimorfismo":     float(s.get("ra_polimorfismo", 0)),
-        "ra_ficheros":         float(s.get("ra_ficheros", 0)),
-        "ra_interfaces":       float(s.get("ra_interfaces", 0)),
+        "ra_herencia":         float(s.get("ra_herencia", 5)),
+        "ra_polimorfismo":     float(s.get("ra_polimorfismo", 5)),
+        "ra_ficheros":         float(s.get("ra_ficheros", 5)),
+        "ra_interfaces":       float(s.get("ra_interfaces", 5)),
         "feedback_score":      texto_a_score(s.get("feedback_profesor", "")),
     }
 
