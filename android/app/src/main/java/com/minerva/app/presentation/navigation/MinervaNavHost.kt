@@ -6,13 +6,23 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.minerva.app.presentation.login.LoginScreen
 import com.minerva.app.presentation.prediction.PredictionScreen
+import com.minerva.app.presentation.splash.SplashScreen
 
 @Composable
 fun MinervaNavHost(
     navController: NavHostController,
     startDestination: String
 ) {
-    NavHost(navController = navController, startDestination = startDestination) {
+    NavHost(navController = navController, startDestination = Routes.SPLASH) {
+        composable(Routes.SPLASH) {
+            SplashScreen(
+                onFinished = {
+                    navController.navigate(startDestination) {
+                        popUpTo(Routes.SPLASH) { inclusive = true }
+                    }
+                }
+            )
+        }
         composable(Routes.LOGIN) {
             LoginScreen(
                 onLoginSuccess = {
