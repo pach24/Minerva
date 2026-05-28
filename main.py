@@ -60,10 +60,25 @@ def logout(request: Request):
     return RedirectResponse(url="/login")
 
 
+def get_current_user(request: Request):
+    user = request.session.get("user")
+    if user:
+        return user
+    auth = request.headers.get("Authorization", "")
+    if auth.startswith("Bearer "):
+        token = auth.split(" ", 1)[1]
+        try:
+            res = supabase.auth.get_user(token)
+            return res.user.email
+        except Exception:
+            return None
+    return None
+
+
 # --- API: PREDICCIÓN ML ---
 @app.post("/api/predecir")
 async def api_predecir(request: Request):
-    user = request.session.get("user")
+    user = get_current_user(request)
     if not user:
         return JSONResponse({"error": "No autorizado"}, status_code=401)
     data = await request.json()
@@ -136,8 +151,8 @@ async def api_metricas():
 # --- API: HISTORIAL POR ALUMNO ---
 @app.get("/api/historial/{alumno_id}")
 async def api_historial(alumno_id: str, request: Request):
-    if not request.session.get("user"):
-     return JSONResponse({"error": "No autorizado"}, status_code=401)
+    if not get_current_user(request):
+        return JSONResponse({"error": "No autorizado"}, status_code=401)
     res = (supabase.table("predicciones")
         .select("*")
         .eq("alumno_id", alumno_id)
