@@ -32,6 +32,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.minerva.app.R
+import com.minerva.app.presentation.components.MinervaDialog
+import com.minerva.app.presentation.components.registerDescription
+import com.minerva.app.presentation.components.unavailableDescription
 import com.minerva.app.presentation.theme.MinervaBlue
 import com.minerva.app.presentation.theme.MinervaTheme
 
@@ -97,38 +100,19 @@ private fun LoginScreenContent(
 
     var activeDialog by remember { mutableStateOf<LoginDialog?>(null) }
 
-    // Dialogs
     when (activeDialog) {
         LoginDialog.ForgotPassword, LoginDialog.Google, LoginDialog.Apple -> {
-            AlertDialog(
-                onDismissRequest = { activeDialog = null },
-                title = { Text("Funcionalidad no disponible", fontWeight = FontWeight.SemiBold) },
-                text = { Text("Esta opción aún no está disponible en la aplicación.") },
-                confirmButton = {
-                    TextButton(onClick = { activeDialog = null }) {
-                        Text("Entendido", color = ButtonBlue)
-                    }
-                },
-                shape = RoundedCornerShape(16.dp)
+            MinervaDialog(
+                title = "Funcionalidad no disponible",
+                description = unavailableDescription(),
+                onDismiss = { activeDialog = null }
             )
         }
         LoginDialog.Register -> {
-            AlertDialog(
-                onDismissRequest = { activeDialog = null },
-                title = { Text("¿Quieres registrarte?", fontWeight = FontWeight.SemiBold) },
-                text = {
-                    Text(
-                        text = "El acceso a Minerva está gestionado por tu institución educativa.\n\n" +
-                                "Contacta con tu centro o escríbenos a:\n\nsoporte@minerva.app",
-                        lineHeight = 22.sp
-                    )
-                },
-                confirmButton = {
-                    TextButton(onClick = { activeDialog = null }) {
-                        Text("Entendido", color = ButtonBlue)
-                    }
-                },
-                shape = RoundedCornerShape(16.dp)
+            MinervaDialog(
+                title = "¿Quieres registrarte?",
+                description = registerDescription(),
+                onDismiss = { activeDialog = null }
             )
         }
         null -> Unit
