@@ -39,10 +39,6 @@ import com.minerva.app.presentation.theme.MinervaBlue
 import com.minerva.app.presentation.theme.MinervaTheme
 
 private val ButtonBlue = Color(0xFF1A73E8)
-private val FieldBorder = Color(0xFFE0E0E0)
-private val LabelColor = Color(0xFF424242)
-private val HintColor = Color(0xFFBDBDBD)
-private val MutedColor = Color(0xFF9E9E9E)
 
 private enum class LoginDialog { ForgotPassword, Google, Apple, Register }
 
@@ -87,15 +83,20 @@ private fun LoginScreenContent(
     onLoginClick: () -> Unit,
 ) {
     val fieldShape = RoundedCornerShape(12.dp)
+    val outline = MaterialTheme.colorScheme.outline
+    val muted = MaterialTheme.colorScheme.onSurfaceVariant
+    val hint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+    val fieldSurface = MaterialTheme.colorScheme.surface
+    val labelColor = MaterialTheme.colorScheme.onSurface
     val fieldColors = OutlinedTextFieldDefaults.colors(
-        unfocusedBorderColor = FieldBorder,
+        unfocusedBorderColor = outline,
         focusedBorderColor = ButtonBlue,
-        unfocusedLeadingIconColor = MutedColor,
+        unfocusedLeadingIconColor = muted,
         focusedLeadingIconColor = ButtonBlue,
-        unfocusedContainerColor = Color.White,
-        focusedContainerColor = Color.White,
-        unfocusedTrailingIconColor = MutedColor,
-        focusedTrailingIconColor = MutedColor,
+        unfocusedContainerColor = fieldSurface,
+        focusedContainerColor = fieldSurface,
+        unfocusedTrailingIconColor = muted,
+        focusedTrailingIconColor = muted,
     )
 
     var activeDialog by remember { mutableStateOf<LoginDialog?>(null) }
@@ -118,7 +119,7 @@ private fun LoginScreenContent(
         null -> Unit
     }
 
-    Scaffold(containerColor = Color.White) { padding ->
+    Scaffold(containerColor = MaterialTheme.colorScheme.background) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -143,13 +144,13 @@ private fun LoginScreenContent(
                 text = "Bienvenido",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF1A1A1A)
+                color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(Modifier.height(6.dp))
             Text(
                 text = "Inicia sesión para continuar",
                 fontSize = 18.sp,
-                color = MutedColor
+                color = muted
             )
 
             Spacer(Modifier.height(36.dp))
@@ -160,13 +161,13 @@ private fun LoginScreenContent(
                     text = "Correo electrónico",
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Medium,
-                    color = LabelColor,
+                    color = labelColor,
                     modifier = Modifier.padding(bottom = 6.dp)
                 )
                 OutlinedTextField(
                     value = email,
                     onValueChange = onEmailChange,
-                    placeholder = { Text("tu@email.com", color = HintColor, fontSize = 15.sp) },
+                    placeholder = { Text("tu@email.com", color = hint, fontSize = 15.sp) },
                     leadingIcon = {
                         Icon(Icons.Outlined.Email, contentDescription = null, modifier = Modifier.size(20.dp))
                     },
@@ -192,7 +193,7 @@ private fun LoginScreenContent(
                         text = "Contraseña",
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Medium,
-                        color = LabelColor
+                        color = labelColor
                     )
                     Text(
                         text = "¿Olvidaste tu contraseña?",
@@ -206,7 +207,7 @@ private fun LoginScreenContent(
                 OutlinedTextField(
                     value = password,
                     onValueChange = onPasswordChange,
-                    placeholder = { Text("••••••••", color = HintColor, fontSize = 15.sp) },
+                    placeholder = { Text("••••••••", color = hint, fontSize = 15.sp) },
                     leadingIcon = {
                         Icon(Icons.Outlined.Lock, contentDescription = null, modifier = Modifier.size(20.dp))
                     },
@@ -277,13 +278,13 @@ private fun LoginScreenContent(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                HorizontalDivider(modifier = Modifier.weight(1f), color = FieldBorder)
+                HorizontalDivider(modifier = Modifier.weight(1f), color = outline)
                 Text(
                     text = "  o continúa con  ",
                     fontSize = 13.sp,
-                    color = MutedColor
+                    color = muted
                 )
-                HorizontalDivider(modifier = Modifier.weight(1f), color = FieldBorder)
+                HorizontalDivider(modifier = Modifier.weight(1f), color = outline)
             }
 
             Spacer(Modifier.height(16.dp))
@@ -295,8 +296,8 @@ private fun LoginScreenContent(
                     .fillMaxWidth()
                     .height(52.dp),
                 shape = RoundedCornerShape(14.dp),
-                border = BorderStroke(1.dp, FieldBorder),
-                colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White)
+                border = BorderStroke(1.dp, outline),
+                colors = ButtonDefaults.outlinedButtonColors(containerColor = fieldSurface)
             ) {
                 Icon(
                     painter = painterResource(R.drawable.google_logo),
@@ -305,7 +306,7 @@ private fun LoginScreenContent(
                     tint = Color.Unspecified
                 )
                 Spacer(Modifier.width(10.dp))
-                Text(text = "Continuar con Google", fontSize = 15.sp, color = LabelColor, fontWeight = FontWeight.Medium)
+                Text(text = "Continuar con Google", fontSize = 15.sp, color = labelColor, fontWeight = FontWeight.Medium)
             }
 
             Spacer(Modifier.height(10.dp))
@@ -317,8 +318,8 @@ private fun LoginScreenContent(
                     .fillMaxWidth()
                     .height(52.dp),
                 shape = RoundedCornerShape(14.dp),
-                border = BorderStroke(1.dp, FieldBorder),
-                colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White)
+                border = BorderStroke(1.dp, outline),
+                colors = ButtonDefaults.outlinedButtonColors(containerColor = fieldSurface)
             ) {
                 Icon(
                     painter = painterResource(R.drawable.apple_logo),
@@ -327,7 +328,7 @@ private fun LoginScreenContent(
                     tint = Color.Unspecified
                 )
                 Spacer(Modifier.width(10.dp))
-                Text(text = "Continuar con Apple", fontSize = 15.sp, color = LabelColor, fontWeight = FontWeight.Medium)
+                Text(text = "Continuar con Apple", fontSize = 15.sp, color = labelColor, fontWeight = FontWeight.Medium)
             }
 
             Spacer(Modifier.height(28.dp))
@@ -341,7 +342,7 @@ private fun LoginScreenContent(
                     }
                 },
                 fontSize = 14.sp,
-                color = MutedColor,
+                color = muted,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.clickable { activeDialog = LoginDialog.Register }
             )

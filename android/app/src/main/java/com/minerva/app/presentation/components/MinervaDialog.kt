@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 
 private val DialogBlue = Color(0xFF1A73E8)
-private val IconCircle = Color(0xFFE8F0FE)
 
 @Composable
 fun MinervaDialog(
@@ -30,10 +29,12 @@ fun MinervaDialog(
     description: AnnotatedString,
     onDismiss: () -> Unit
 ) {
+    val iconCircle = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = RoundedCornerShape(20.dp),
-            color = Color.White,
+            color = MaterialTheme.colorScheme.surface,
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
@@ -43,13 +44,13 @@ fun MinervaDialog(
                 Box(
                     modifier = Modifier
                         .size(80.dp)
-                        .background(IconCircle, CircleShape),
+                        .background(iconCircle, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Lock,
                         contentDescription = null,
-                        tint = DialogBlue,
+                        tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(36.dp)
                     )
                 }
@@ -60,7 +61,7 @@ fun MinervaDialog(
                     text = title,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
-                    color = Color(0xFF1A1A1A),
+                    color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center
                 )
 
@@ -69,7 +70,7 @@ fun MinervaDialog(
                 Text(
                     text = description,
                     fontSize = 14.sp,
-                    color = Color(0xFF666666),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                     lineHeight = 21.sp
                 )
