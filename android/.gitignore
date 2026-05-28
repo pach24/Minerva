@@ -1,0 +1,14 @@
+.gradle/
+build/
+app/build/
+local.properties
+*.apk
+*.aab
+*.ap_
+captures/
+.externalNativeBuild/
+.cxx/
+
+# IntelliJ/Android Studio — ignorar todo excepto run configurations compartidas
+.idea/
+!.idea/runConfigurations/
