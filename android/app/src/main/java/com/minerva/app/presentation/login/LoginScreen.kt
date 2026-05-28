@@ -1,6 +1,6 @@
 package com.minerva.app.presentation.login
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -11,24 +11,28 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.minerva.app.presentation.theme.cornerGlowBorder
+import com.minerva.app.presentation.theme.verticalGradientBorder
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.minerva.app.R
@@ -39,6 +43,11 @@ import com.minerva.app.presentation.theme.MinervaBlue
 import com.minerva.app.presentation.theme.MinervaTheme
 
 private val ButtonBlue = Color(0xFF1A73E8)
+
+private val PasswordDotsTransformation = VisualTransformation { text ->
+    val masked = "●".repeat(text.length)
+    TransformedText(AnnotatedString(text = masked), OffsetMapping.Identity)
+}
 
 private enum class LoginDialog { ForgotPassword, Google, Apple, Register }
 
@@ -82,14 +91,18 @@ private fun LoginScreenContent(
     onPasswordVisibleToggle: () -> Unit,
     onLoginClick: () -> Unit,
 ) {
-    val fieldShape = RoundedCornerShape(12.dp)
+    val isDark = isSystemInDarkTheme()
+    val glowAlpha = if (isDark) 0.40f else 0.12f
+    val buttonBorderTop = Color(0xFF1D233A)
+    val fieldShape  = RoundedCornerShape(16.dp)
+    val buttonShape = RoundedCornerShape(50.dp)
     val outline = MaterialTheme.colorScheme.outline
     val muted = MaterialTheme.colorScheme.onSurfaceVariant
     val hint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
     val fieldSurface = MaterialTheme.colorScheme.surface
     val labelColor = MaterialTheme.colorScheme.onSurface
     val fieldColors = OutlinedTextFieldDefaults.colors(
-        unfocusedBorderColor = outline,
+        unfocusedBorderColor = Color.Transparent,
         focusedBorderColor = ButtonBlue,
         unfocusedLeadingIconColor = muted,
         focusedLeadingIconColor = ButtonBlue,
@@ -141,14 +154,14 @@ private fun LoginScreenContent(
             Spacer(Modifier.height(0.dp))
 
             Text(
-                text = "Bienvenido",
+                text = "Minerva",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(Modifier.height(6.dp))
             Text(
-                text = "Inicia sesión para continuar",
+                text = "Educación inteligente.",
                 fontSize = 18.sp,
                 color = muted
             )
@@ -169,7 +182,9 @@ private fun LoginScreenContent(
                     onValueChange = onEmailChange,
                     placeholder = { Text("tu@email.com", color = hint, fontSize = 15.sp) },
                     leadingIcon = {
-                        Icon(Icons.Outlined.Email, contentDescription = null, modifier = Modifier.size(20.dp))
+                        Box(Modifier.padding(start = 8.dp)) {
+                            Icon(Icons.Outlined.Email, contentDescription = null, modifier = Modifier.size(20.dp))
+                        }
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     singleLine = true,
@@ -207,23 +222,27 @@ private fun LoginScreenContent(
                 OutlinedTextField(
                     value = password,
                     onValueChange = onPasswordChange,
-                    placeholder = { Text("••••••••", color = hint, fontSize = 15.sp) },
+                    placeholder = { Text("●●●●●●●●", color = hint, fontSize = 15.sp) },
                     leadingIcon = {
-                        Icon(Icons.Outlined.Lock, contentDescription = null, modifier = Modifier.size(20.dp))
+                        Box(Modifier.padding(start = 8.dp)) {
+                            Icon(painterResource(R.drawable.lock), contentDescription = null, modifier = Modifier.size(20.dp))
+                        }
                     },
-                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordDotsTransformation,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     singleLine = true,
                     enabled = !isLoading,
                     shape = fieldShape,
                     colors = fieldColors,
                     trailingIcon = {
-                        IconButton(onClick = onPasswordVisibleToggle) {
-                            Icon(
-                                imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                                contentDescription = null,
-                                modifier = Modifier.size(20.dp)
-                            )
+                        Box(Modifier.padding(end = 8.dp)) {
+                            IconButton(onClick = onPasswordVisibleToggle) {
+                                Icon(
+                                    imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            }
                         }
                     },
                     modifier = Modifier.fillMaxWidth()
@@ -234,9 +253,12 @@ private fun LoginScreenContent(
                 Spacer(Modifier.height(8.dp))
                 Text(
                     text = errorMessage,
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.fillMaxWidth()
+                    color = Color(0xFFFF3B30),
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
                 )
             }
 
@@ -249,7 +271,7 @@ private fun LoginScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp),
-                shape = RoundedCornerShape(14.dp),
+                shape = buttonShape,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = ButtonBlue,
                     disabledContainerColor = ButtonBlue.copy(alpha = 0.45f)
@@ -293,20 +315,31 @@ private fun LoginScreenContent(
             OutlinedButton(
                 onClick = { activeDialog = LoginDialog.Google },
                 modifier = Modifier
+                    .shadow(elevation = 4.dp, shape = buttonShape, clip = false,
+                        spotColor = Color.Black.copy(alpha = 0.10f),
+                        ambientColor = Color.Black.copy(alpha = 0.05f))
                     .fillMaxWidth()
-                    .height(52.dp),
-                shape = RoundedCornerShape(14.dp),
-                border = BorderStroke(1.dp, outline),
-                colors = ButtonDefaults.outlinedButtonColors(containerColor = fieldSurface)
+                    .height(52.dp)
+                    .then(if (isDark) Modifier.verticalGradientBorder(50.dp, buttonBorderTop, buttonBorderTop.copy(alpha = 0f))
+                          else Modifier.cornerGlowBorder(50.dp, peakAlpha = glowAlpha)),
+                shape = buttonShape,
+                border = null,
+                colors = ButtonDefaults.outlinedButtonColors(containerColor = fieldSurface),
+                contentPadding = PaddingValues(0.dp)
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.google_logo),
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp),
-                    tint = Color.Unspecified
-                )
-                Spacer(Modifier.width(10.dp))
-                Text(text = "Continuar con Google", fontSize = 15.sp, color = labelColor, fontWeight = FontWeight.Medium)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.wrapContentWidth()
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.google_logo),
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp),
+                        tint = Color.Unspecified
+                    )
+                    Spacer(Modifier.width(10.dp))
+                    Text(text = "Continuar con Google", fontSize = 15.sp, color = labelColor, fontWeight = FontWeight.Medium)
+                }
             }
 
             Spacer(Modifier.height(10.dp))
@@ -315,20 +348,31 @@ private fun LoginScreenContent(
             OutlinedButton(
                 onClick = { activeDialog = LoginDialog.Apple },
                 modifier = Modifier
+                    .shadow(elevation = 4.dp, shape = buttonShape, clip = false,
+                        spotColor = Color.Black.copy(alpha = 0.10f),
+                        ambientColor = Color.Black.copy(alpha = 0.05f))
                     .fillMaxWidth()
-                    .height(52.dp),
-                shape = RoundedCornerShape(14.dp),
-                border = BorderStroke(1.dp, outline),
-                colors = ButtonDefaults.outlinedButtonColors(containerColor = fieldSurface)
+                    .height(52.dp)
+                    .then(if (isDark) Modifier.verticalGradientBorder(50.dp, buttonBorderTop, buttonBorderTop.copy(alpha = 0f))
+                          else Modifier.cornerGlowBorder(50.dp, peakAlpha = glowAlpha)),
+                shape = buttonShape,
+                border = null,
+                colors = ButtonDefaults.outlinedButtonColors(containerColor = fieldSurface),
+                contentPadding = PaddingValues(0.dp)
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.apple_logo),
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp),
-                    tint = Color.Unspecified
-                )
-                Spacer(Modifier.width(10.dp))
-                Text(text = "Continuar con Apple", fontSize = 15.sp, color = labelColor, fontWeight = FontWeight.Medium)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.wrapContentWidth()
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.apple_logo),
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp),
+                        tint = Color.Unspecified
+                    )
+                    Spacer(Modifier.width(10.dp))
+                    Text(text = "Continuar con Apple", fontSize = 15.sp, color = labelColor, fontWeight = FontWeight.Medium)
+                }
             }
 
             Spacer(Modifier.height(28.dp))

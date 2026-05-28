@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,8 +20,9 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(onFinished: () -> Unit) {
+    val lottieRes = if (isSystemInDarkTheme()) R.raw.splashanimationdark else R.raw.splash_animation
     val composition by rememberLottieComposition(
-        LottieCompositionSpec.RawRes(R.raw.splash_animation)
+        LottieCompositionSpec.RawRes(lottieRes)
     )
     val progress by animateLottieCompositionAsState(
         composition = composition,
