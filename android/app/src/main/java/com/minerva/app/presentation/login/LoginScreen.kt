@@ -27,6 +27,11 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,6 +55,21 @@ private val PasswordDotsTransformation = VisualTransformation { text ->
 }
 
 private enum class LoginDialog { ForgotPassword, Google, Apple, Register }
+
+@Composable
+private fun enterModifier(started: Boolean, delayMs: Int): Modifier {
+    val offsetY by animateDpAsState(
+        targetValue = if (started) 0.dp else 60.dp,
+        animationSpec = tween(520, delayMs, FastOutSlowInEasing),
+        label = ""
+    )
+    val a by animateFloatAsState(
+        targetValue = if (started) 1f else 0f,
+        animationSpec = tween(400, delayMs),
+        label = ""
+    )
+    return Modifier.offset(y = offsetY).alpha(a)
+}
 
 @Composable
 fun LoginScreen(
@@ -91,6 +111,8 @@ private fun LoginScreenContent(
     onPasswordVisibleToggle: () -> Unit,
     onLoginClick: () -> Unit,
 ) {
+    var started by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { started = true }
     val isDark = isSystemInDarkTheme()
     val glowAlpha = if (isDark) 0.40f else 0.12f
     val buttonBorderTop = Color(0xFF1D233A)
@@ -137,39 +159,40 @@ private fun LoginScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 28.dp)
+            .padding(horizontal = 28.dp)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(Modifier.height(56.dp))
 
-            // Logo
-            Icon(
-                painter = painterResource(R.drawable.mi_logo),
-                contentDescription = "Minerva",
-                modifier = Modifier.size(186.dp),
-                tint = Color.Unspecified
-            )
-
-            Spacer(Modifier.height(0.dp))
-
-            Text(
-                text = "Minerva",
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Spacer(Modifier.height(6.dp))
-            Text(
-                text = "Educación inteligente.",
-                fontSize = 18.sp,
-                color = muted
-            )
+            Column(
+                modifier = enterModifier(started, 0).fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.mi_logo),
+                    contentDescription = "Minerva",
+                    modifier = Modifier.size(186.dp),
+                    tint = Color.Unspecified
+                )
+                Text(
+                    text = "Minerva",
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    text = "Educación inteligente.",
+                    fontSize = 18.sp,
+                    color = muted
+                )
+            }
 
             Spacer(Modifier.height(36.dp))
 
             // Correo electrónico
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.fillMaxWidth().then(enterModifier(started, 100))) {
                 Text(
                     text = "Correo electrónico",
                     fontSize = 13.sp,
@@ -198,7 +221,7 @@ private fun LoginScreenContent(
             Spacer(Modifier.height(16.dp))
 
             // Contraseña
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.fillMaxWidth().then(enterModifier(started, 180))) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -270,7 +293,8 @@ private fun LoginScreenContent(
                 enabled = !isLoading && email.isNotBlank() && password.isNotBlank(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(52.dp),
+                    .height(52.dp)
+                    .then(enterModifier(started, 280)),
                 shape = buttonShape,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = ButtonBlue,
@@ -298,7 +322,7 @@ private fun LoginScreenContent(
             // Divisor "o continúa con"
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().then(enterModifier(started, 360))
             ) {
                 HorizontalDivider(modifier = Modifier.weight(1f), color = outline)
                 Text(
@@ -315,6 +339,7 @@ private fun LoginScreenContent(
             OutlinedButton(
                 onClick = { activeDialog = LoginDialog.Google },
                 modifier = Modifier
+                    .then(enterModifier(started, 420))
                     .shadow(elevation = 4.dp, shape = buttonShape, clip = false,
                         spotColor = Color.Black.copy(alpha = 0.10f),
                         ambientColor = Color.Black.copy(alpha = 0.05f))
@@ -348,6 +373,7 @@ private fun LoginScreenContent(
             OutlinedButton(
                 onClick = { activeDialog = LoginDialog.Apple },
                 modifier = Modifier
+                    .then(enterModifier(started, 470))
                     .shadow(elevation = 4.dp, shape = buttonShape, clip = false,
                         spotColor = Color.Black.copy(alpha = 0.10f),
                         ambientColor = Color.Black.copy(alpha = 0.05f))
@@ -388,7 +414,9 @@ private fun LoginScreenContent(
                 fontSize = 14.sp,
                 color = muted,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.clickable { activeDialog = LoginDialog.Register }
+                modifier = Modifier
+                    .clickable { activeDialog = LoginDialog.Register }
+                    .then(enterModifier(started, 530))
             )
 
             Spacer(Modifier.height(32.dp))
