@@ -68,6 +68,31 @@ async def api_predecir(request: Request):
         return JSONResponse({"error": "No autorizado"}, status_code=401)
     data = await request.json()
     results = predict_students(data)
+
+    try:
+        rows = [{
+            "alumno_id": str(r.get("id", "")),
+            "alumno_nombre": r.get("nombre", ""),
+            "asistencia": r.get("asistencia"),
+            "nota_ra1": r.get("nota_ra1"),
+            "nota_ra2": r.get("nota_ra2"),
+            "nota_ra3": r.get("nota_ra3"),
+            "nota_ra4": r.get("nota_ra4"),
+            "nota_ra5": r.get("nota_ra5"),
+            "nota_ra6": r.get("nota_ra6"),
+            "nota_ra7": r.get("nota_ra7"),
+            "nota_ra8": r.get("nota_ra8"),
+            "nota_ra9": r.get("nota_ra9"),
+            "nota_media": r.get("nota_media"),
+            "pct_ras_superados": r.get("pct_ras_superados"),
+            "prob_aprobado": r.get("prob_aprobado"),
+            "nivel_riesgo": r.get("nivel_riesgo"),
+            "feedback_profesor": r.get("feedback_profesor", ""),
+        } for r in results]
+        supabase.table("predicciones").insert(rows).execute()
+    except Exception:
+        pass
+
     return JSONResponse(results)
 
 
@@ -106,6 +131,19 @@ async def api_metricas():
             return JSONResponse(json.load(f))
     except FileNotFoundError:
         return JSONResponse({"error": "model_metrics.json no encontrado. Ejecuta /api/entrenar primero."}, status_code=404)
+
+
+# --- API: HISTORIAL POR ALUMNO ---
+@app.get("/api/historial/{alumno_id}")
+async def api_historial(alumno_id: str, request: Request):
+    if not request.session.get("user"):
+     return JSONResponse({"error": "No autorizado"}, status_code=401)
+    res = (supabase.table("predicciones")
+        .select("*")
+        .eq("alumno_id", alumno_id)
+        .order("fecha")
+        .execute())
+    return JSONResponse(res.data)
 
 
 # --- RUTA PROTEGIDA (DEMO) ---
