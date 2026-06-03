@@ -6,18 +6,18 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
+/**
+ * Adjunta el access token a cada petición saliente.
+ * La renovación cuando el backend responde 401 la gestiona [TokenAuthenticator].
+ */
 class AuthInterceptor @Inject constructor(
     private val sessionDataStore: SessionDataStore
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val token = runBlocking { sessionDataStore.getToken() }
-        val request = if (token != null) {
-            chain.request().newBuilder()
-                .addHeader("Authorization", "Bearer $token")
-                .build()
-        } else {
-            chain.request()
-        }
+        val request = chain.request().newBuilder()
+            .apply { if (token != null) header("Authorization", "Bearer $token") }
+            .build()
         return chain.proceed(request)
     }
 }

@@ -28,8 +28,13 @@ fun PredictionScreen(
     viewModel: PredictionViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val loggedOut by viewModel.loggedOut.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(loggedOut) {
+        if (loggedOut) onLogout()
+    }
 
     val pickCsv = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -53,10 +58,7 @@ fun PredictionScreen(
             TopAppBar(
                 title = { Text("Minerva") },
                 actions = {
-                    IconButton(onClick = {
-                        viewModel.logout()
-                        onLogout()
-                    }) {
+                    IconButton(onClick = { viewModel.logout() }) {
                         Icon(Icons.Default.Logout, contentDescription = "Cerrar sesión")
                     }
                 }

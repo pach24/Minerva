@@ -17,6 +17,7 @@ class SessionDataStore @Inject constructor(
 ) {
     companion object {
         private val ACCESS_TOKEN = stringPreferencesKey("access_token")
+        private val REFRESH_TOKEN = stringPreferencesKey("refresh_token")
         private val EMAIL = stringPreferencesKey("email")
     }
 
@@ -32,9 +33,14 @@ class SessionDataStore @Inject constructor(
         .catch { emit(emptyPreferences()) }
         .first()[ACCESS_TOKEN]
 
-    suspend fun saveSession(token: String, email: String) {
+    suspend fun getRefreshToken(): String? = dataStore.data
+        .catch { emit(emptyPreferences()) }
+        .first()[REFRESH_TOKEN]
+
+    suspend fun saveSession(token: String, refreshToken: String, email: String) {
         dataStore.edit { prefs ->
             prefs[ACCESS_TOKEN] = token
+            prefs[REFRESH_TOKEN] = refreshToken
             prefs[EMAIL] = email
         }
     }
