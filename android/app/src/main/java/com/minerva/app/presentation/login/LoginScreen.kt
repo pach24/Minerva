@@ -1,47 +1,71 @@
 package com.minerva.app.presentation.login
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.minerva.app.presentation.theme.cornerGlowBorder
+import com.minerva.app.presentation.theme.verticalGradientBorder
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.minerva.app.R
+import com.minerva.app.presentation.components.MinervaDialog
+import com.minerva.app.presentation.components.registerDescription
+import com.minerva.app.presentation.components.unavailableDescription
 import com.minerva.app.presentation.theme.MinervaBlue
 import com.minerva.app.presentation.theme.MinervaTheme
 
 private val ButtonBlue = Color(0xFF1A73E8)
-private val FieldBorder = Color(0xFFE0E0E0)
-private val LabelColor = Color(0xFF424242)
-private val HintColor = Color(0xFFBDBDBD)
-private val MutedColor = Color(0xFF9E9E9E)
+
+private val PasswordDotsTransformation = VisualTransformation { text ->
+    val masked = "●".repeat(text.length)
+    TransformedText(AnnotatedString(text = masked), OffsetMapping.Identity)
+}
 
 private enum class LoginDialog { ForgotPassword, Google, Apple, Register }
+
+@Composable
+private fun enterModifier(started: Boolean, delayMs: Int): Modifier {
+    val offsetY by animateDpAsState(
+        targetValue = if (started) 0.dp else 60.dp,
+        animationSpec = tween(520, delayMs, FastOutSlowInEasing),
+        label = ""
+    )
+    val a by animateFloatAsState(
+        targetValue = if (started) 1f else 0f,
+        animationSpec = tween(400, delayMs),
+        label = ""
+    )
+    return Modifier.offset(y = offsetY).alpha(a)
+}
 
 @Composable
 fun LoginScreen(
@@ -83,108 +107,103 @@ private fun LoginScreenContent(
     onPasswordVisibleToggle: () -> Unit,
     onLoginClick: () -> Unit,
 ) {
-    val fieldShape = RoundedCornerShape(12.dp)
+    var started by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { started = true }
+    val isDark = isSystemInDarkTheme()
+    val glowAlpha = if (isDark) 0.40f else 0.12f
+    val buttonBorderTop = Color(0xFF1D233A)
+    val fieldShape  = RoundedCornerShape(16.dp)
+    val buttonShape = RoundedCornerShape(50.dp)
+    val outline = MaterialTheme.colorScheme.outline
+    val muted = MaterialTheme.colorScheme.onSurfaceVariant
+    val hint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+    val fieldSurface = MaterialTheme.colorScheme.surface
+    val labelColor = MaterialTheme.colorScheme.onSurface
     val fieldColors = OutlinedTextFieldDefaults.colors(
-        unfocusedBorderColor = FieldBorder,
+        unfocusedBorderColor = Color.Transparent,
         focusedBorderColor = ButtonBlue,
-        unfocusedLeadingIconColor = MutedColor,
+        unfocusedLeadingIconColor = muted,
         focusedLeadingIconColor = ButtonBlue,
-        unfocusedContainerColor = Color.White,
-        focusedContainerColor = Color.White,
-        unfocusedTrailingIconColor = MutedColor,
-        focusedTrailingIconColor = MutedColor,
+        unfocusedContainerColor = fieldSurface,
+        focusedContainerColor = fieldSurface,
+        unfocusedTrailingIconColor = muted,
+        focusedTrailingIconColor = muted,
     )
 
     var activeDialog by remember { mutableStateOf<LoginDialog?>(null) }
 
-    // Dialogs
     when (activeDialog) {
         LoginDialog.ForgotPassword, LoginDialog.Google, LoginDialog.Apple -> {
-            AlertDialog(
-                onDismissRequest = { activeDialog = null },
-                title = { Text("Funcionalidad no disponible", fontWeight = FontWeight.SemiBold) },
-                text = { Text("Esta opción aún no está disponible en la aplicación.") },
-                confirmButton = {
-                    TextButton(onClick = { activeDialog = null }) {
-                        Text("Entendido", color = ButtonBlue)
-                    }
-                },
-                shape = RoundedCornerShape(16.dp)
+            MinervaDialog(
+                title = "Funcionalidad no disponible",
+                description = unavailableDescription(),
+                onDismiss = { activeDialog = null }
             )
         }
         LoginDialog.Register -> {
-            AlertDialog(
-                onDismissRequest = { activeDialog = null },
-                title = { Text("¿Quieres registrarte?", fontWeight = FontWeight.SemiBold) },
-                text = {
-                    Text(
-                        text = "El acceso a Minerva está gestionado por tu institución educativa.\n\n" +
-                                "Contacta con tu centro o escríbenos a:\n\nsoporte@minerva.app",
-                        lineHeight = 22.sp
-                    )
-                },
-                confirmButton = {
-                    TextButton(onClick = { activeDialog = null }) {
-                        Text("Entendido", color = ButtonBlue)
-                    }
-                },
-                shape = RoundedCornerShape(16.dp)
+            MinervaDialog(
+                title = "¿Quieres registrarte?",
+                description = registerDescription(),
+                onDismiss = { activeDialog = null }
             )
         }
         null -> Unit
     }
 
-    Scaffold(containerColor = Color.White) { padding ->
+    Scaffold(containerColor = MaterialTheme.colorScheme.background) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 28.dp)
+            .padding(horizontal = 28.dp)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(Modifier.height(56.dp))
 
-            // Logo
-            Icon(
-                painter = painterResource(R.drawable.mi_logo),
-                contentDescription = "Minerva",
-                modifier = Modifier.size(186.dp),
-                tint = Color.Unspecified
-            )
-
-            Spacer(Modifier.height(0.dp))
-
-            Text(
-                text = "Bienvenido",
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF1A1A1A)
-            )
-            Spacer(Modifier.height(6.dp))
-            Text(
-                text = "Inicia sesión para continuar",
-                fontSize = 18.sp,
-                color = MutedColor
-            )
+            Column(
+                modifier = enterModifier(started, 0).fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.mi_logo),
+                    contentDescription = "Minerva",
+                    modifier = Modifier.size(186.dp),
+                    tint = Color.Unspecified
+                )
+                Text(
+                    text = "Minerva",
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    text = "Educación inteligente.",
+                    fontSize = 18.sp,
+                    color = muted
+                )
+            }
 
             Spacer(Modifier.height(36.dp))
 
             // Correo electrónico
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.fillMaxWidth().then(enterModifier(started, 100))) {
                 Text(
                     text = "Correo electrónico",
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Medium,
-                    color = LabelColor,
+                    color = labelColor,
                     modifier = Modifier.padding(bottom = 6.dp)
                 )
                 OutlinedTextField(
                     value = email,
                     onValueChange = onEmailChange,
-                    placeholder = { Text("tu@email.com", color = HintColor, fontSize = 15.sp) },
+                    placeholder = { Text("tu@email.com", color = hint, fontSize = 15.sp) },
                     leadingIcon = {
-                        Icon(Icons.Outlined.Email, contentDescription = null, modifier = Modifier.size(20.dp))
+                        Box(Modifier.padding(start = 8.dp)) {
+                            Icon(painterResource(R.drawable.ic_envelope), contentDescription = null, modifier = Modifier.size(20.dp))
+                        }
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     singleLine = true,
@@ -198,7 +217,7 @@ private fun LoginScreenContent(
             Spacer(Modifier.height(16.dp))
 
             // Contraseña
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.fillMaxWidth().then(enterModifier(started, 180))) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -208,7 +227,7 @@ private fun LoginScreenContent(
                         text = "Contraseña",
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Medium,
-                        color = LabelColor
+                        color = labelColor
                     )
                     Text(
                         text = "¿Olvidaste tu contraseña?",
@@ -222,23 +241,27 @@ private fun LoginScreenContent(
                 OutlinedTextField(
                     value = password,
                     onValueChange = onPasswordChange,
-                    placeholder = { Text("••••••••", color = HintColor, fontSize = 15.sp) },
+                    placeholder = { Text("●●●●●●●●", color = hint, fontSize = 15.sp) },
                     leadingIcon = {
-                        Icon(Icons.Outlined.Lock, contentDescription = null, modifier = Modifier.size(20.dp))
+                        Box(Modifier.padding(start = 8.dp)) {
+                            Icon(painterResource(R.drawable.lock), contentDescription = null, modifier = Modifier.size(20.dp))
+                        }
                     },
-                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordDotsTransformation,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     singleLine = true,
                     enabled = !isLoading,
                     shape = fieldShape,
                     colors = fieldColors,
                     trailingIcon = {
-                        IconButton(onClick = onPasswordVisibleToggle) {
-                            Icon(
-                                imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                                contentDescription = null,
-                                modifier = Modifier.size(20.dp)
-                            )
+                        Box(Modifier.padding(end = 8.dp)) {
+                            IconButton(onClick = onPasswordVisibleToggle) {
+                                Icon(
+                                    painter = painterResource(if (passwordVisible) R.drawable.ic_eye else R.drawable.ic_eye_slash),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            }
                         }
                     },
                     modifier = Modifier.fillMaxWidth()
@@ -249,9 +272,12 @@ private fun LoginScreenContent(
                 Spacer(Modifier.height(8.dp))
                 Text(
                     text = errorMessage,
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.fillMaxWidth()
+                    color = Color(0xFFFF3B30),
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
                 )
             }
 
@@ -263,8 +289,9 @@ private fun LoginScreenContent(
                 enabled = !isLoading && email.isNotBlank() && password.isNotBlank(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(52.dp),
-                shape = RoundedCornerShape(14.dp),
+                    .height(52.dp)
+                    .then(enterModifier(started, 280)),
+                shape = buttonShape,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = ButtonBlue,
                     disabledContainerColor = ButtonBlue.copy(alpha = 0.45f)
@@ -291,15 +318,15 @@ private fun LoginScreenContent(
             // Divisor "o continúa con"
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().then(enterModifier(started, 360))
             ) {
-                HorizontalDivider(modifier = Modifier.weight(1f), color = FieldBorder)
+                HorizontalDivider(modifier = Modifier.weight(1f), color = outline)
                 Text(
                     text = "  o continúa con  ",
                     fontSize = 13.sp,
-                    color = MutedColor
+                    color = muted
                 )
-                HorizontalDivider(modifier = Modifier.weight(1f), color = FieldBorder)
+                HorizontalDivider(modifier = Modifier.weight(1f), color = outline)
             }
 
             Spacer(Modifier.height(16.dp))
@@ -308,20 +335,32 @@ private fun LoginScreenContent(
             OutlinedButton(
                 onClick = { activeDialog = LoginDialog.Google },
                 modifier = Modifier
+                    .then(enterModifier(started, 420))
+                    .shadow(elevation = 4.dp, shape = buttonShape, clip = false,
+                        spotColor = Color.Black.copy(alpha = 0.10f),
+                        ambientColor = Color.Black.copy(alpha = 0.05f))
                     .fillMaxWidth()
-                    .height(52.dp),
-                shape = RoundedCornerShape(14.dp),
-                border = BorderStroke(1.dp, FieldBorder),
-                colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White)
+                    .height(52.dp)
+                    .then(if (isDark) Modifier.verticalGradientBorder(50.dp, buttonBorderTop, buttonBorderTop.copy(alpha = 0f))
+                          else Modifier.cornerGlowBorder(50.dp, peakAlpha = glowAlpha)),
+                shape = buttonShape,
+                border = null,
+                colors = ButtonDefaults.outlinedButtonColors(containerColor = fieldSurface),
+                contentPadding = PaddingValues(0.dp)
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.google_logo),
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp),
-                    tint = Color.Unspecified
-                )
-                Spacer(Modifier.width(10.dp))
-                Text(text = "Continuar con Google", fontSize = 15.sp, color = LabelColor, fontWeight = FontWeight.Medium)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.wrapContentWidth()
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.google_logo),
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp),
+                        tint = Color.Unspecified
+                    )
+                    Spacer(Modifier.width(10.dp))
+                    Text(text = "Continuar con Google", fontSize = 15.sp, color = labelColor, fontWeight = FontWeight.Medium)
+                }
             }
 
             Spacer(Modifier.height(10.dp))
@@ -330,20 +369,32 @@ private fun LoginScreenContent(
             OutlinedButton(
                 onClick = { activeDialog = LoginDialog.Apple },
                 modifier = Modifier
+                    .then(enterModifier(started, 470))
+                    .shadow(elevation = 4.dp, shape = buttonShape, clip = false,
+                        spotColor = Color.Black.copy(alpha = 0.10f),
+                        ambientColor = Color.Black.copy(alpha = 0.05f))
                     .fillMaxWidth()
-                    .height(52.dp),
-                shape = RoundedCornerShape(14.dp),
-                border = BorderStroke(1.dp, FieldBorder),
-                colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White)
+                    .height(52.dp)
+                    .then(if (isDark) Modifier.verticalGradientBorder(50.dp, buttonBorderTop, buttonBorderTop.copy(alpha = 0f))
+                          else Modifier.cornerGlowBorder(50.dp, peakAlpha = glowAlpha)),
+                shape = buttonShape,
+                border = null,
+                colors = ButtonDefaults.outlinedButtonColors(containerColor = fieldSurface),
+                contentPadding = PaddingValues(0.dp)
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.apple_logo),
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp),
-                    tint = Color.Unspecified
-                )
-                Spacer(Modifier.width(10.dp))
-                Text(text = "Continuar con Apple", fontSize = 15.sp, color = LabelColor, fontWeight = FontWeight.Medium)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.wrapContentWidth()
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.apple_logo),
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp),
+                        tint = Color.Unspecified
+                    )
+                    Spacer(Modifier.width(10.dp))
+                    Text(text = "Continuar con Apple", fontSize = 15.sp, color = labelColor, fontWeight = FontWeight.Medium)
+                }
             }
 
             Spacer(Modifier.height(28.dp))
@@ -357,9 +408,11 @@ private fun LoginScreenContent(
                     }
                 },
                 fontSize = 14.sp,
-                color = MutedColor,
+                color = muted,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.clickable { activeDialog = LoginDialog.Register }
+                modifier = Modifier
+                    .clickable { activeDialog = LoginDialog.Register }
+                    .then(enterModifier(started, 530))
             )
 
             Spacer(Modifier.height(32.dp))

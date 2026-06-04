@@ -14,8 +14,15 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 from supabase import create_client
 from ml.predict import predict_students
+import jwt
+from jwt import PyJWKClient
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+# Verificación local de JWT con las claves públicas asimétricas (ES256) de Supabase.
+# El JWKS es público: no depende de SUPABASE_KEY ni hace una llamada por petición.
+JWKS_URL = SUPABASE_URL.rstrip("/") + "/auth/v1/.well-known/jwks.json"
+_jwk_client = PyJWKClient(JWKS_URL)
 
 app = FastAPI()
 
@@ -67,12 +74,25 @@ def get_current_user(request: Request):
     auth = request.headers.get("Authorization", "")
     if auth.startswith("Bearer "):
         token = auth.split(" ", 1)[1]
-        try:
-            res = supabase.auth.get_user(token)
-            return res.user.email
-        except Exception:
-            return None
+        return _verify_bearer_token(token)
     return None
+
+
+def _verify_bearer_token(token: str):
+    """Verifica localmente el JWT de Supabase (ES256) con la clave pública del JWKS.
+    Devuelve el email del usuario si el token es válido, o None en caso contrario."""
+    try:
+        signing_key = _jwk_client.get_signing_key_from_jwt(token)
+        claims = jwt.decode(
+            token,
+            signing_key.key,
+            algorithms=["ES256"],
+            audience="authenticated",
+            issuer=SUPABASE_URL.rstrip("/") + "/auth/v1",
+        )
+        return claims.get("email")
+    except Exception:
+        return None
 
 
 # --- API: PREDICCIÓN ML ---

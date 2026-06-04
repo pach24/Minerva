@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,18 +26,20 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MinervaTheme {
-                val viewModel: MainViewModel = hiltViewModel()
-                val startDestination by viewModel.startDestination.collectAsStateWithLifecycle()
-
-                if (startDestination != null) {
+                Surface(modifier = Modifier.fillMaxSize()) {
                     val navController = rememberNavController()
-                    MinervaNavHost(
-                        navController = navController,
-                        startDestination = startDestination!!
-                    )
-                } else {
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
+                    val viewModel: MainViewModel = hiltViewModel()
+                    val startDestination by viewModel.startDestination.collectAsStateWithLifecycle()
+
+                    if (startDestination != null) {
+                        MinervaNavHost(
+                            navController = navController,
+                            startDestination = startDestination!!
+                        )
+                    } else {
+                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            CircularProgressIndicator()
+                        }
                     }
                 }
             }

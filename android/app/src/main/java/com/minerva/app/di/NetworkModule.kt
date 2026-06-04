@@ -6,6 +6,8 @@ import com.minerva.app.data.local.SessionDataStore
 import com.minerva.app.data.remote.AuthInterceptor
 import com.minerva.app.data.remote.MinervaApi
 import com.minerva.app.data.remote.SupabaseAuthApi
+import com.minerva.app.data.remote.SupabaseRestApi
+import com.minerva.app.data.remote.TokenAuthenticator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,12 +17,18 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+
+    private const val CONNECT_TIMEOUT_SECONDS = 30L
+    // Render free tier "despierta" (cold start) en la primera petición tras inactividad.
+    private const val READ_TIMEOUT_SECONDS = 60L
+    private const val WRITE_TIMEOUT_SECONDS = 30L
 
     @Provides
     @Singleton
@@ -37,22 +45,33 @@ object NetworkModule {
     @Provides
     @Singleton
     @Named("minerva")
-    fun provideMinervaOkHttp(authInterceptor: AuthInterceptor): OkHttpClient =
-        OkHttpClient.Builder()
+    fun provideMinervaOkHttp(
+        authInterceptor: AuthInterceptor,
+        tokenAuthenticator: TokenAuthenticator
+    ): OkHttpClient =
+        baseClientBuilder()
             .addInterceptor(authInterceptor)
-            .addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
+            .authenticator(tokenAuthenticator)
             .build()
 
     @Provides
     @Singleton
     @Named("supabase")
     fun provideSupabaseOkHttp(): OkHttpClient =
-        OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
+        baseClientBuilder().build()
+
+    // Cliente para PostgREST de Supabase: añade el Bearer del usuario (AuthInterceptor)
+    // y renueva el token en 401 (TokenAuthenticator), igual que el cliente de Minerva.
+    @Provides
+    @Singleton
+    @Named("supabase_rest")
+    fun provideSupabaseRestOkHttp(
+        authInterceptor: AuthInterceptor,
+        tokenAuthenticator: TokenAuthenticator
+    ): OkHttpClient =
+        baseClientBuilder()
+            .addInterceptor(authInterceptor)
+            .authenticator(tokenAuthenticator)
             .build()
 
     @Provides
@@ -76,6 +95,32 @@ object NetworkModule {
             .create(SupabaseAuthApi::class.java)
 
     @Provides
+    @Singleton
+    fun provideSupabaseRestApi(json: Json, @Named("supabase_rest") okHttp: OkHttpClient): SupabaseRestApi =
+        Retrofit.Builder()
+            .baseUrl(BuildConfig.SUPABASE_URL.trimEnd('/') + "/")
+            .client(okHttp)
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .build()
+            .create(SupabaseRestApi::class.java)
+
+    @Provides
     @Named("supabase_anon_key")
     fun provideSupabaseAnonKey(): String = BuildConfig.SUPABASE_ANON_KEY
+
+    private fun baseClientBuilder(): OkHttpClient.Builder =
+        OkHttpClient.Builder()
+            .connectTimeout(CONNECT_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .readTimeout(READ_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .writeTimeout(WRITE_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .addInterceptor(loggingInterceptor())
+
+    // Logging solo en debug y con cabeceras sensibles (tokens) redactadas.
+    private fun loggingInterceptor(): HttpLoggingInterceptor =
+        HttpLoggingInterceptor().apply {
+            level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
+                    else HttpLoggingInterceptor.Level.NONE
+            redactHeader("Authorization")
+            redactHeader("apikey")
+        }
 }
