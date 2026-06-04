@@ -67,7 +67,7 @@ footer {
   margin: 0 auto;
 }
 
-/* Sección de descarga (Apple style Card) */
+/* Sección de descarga */
 
 .download-section {
   max-width: var(--max-width);
@@ -76,27 +76,45 @@ footer {
 }
 
 .download-card {
+  position: relative;
   background: #ffffff;
   border-radius: 24px;
   border: 1px solid rgba(209, 213, 219, 0.6);
-  padding: calc(var(--spacing-unit) * 10) calc(var(--spacing-unit) * 8);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.04);
+  padding: 56px 64px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.06);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 56px;
+}
+
+.download-app-icon {
+  position: absolute;
+  top: 24px;
+  left: 28px;
+  width: 54px;
+  height: 54px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  gap: calc(var(--spacing-unit) * 6);
-  max-width: 800px;
-  margin: 0 auto;
+}
+
+.download-app-icon img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
 }
 
 .download-info {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: calc(var(--spacing-unit) * 2);
-  max-width: 600px;
+  align-items: flex-start;
+  gap: 14px;
+  flex: 1;
 }
 
 .download-badge {
@@ -104,73 +122,43 @@ footer {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #007aff;
-  background: rgba(0, 122, 255, 0.08);
+  color: var(--color-accent);
+  background: rgba(0, 113, 227, 0.07);
   padding: 4px 10px;
   border-radius: 6px;
-  margin-bottom: 4px;
 }
 
 .download-info h2 {
   margin: 0;
-  font-size: clamp(26px, 3.5vw, 36px);
+  font-size: clamp(26px, 3vw, 36px);
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: var(--color-primary, #1d1d1f);
+  color: var(--color-text);
+  line-height: 1.15;
 }
 
 .download-info p {
-  margin: 0 0 calc(var(--spacing-unit) * 2);
-  font-size: 16px;
-  line-height: 1.6;
-  color: var(--color-secondary, #86868b);
-}
-
-.app-badges {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: calc(var(--spacing-unit) * 3);
-}
-
-.app-store-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #1d1d1f;
-  color: white;
-  padding: 10px 18px;
-  border-radius: 12px;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.app-store-btn:hover {
-  background: #000;
-  transform: translateY(-1px);
-}
-
-.compatibility-text {
-  font-size: 12px;
-  color: var(--color-secondary, #86868b);
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--color-secondary);
+  max-width: 360px;
 }
 
 .download-qr-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: calc(var(--spacing-unit) * 2);
+  gap: 12px;
+  flex-shrink: 0;
 }
 
 .qr-wrapper {
   background: #ffffff;
-  border: 1px solid rgba(209, 213, 219, 0.6);
-  padding: calc(var(--spacing-unit) * 3.5);
-  border-radius: 24px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  position: relative;
+  border: 1px solid rgba(209, 213, 219, 0.5);
+  padding: 14px;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
   display: flex;
   align-items: center;
@@ -178,38 +166,45 @@ footer {
 }
 
 .qr-wrapper:hover {
-  transform: scale(1.05);
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.1);
+  transform: scale(1.03) translateY(-3px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
 }
 
 .mock-qr {
-  width: 200px;
-  height: 200px;
+  width: 170px;
+  height: 170px;
   display: block;
+  border-radius: 6px;
 }
 
 .qr-hint {
   font-size: 12px;
   font-weight: 500;
-  color: var(--color-secondary, #86868b);
-  letter-spacing: -0.01em;
+  color: var(--color-secondary);
   display: flex;
   align-items: center;
+  gap: 5px;
 }
 
-/* Responsividad */
 @media (max-width: 768px) {
   .download-card {
-    padding: calc(var(--spacing-unit) * 6) calc(var(--spacing-unit) * 4);
-  }
-  
-  .app-badges {
     flex-direction: column;
-    gap: calc(var(--spacing-unit) * 2);
+    padding: 48px 32px 40px;
+    align-items: center;
+    text-align: center;
+    gap: 36px;
+  }
+
+  .download-info {
+    align-items: center;
+  }
+
+  .download-info p {
+    max-width: 100%;
   }
 
   .mock-qr {
-    width: 160px;
-    height: 160px;
+    width: 150px;
+    height: 150px;
   }
 }
