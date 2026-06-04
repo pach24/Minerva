@@ -1,0 +1,157 @@
+/* Mobile App Section */
+.mobile-app-section {
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-top: 1px solid #e5e7eb;
+}
+
+.mobile-app-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.mobile-app-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.app-showcase {
+    display: flex;
+    justify-content: center;
+}
+
+.app-icon-container {
+    position: relative;
+    width: 280px;
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.app-showcase-icon {
+    width: 240px;
+    height: 240px;
+    border-radius: 56px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.app-showcase-icon:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.16);
+}
+
+.app-info {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.app-badge {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    padding: 8px 16px;
+    background: rgba(0, 123, 255, 0.1);
+    color: #007BFF;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.app-info h2 {
+    font-size: 40px;
+    font-weight: 700;
+    color: #1d1d1f;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.app-info p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.app-features {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px 0;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    color: #333;
+    font-weight: 500;
+}
+
+.feature-item i {
+    flex-shrink: 0;
+}
+
+.app-download-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #007BFF 0%, #0056cc 100%);
+    color: white;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    width: fit-content;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.app-download-btn:hover {
+    background: linear-gradient(135deg, #0056cc 0%, #003d99 100%);
+    box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.compatibility-info {
+    font-size: 13px;
+    color: #888;
+    margin-top: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .mobile-app-section {
+        padding: 60px 20px;
+    }
+
+    .mobile-app-wrapper {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .app-info h2 {
+        font-size: 32px;
+    }
+
+    .app-showcase-icon {
+        width: 200px;
+        height: 200px;
+    }
+
+    .app-icon-container {
+        width: 220px;
+        height: 220px;
+    }
+}
