@@ -63,6 +63,8 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
 
     var showLogoutConfirm by remember { mutableStateOf(false) }
     var showSupport by remember { mutableStateOf(false) }
+    var showAbout by remember { mutableStateOf(false) }
+    var showAccountInfo by remember { mutableStateOf(false) }
     var editingName by remember { mutableStateOf(false) }
     var visible by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) { visible = true }
@@ -105,6 +107,28 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
             onDismiss = { showSupport = false }
         )
     }
+    if (showAccountInfo) {
+        MinervaDialog(
+            title = "Datos de la cuenta",
+            description = androidx.compose.ui.text.buildAnnotatedString {
+                append("Esta funcionalidad todavía no está disponible.\n\nPróximamente podrás consultar y gestionar los datos asociados a tu cuenta desde aquí.")
+            },
+            iconPainter = painterResource(R.drawable.ic_user),
+            onDismiss = { showAccountInfo = false }
+        )
+    }
+    if (showAbout) {
+        MinervaDialog(
+            title = "Minerva ${BuildConfig.VERSION_NAME}",
+            description = androidx.compose.ui.text.buildAnnotatedString {
+                append("Plataforma de predicción académica basada en inteligencia artificial.\n\n")
+                append("Desarrollada para ayudar a docentes a identificar alumnos en riesgo de forma temprana.\n\n")
+                append("© 2025 Minerva · Primera release alpha")
+            },
+            iconPainter = painterResource(R.drawable.ic_info),
+            onDismiss = { showAbout = false }
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -140,6 +164,7 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
             icon = painterResource(R.drawable.ic_user),
             title = "Datos de la cuenta",
             subtitle = "Email gestionado por tu institución · solo lectura",
+            onClick = { showAccountInfo = true },
             modifier = Modifier.staggeredEnter(visible, 170)
         )
 
@@ -158,6 +183,7 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
             icon = painterResource(R.drawable.ic_info),
             title = "Versión",
             trailingText = BuildConfig.VERSION_NAME,
+            onClick = { showAbout = true },
             modifier = Modifier.staggeredEnter(visible, 280)
         )
 

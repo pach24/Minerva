@@ -17,6 +17,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -185,25 +187,11 @@ private fun CsvLoadedContent(
         Spacer(Modifier.height(12.dp))
         LazyColumn(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(bottom = 4.dp)
         ) {
             items(students) { student ->
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .animateItem(),
-                    shape = RoundedCornerShape(16.dp),
-                    color = MaterialTheme.colorScheme.surface,
-                    tonalElevation = 1.dp,
-                    shadowElevation = 1.dp
-                ) {
-                    Text(
-                        text = student.nombre,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
+                StudentCard(student = student, modifier = Modifier.animateItem())
             }
         }
         Spacer(Modifier.height(12.dp))
@@ -270,6 +258,67 @@ private fun ResultsContent(
                     modifier = Modifier.animateItem()
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun StudentCard(student: Student, modifier: Modifier = Modifier) {
+    val initials = student.nombre
+        .split(" ")
+        .filter { it.isNotBlank() }
+        .take(2)
+        .joinToString("") { it.first().uppercaseChar().toString() }
+        .ifEmpty { "?" }
+
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .background(MinervaAccent.copy(alpha = 0.14f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = initials,
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MinervaAccent
+                )
+            }
+            Spacer(Modifier.width(14.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = student.nombre,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = "Alumno",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Icon(
+                imageVector = Icons.Default.Person,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.35f),
+                modifier = Modifier.size(18.dp)
+            )
         }
     }
 }
