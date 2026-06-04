@@ -6,6 +6,7 @@ import com.minerva.app.data.local.SessionDataStore
 import com.minerva.app.data.remote.AuthInterceptor
 import com.minerva.app.data.remote.MinervaApi
 import com.minerva.app.data.remote.SupabaseAuthApi
+import com.minerva.app.data.remote.SupabaseRestApi
 import com.minerva.app.data.remote.TokenAuthenticator
 import dagger.Module
 import dagger.Provides
@@ -59,6 +60,20 @@ object NetworkModule {
     fun provideSupabaseOkHttp(): OkHttpClient =
         baseClientBuilder().build()
 
+    // Cliente para PostgREST de Supabase: añade el Bearer del usuario (AuthInterceptor)
+    // y renueva el token en 401 (TokenAuthenticator), igual que el cliente de Minerva.
+    @Provides
+    @Singleton
+    @Named("supabase_rest")
+    fun provideSupabaseRestOkHttp(
+        authInterceptor: AuthInterceptor,
+        tokenAuthenticator: TokenAuthenticator
+    ): OkHttpClient =
+        baseClientBuilder()
+            .addInterceptor(authInterceptor)
+            .authenticator(tokenAuthenticator)
+            .build()
+
     @Provides
     @Singleton
     fun provideMinervaApi(json: Json, @Named("minerva") okHttp: OkHttpClient): MinervaApi =
@@ -78,6 +93,16 @@ object NetworkModule {
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
             .create(SupabaseAuthApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideSupabaseRestApi(json: Json, @Named("supabase_rest") okHttp: OkHttpClient): SupabaseRestApi =
+        Retrofit.Builder()
+            .baseUrl(BuildConfig.SUPABASE_URL.trimEnd('/') + "/")
+            .client(okHttp)
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .build()
+            .create(SupabaseRestApi::class.java)
 
     @Provides
     @Named("supabase_anon_key")

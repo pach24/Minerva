@@ -7,10 +7,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -206,7 +202,7 @@ private fun LoginScreenContent(
                     placeholder = { Text("tu@email.com", color = hint, fontSize = 15.sp) },
                     leadingIcon = {
                         Box(Modifier.padding(start = 8.dp)) {
-                            Icon(Icons.Outlined.Email, contentDescription = null, modifier = Modifier.size(20.dp))
+                            Icon(painterResource(R.drawable.ic_envelope), contentDescription = null, modifier = Modifier.size(20.dp))
                         }
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -261,7 +257,7 @@ private fun LoginScreenContent(
                         Box(Modifier.padding(end = 8.dp)) {
                             IconButton(onClick = onPasswordVisibleToggle) {
                                 Icon(
-                                    imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                                    painter = painterResource(if (passwordVisible) R.drawable.ic_eye else R.drawable.ic_eye_slash),
                                     contentDescription = null,
                                     modifier = Modifier.size(20.dp)
                                 )

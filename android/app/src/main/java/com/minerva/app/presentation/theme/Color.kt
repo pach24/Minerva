@@ -6,6 +6,8 @@ import androidx.compose.ui.graphics.Color
 val MinervaBlue      = Color(0xFF1565C0)
 val MinervaBlueDark  = Color(0xFF0D47A1)
 val MinervaBlueLight = Color(0xFF42A5F5)
+/** Azul vivo de CTA, alineado con el mock de login (botones e indicadores de selección). */
+val MinervaAccent    = Color(0xFF1A73E8)
 
 // Light scheme
 val BackgroundLight        = Color(0xFFF2F2F7)

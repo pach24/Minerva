@@ -17,6 +17,6 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     val startDestination: StateFlow<String?> = observeSessionUseCase()
-        .map { session -> if (session != null) Routes.PREDICTION else Routes.LOGIN }
+        .map { session -> if (session != null) Routes.MAIN else Routes.LOGIN }
         .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 }

@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -23,13 +25,27 @@ import androidx.compose.ui.window.Dialog
 
 private val DialogBlue = Color(0xFF1A73E8)
 
+/**
+ * Diálogo de marca reutilizable: icono en círculo + título + descripción.
+ *
+ * - Sin [onConfirm] → un único botón ([dismissText]) que cierra el diálogo.
+ * - Con [onConfirm] → confirmación de dos acciones (botón principal + "Cancelar"),
+ *   con estilo destructivo opcional para acciones como cerrar sesión.
+ */
 @Composable
 fun MinervaDialog(
     title: String,
     description: AnnotatedString,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    icon: ImageVector = Icons.Outlined.Lock,
+    iconPainter: Painter? = null,
+    confirmText: String? = null,
+    onConfirm: (() -> Unit)? = null,
+    confirmIsDestructive: Boolean = false,
+    dismissText: String = "Entendido",
 ) {
-    val iconCircle = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+    val accent = if (confirmIsDestructive) MaterialTheme.colorScheme.error else DialogBlue
+    val iconCircle = accent.copy(alpha = 0.12f)
 
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -47,12 +63,21 @@ fun MinervaDialog(
                         .background(iconCircle, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Lock,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(36.dp)
-                    )
+                    if (iconPainter != null) {
+                        Icon(
+                            painter = iconPainter,
+                            contentDescription = null,
+                            tint = accent,
+                            modifier = Modifier.size(36.dp)
+                        )
+                    } else {
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = null,
+                            tint = accent,
+                            modifier = Modifier.size(36.dp)
+                        )
+                    }
                 }
 
                 Spacer(Modifier.height(20.dp))
@@ -77,20 +102,47 @@ fun MinervaDialog(
 
                 Spacer(Modifier.height(24.dp))
 
-                Button(
-                    onClick = onDismiss,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = DialogBlue)
-                ) {
-                    Text(
-                        text = "Entendido",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
-                    )
+                if (onConfirm == null) {
+                    Button(
+                        onClick = onDismiss,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = DialogBlue)
+                    ) {
+                        Text(dismissText, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = Color.White)
+                    }
+                } else {
+                    Button(
+                        onClick = onConfirm,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = accent)
+                    ) {
+                        Text(
+                            confirmText ?: "Aceptar",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White
+                        )
+                    }
+                    Spacer(Modifier.height(8.dp))
+                    TextButton(
+                        onClick = onDismiss,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp)
+                    ) {
+                        Text(
+                            "Cancelar",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             }
         }
@@ -105,6 +157,13 @@ fun unavailableDescription(): AnnotatedString = AnnotatedString(
 fun registerDescription(): AnnotatedString = buildAnnotatedString {
     append("El acceso a Minerva está gestionado por tu institución educativa.\n\n")
     append("Contacta con tu centro o escríbenos a:\n\n")
+    withStyle(SpanStyle(color = Color(0xFF1A73E8), fontWeight = FontWeight.Medium)) {
+        append("soporte@minerva.app")
+    }
+}
+
+fun supportDescription(): AnnotatedString = buildAnnotatedString {
+    append("¿Necesitas ayuda con Minerva? Escríbenos y te responderemos lo antes posible:\n\n")
     withStyle(SpanStyle(color = Color(0xFF1A73E8), fontWeight = FontWeight.Medium)) {
         append("soporte@minerva.app")
     }

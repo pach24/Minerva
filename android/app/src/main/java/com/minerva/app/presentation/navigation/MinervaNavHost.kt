@@ -10,7 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.minerva.app.presentation.login.LoginScreen
-import com.minerva.app.presentation.prediction.PredictionScreen
+import com.minerva.app.presentation.main.MainScreen
 import com.minerva.app.presentation.splash.SplashScreen
 
 @Composable
@@ -38,21 +38,21 @@ fun MinervaNavHost(
         ) {
             LoginScreen(
                 onLoginSuccess = {
-                    navController.navigate(Routes.PREDICTION) {
+                    navController.navigate(Routes.MAIN) {
                         popUpTo(Routes.LOGIN) { inclusive = true }
                     }
                 }
             )
         }
         composable(
-            route = Routes.PREDICTION,
+            route = Routes.MAIN,
             enterTransition = { fadeIn(tween(250)) },
             exitTransition = { fadeOut(tween(250)) }
         ) {
-            PredictionScreen(
-                onLogout = {
+            MainScreen(
+                onLoggedOut = {
                     navController.navigate(Routes.LOGIN) {
-                        popUpTo(Routes.PREDICTION) { inclusive = true }
+                        popUpTo(Routes.MAIN) { inclusive = true }
                     }
                 }
             )
