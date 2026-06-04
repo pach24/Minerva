@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/static/media/minerva_app_icon.png">
     <title>Minerva - Predicción Académica</title>
     
 
@@ -26,7 +27,7 @@
 <body>
     <nav class="navbar" id="navbar">
     <div class="navbar-main">
-        <div class="logo">Minerva</div>
+        <div class="logo"><img src="/static/media/minerva_icon.png" alt="Minerva Logo" style="height: 40px; width: auto;"></div>
         <ul>
             <li><a href="#hero">Inicio</a></li>
             <li><a href="#about-minerva">Acerca de</a></li>
@@ -289,7 +290,7 @@
 
         <div class="roadmap-timeline">
             <div class="roadmap-item">
-                <div class="roadmap-dot roadmap-dot--active"></div>
+                <div class="roadmap-dot"></div>
                 <div class="roadmap-card">
                     <span class="roadmap-phase">Nov 2025</span>
                     <h3>Documentación y organización</h3>
@@ -299,11 +300,10 @@
 
 
             <div class="roadmap-item">
-                <div class="roadmap-dot roadmap-dot--active"></div>
+                <div class="roadmap-dot"></div>
                 <div class="roadmap-card">
                     <div class="roadmap-header">
                         <span class="roadmap-phase">Nov 2025 - Dic 2025</span>
-                        <div class="status-pulse" title="Fase Activa"></div>
                     </div>
 
                     <h3>Proof of Concept (PoC)</h3>
@@ -330,9 +330,12 @@
             </div>
 
             <div class="roadmap-item">
-                <div class="roadmap-dot"></div>
+                <div class="roadmap-dot roadmap-dot--active"></div>
                 <div class="roadmap-card">
-                    <span class="roadmap-phase">Mar 2026 +</span>
+                    <div class="roadmap-header">
+                        <span class="roadmap-phase">Mar 2026 +</span>
+                        <div class="status-pulse" title="Fase Activa"></div>
+                    </div>
                     <h3>Despliegue y monitorización</h3>
                     <p>Puesta en producción del sistema, configuración de dashboards de monitoreo, documentación técnica completa y capacitación de usuarios.</p>
                 </div>
@@ -377,6 +380,13 @@
                 <h4>Machine Learning</h4>
                 <p>scikit-learn · SGDClassifier<br>Aprendizaje incremental</p>
             </div>
+            <div class="tech-item">
+                <div class="tech-icon">
+                    <i data-lucide="smartphone"></i>
+                </div>
+                <h4>Mobile App</h4>
+                <p>Kotlin · Jetpack Compose<br>Supabase · Real-time Sync</p>
+            </div>
         </div>
     </section>
 
@@ -407,111 +417,8 @@
         </div>
         <div class="download-qr-container">
             <div class="qr-wrapper">
-                <!-- Custom styled mockup SVG for QR Code (High Fidelity) -->
-                <svg class="mock-qr" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="qr-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#007aff" />
-                            <stop offset="100%" stop-color="#5e5ce6" />
-                        </linearGradient>
-                    </defs>
-                    <!-- Background -->
-                    <rect width="200" height="200" rx="24" fill="#ffffff"/>
-                    
-                    <!-- Corner anchors (Finder Patterns) -->
-                    <!-- Top Left -->
-                    <rect x="15" y="15" width="45" height="45" rx="12" fill="#1d1d1f" />
-                    <rect x="22" y="22" width="31" height="31" rx="8" fill="#ffffff" />
-                    <rect x="28" y="28" width="19" height="19" rx="5" fill="url(#qr-gradient)" />
-                    
-                    <!-- Top Right -->
-                    <rect x="140" y="15" width="45" height="45" rx="12" fill="#1d1d1f" />
-                    <rect x="147" y="22" width="31" height="31" rx="8" fill="#ffffff" />
-                    <rect x="153" y="28" width="19" height="19" rx="5" fill="url(#qr-gradient)" />
 
-                    <!-- Bottom Left -->
-                    <rect x="15" y="140" width="45" height="45" rx="12" fill="#1d1d1f" />
-                    <rect x="22" y="147" width="31" height="31" rx="8" fill="#ffffff" />
-                    <rect x="28" y="153" width="19" height="19" rx="5" fill="url(#qr-gradient)" />
-
-                    <!-- Alignment Patterns -->
-                    <rect x="145" y="145" width="20" height="20" rx="5" fill="#1d1d1f" />
-                    <rect x="149" y="149" width="12" height="12" rx="3" fill="#ffffff" />
-                    <rect x="152" y="152" width="6" height="6" rx="1.5" fill="url(#qr-gradient)" />
-
-                    <!-- Realistic QR micro pixels -->
-                    <rect x="70" y="15" width="6" height="6" rx="2" fill="#1d1d1f" />
-                    <rect x="80" y="15" width="16" height="6" rx="2" fill="#1d1d1f" />
-                    <rect x="105" y="15" width="6" height="6" rx="2" fill="#1d1d1f" />
-                    <rect x="115" y="15" width="16" height="6" rx="2" fill="#1d1d1f" />
-                    
-                    <rect x="70" y="25" width="6" height="16" rx="2" fill="#1d1d1f" />
-                    <rect x="85" y="25" width="6" height="6" rx="2" fill="#1d1d1f" />
-                    <rect x="95" y="25" width="16" height="6" rx="2" fill="#1d1d1f" />
-                    <rect x="120" y="25" width="10" height="6" rx="2" fill="#1d1d1f" />
-
-                    <rect x="80" y="35" width="10" height="6" rx="2" fill="#1d1d1f" />
-                    <rect x="100" y="35" width="6" height="16" rx="2" fill="#1d1d1f" />
-                    <rect x="110" y="35" width="16" height="6" rx="2" fill="#1d1d1f" />
-
-                    <!-- Timing patterns -->
-                    <circle cx="37.5" cy="72.5" r="3.5" fill="#1d1d1f" />
-                    <circle cx="37.5" cy="87.5" r="3.5" fill="#1d1d1f" />
-                    <circle cx="37.5" cy="102.5" r="3.5" fill="#1d1d1f" />
-                    <circle cx="37.5" cy="117.5" r="3.5" fill="#1d1d1f" />
-
-                    <circle cx="72.5" cy="37.5" r="3.5" fill="#1d1d1f" />
-                    <circle cx="87.5" cy="37.5" r="3.5" fill="#1d1d1f" />
-                    <circle cx="102.5" cy="37.5" r="3.5" fill="#1d1d1f" />
-                    <circle cx="117.5" cy="37.5" r="3.5" fill="#1d1d1f" />
-
-                    <!-- Data modules -->
-                    <rect x="15" y="70" width="16" height="6" rx="2" fill="#1d1d1f" />
-                    <rect x="15" y="80" width="6" height="16" rx="2" fill="#1d1d1f" />
-                    <rect x="15" y="105" width="16" height="6" rx="2" fill="#1d1d1f" />
-                    <rect x="15" y="115" width="6" height="16" rx="2" fill="#1d1d1f" />
-
-                    <rect x="140" y="70" width="26" height="6" rx="2" fill="#1d1d1f" />
-                    <rect x="175" y="70" width="10" height="6" rx="2" fill="#1d1d1f" />
-                    <rect x="140" y="80" width="6" height="16" rx="2" fill="#1d1d1f" />
-                    <rect x="155" y="80" width="16" height="6" rx="2" fill="#1d1d1f" />
-                    <rect x="180" y="80" width="6" height="26" rx="2" fill="#1d1d1f" />
-                    
-                    <rect x="140" y="105" width="16" height="6" rx="2" fill="#1d1d1f" />
-                    <rect x="165" y="105" width="6" height="26" rx="2" fill="#1d1d1f" />
-                    <rect x="140" y="115" width="16" height="6" rx="2" fill="#1d1d1f" />
-
-                    <rect x="70" y="140" width="16" height="6" rx="2" fill="#1d1d1f" />
-                    <rect x="70" y="150" width="6" height="26" rx="2" fill="#1d1d1f" />
-                    <rect x="70" y="180" width="26" height="6" rx="2" fill="#1d1d1f" />
-                    <rect x="85" y="160" width="16" height="6" rx="2" fill="#1d1d1f" />
-                    <rect x="110" y="140" width="6" height="26" rx="2" fill="#1d1d1f" />
-                    <rect x="110" y="175" width="16" height="6" rx="2" fill="#1d1d1f" />
-                    <rect x="120" y="155" width="6" height="16" rx="2" fill="#1d1d1f" />
-
-                    <rect x="70" y="55" width="26" height="6" rx="2" fill="#1d1d1f" />
-                    <rect x="70" y="65" width="6" height="16" rx="2" fill="#1d1d1f" />
-                    <rect x="85" y="75" width="16" height="6" rx="2" fill="#1d1d1f" />
-                    
-                    <rect x="110" y="55" width="6" height="26" rx="2" fill="#1d1d1f" />
-                    <rect x="125" y="55" width="16" height="6" rx="2" fill="#1d1d1f" />
-                    <rect x="120" y="70" width="6" height="16" rx="2" fill="#1d1d1f" />
-                    
-                    <rect x="55" y="110" width="26" height="6" rx="2" fill="#1d1d1f" />
-                    <rect x="55" y="120" width="6" height="16" rx="2" fill="#1d1d1f" />
-                    <rect x="70" y="130" width="16" height="6" rx="2" fill="#1d1d1f" />
-
-                    <rect x="55" y="70" width="6" height="26" rx="2" fill="#1d1d1f" />
-                    <rect x="55" y="100" width="16" height="6" rx="2" fill="#1d1d1f" />
-
-                    <rect x="115" y="115" width="16" height="6" rx="2" fill="#1d1d1f" />
-                    <rect x="125" y="125" width="6" height="16" rx="2" fill="#1d1d1f" />
-                    
-                    <!-- Center Logo Badge -->
-                    <rect x="74" y="74" width="52" height="52" rx="15" fill="#ffffff" style="filter: drop-shadow(0px 4px 10px rgba(0,0,0,0.1));" />
-                    <rect x="78" y="78" width="44" height="44" rx="12" fill="url(#qr-gradient)" />
-                    <text x="100" y="110" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="28" font-weight="900" fill="white" text-anchor="middle">M</text>
-                </svg>
+                    <img src="/static/media/minerva_app_icon.png" alt="Minerva App Icon" style="width: 200px; height: 200px; border-radius: 24px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1);">
             </div>
             <span class="qr-hint"><i data-lucide="scan-line" style="width:12px; height:12px; vertical-align:middle; margin-right:4px;"></i> Escanear para descargar</span>
         </div>
