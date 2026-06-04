@@ -27,7 +27,7 @@ fun RiskBadge(level: RiskLevel, modifier: Modifier = Modifier) {
     }
     Box(
         modifier = modifier
-            .clip(RoundedCornerShape(4.dp))
+            .clip(RoundedCornerShape(50))
             .background(bg)
             .padding(horizontal = 8.dp, vertical = 3.dp)
     ) {

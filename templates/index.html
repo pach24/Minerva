@@ -350,42 +350,42 @@
     
 
     <section class="architecture" id="architecture">
-        <h2>Arquitectura Robusta</h2>
+        <h2>Tecnología</h2>
         <div class="tech-grid">
             <div class="tech-item">
                 <div class="tech-icon">
                     <i data-lucide="layout-dashboard"></i>
                 </div>
                 <h4>Frontend</h4>
-                <p>HTML5 · CSS3 · JavaScript<br>MVVM Architecture</p>
+                <p>HTML5 · CSS3 · JavaScript<br>Jinja2</p>
             </div>
             <div class="tech-item">
                 <div class="tech-icon">
                     <i data-lucide="server"></i>
                 </div>
                 <h4>Backend</h4>
-                <p>Python · Flask/FastAPI<br>Pandas · NumPy</p>
+                <p>Python · FastAPI · Uvicorn<br>Starlette · Pydantic</p>
             </div>
             <div class="tech-item">
                 <div class="tech-icon">
                     <i data-lucide="database"></i>
                 </div>
-                <h4>Base de Datos</h4>
-                <p>PostgreSQL<br>Consultas optimizadas</p>
+                <h4>Base de Datos & Auth</h4>
+                <p>Supabase · PostgreSQL<br>Supabase Auth</p>
             </div>
             <div class="tech-item">
                 <div class="tech-icon">
                     <i data-lucide="brain"></i>
                 </div>
                 <h4>Machine Learning</h4>
-                <p>scikit-learn · SGDClassifier<br>Aprendizaje incremental</p>
+                <p>scikit-learn · SGDClassifier<br>Pandas · NumPy · SciPy</p>
             </div>
             <div class="tech-item">
                 <div class="tech-icon">
                     <i data-lucide="smartphone"></i>
                 </div>
-                <h4>Mobile App</h4>
-                <p>Kotlin · Jetpack Compose<br>Supabase · Real-time Sync</p>
+                <h4>App Android</h4>
+                <p>Kotlin · Jetpack Compose · Material 3<br>Hilt · Retrofit · Coroutines<br>Clean Architecture · MVVM</p>
             </div>
         </div>
     </section>
@@ -400,27 +400,24 @@
     </div>
 </section>
 
-<!-- Download Section (Apple-style Card) -->
+<!-- Download Section -->
 <section class="download-section" id="descarga">
     <div class="download-card">
+        <div class="download-app-icon">
+            <img src="/static/media/minerva_icon.png" alt="Minerva App">
+        </div>
         <div class="download-info">
-            <span class="download-badge">Minerva Mobile</span>
-            <h2>Minerva en todos tus dispositivos</h2>
-            <p>Escanea el código QR para descargar la versión de Minerva para iOS o iPadOS. Mantente al tanto de las alertas académicas y realiza un seguimiento personalizado desde cualquier lugar.</p>
-            <div class="app-badges">
-                <a href="#" class="app-store-btn" onclick="event.preventDefault()">
-                    <i data-lucide="play" style="width:16px; height:16px; fill:currentColor;"></i>
-                    <span>App Store</span>
-                </a>
-                <span class="compatibility-text">Requiere iOS 17.0 o superior</span>
-            </div>
+            <h2>Minerva en tu bolsillo</h2>
+            <p>Escanea el código para instalar Minerva en Android y accede al análisis de riesgo académico desde cualquier lugar.</p>
         </div>
         <div class="download-qr-container">
             <div class="qr-wrapper">
-
-                    <img src="/static/media/minerva_app_icon.png" alt="Minerva App Icon" style="width: 200px; height: 200px; border-radius: 24px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1);">
+                <img src="/static/media/qr_download.png" alt="QR descarga Minerva" class="mock-qr">
             </div>
-            <span class="qr-hint"><i data-lucide="scan-line" style="width:12px; height:12px; vertical-align:middle; margin-right:4px;"></i> Escanear para descargar</span>
+            <span class="qr-hint">
+                <i data-lucide="scan-line" style="width:12px;height:12px;"></i>
+                v0.1.0-alpha · Android 8.0+
+            </span>
         </div>
     </div>
 </section>
