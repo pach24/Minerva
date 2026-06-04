@@ -66,7 +66,7 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
 
     implementation(libs.activity.compose)
-    implementation(libs.navigation.compose)
+   implementation(libs.navigation.compose)
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.runtime.compose)
@@ -81,6 +81,7 @@ dependencies {
     implementation(libs.retrofit.kotlinx.serialization)
     implementation(libs.kotlinx.serialization.json)
 
+    implementation(libs.lottie.compose)
     implementation(libs.datastore.preferences)
     implementation(libs.coroutines.android)
 

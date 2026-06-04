@@ -8,6 +8,7 @@ import com.minerva.app.domain.model.Prediction
 import com.minerva.app.domain.model.Student
 import com.minerva.app.domain.repository.PredictionRepository
 import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 class PredictionRepositoryImpl @Inject constructor(
@@ -20,12 +21,17 @@ class PredictionRepositoryImpl @Inject constructor(
             val results = minervaApi.predecir(dtos)
             Result.Success(results.map { it.toDomain() })
         } catch (e: HttpException) {
-            if (e.code() == 401)
-                Result.Error("Sesión caducada. Por favor inicia sesión de nuevo.", e)
-            else
-                Result.Error("Error del servidor: ${e.code()}", e)
+            when (e.code()) {
+                401 -> Result.Error("Tu sesión ha caducado. Inicia sesión de nuevo.", e)
+                in 500..599 -> Result.Error(
+                    "El servidor no está disponible ahora mismo. Inténtalo de nuevo en unos segundos.", e
+                )
+                else -> Result.Error("No se pudo completar la predicción (código ${e.code()}).", e)
+            }
+        } catch (e: IOException) {
+            Result.Error("Sin conexión con el servidor. Comprueba tu red e inténtalo de nuevo.", e)
         } catch (e: Exception) {
-            Result.Error("Error de red: ${e.message}", e)
+            Result.Error("Ha ocurrido un error inesperado al predecir.", e)
         }
     }
 

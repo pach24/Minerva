@@ -26,7 +26,7 @@ class AuthRepositoryImpl @Inject constructor(
                 body = LoginRequestDto(email, password)
             )
             val session = AuthSession(dto.access_token, dto.user.email)
-            sessionDataStore.saveSession(session.accessToken, session.email)
+            sessionDataStore.saveSession(session.accessToken, dto.refresh_token, session.email)
             Result.Success(session)
         } catch (e: HttpException) {
             Result.Error("Credenciales incorrectas (${e.code()})", e)
