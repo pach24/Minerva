@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Minerva" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">#090C1D</item>
+    </style>
+</resources>
