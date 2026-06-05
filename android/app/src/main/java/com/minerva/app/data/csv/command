@@ -1,0 +1,1 @@
+$adb = "C:\Users\Usuario\AppData\Local\Android\Sdk\platform-tools\adb.exe"; & $adb push "app/src/main/java/com/minerva/app/data/csv/alumnos_2dam.csv" /sdcard/Download/alumnos_2dam.csv; & $adb shell cat /sdcard/Download/alumnos_2dam.csv
