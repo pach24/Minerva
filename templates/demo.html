@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="/static/media/minerva_app_icon.png">
     <title>Minerva · Insights Académicos</title>
-    <link rel="stylesheet" href="/static/css/demo.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/demo.css?v=2">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
@@ -13,7 +16,7 @@
     <!-- Loading Overlay (Intelligence Style) -->
     <div id="loading-overlay" class="loading-overlay">
         <div class="loading-card">
-            <div class="loading-logo">M</div>
+            <div class="loading-logo"><img src="/static/media/minerva_app_icon.png" alt="Minerva"></div>
             <p class="loading-text" id="loading-text">Análisis Inteligente</p>
             <span class="loading-percent" id="loading-percent">0%</span>
         </div>
@@ -37,11 +40,16 @@
             <div class="brand">
                 <img src="/static/media/minerva_icon.png" alt="Minerva Logo" style="height: 40px; width: auto; margin-right: 8px;">
                 <span class="logo-text">Minerva</span>
-                <span class="badge-poc">Insight</span>
             </div>
-            <div class="user-profile">
-                <span class="user-name">Profesor Admin</span>
-                <div class="avatar">PA</div>
+            <div class="user-profile" id="user-profile">
+                <span class="user-name" id="user-name">{{ user }}</span>
+                <div class="avatar" id="user-avatar">—</div>
+                <div class="user-menu" id="user-menu">
+                    <a class="user-menu-item danger" href="/logout">
+                        <i data-lucide="log-out" style="width:16px;height:16px;"></i>
+                        Cerrar sesión
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
@@ -58,6 +66,9 @@
                     <i data-lucide="code" style="width:15px;height:15px;"></i>
                     Programación
                 </div>
+                <button class="btn-secondary" id="btn-import">
+                    <i data-lucide="upload" style="width:15px;height:15px;"></i> Importar CSV
+                </button>
                 <button class="btn-primary" id="btn-predict">
                     <i data-lucide="sparkles" style="width:16px;height:16px;"></i> Generar Predicción
                 </button>
@@ -74,17 +85,48 @@
             </button>
             <input type="file" id="csv-input" accept=".csv" style="display:none;" onchange="handleFileUpload(this)">
             <p class="file-hint">Formato sugerido: ID · Alumno · Asistencia · Nota · Participación</p>
+
+            <div class="sample-divider"></div>
+            <p class="sample-text">¿No tienes ningún CSV a mano?</p>
+            <div class="sample-actions">
+                <button class="btn-sample" onclick="loadSampleCSV()">
+                    <i data-lucide="file-spreadsheet" style="width:15px;height:15px;"></i>
+                    Probar con datos de ejemplo
+                </button>
+                <a class="btn-sample-download" href="/static/samples/alumnos_2dam.csv" download="alumnos_2dam.csv">
+                    <i data-lucide="download" style="width:14px;height:14px;"></i>
+                    Descargar datos de ejemplo
+                </a>
+            </div>
         </div>
 
         <!-- Data View -->
         <div id="data-view" class="data-view" style="display:none;">
+            <div class="stats-strip">
+                <div class="stat-card">
+                    <span class="stat-label">Alumnos</span>
+                    <span class="stat-value" id="stat-count">—</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Media del grupo</span>
+                    <span class="stat-value" id="stat-grade">—</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Asistencia media</span>
+                    <span class="stat-value" id="stat-att">—</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">En riesgo</span>
+                    <span class="stat-value muted" id="stat-risk">—</span>
+                </div>
+            </div>
+
             <div class="table-meta">
                 <div class="meta-left">
                     <span class="subject-tag">
                         <i data-lucide="code" style="width:13px;height:13px;"></i>
                         Programación
                     </span>
-                    <span id="student-count" class="count-tag">0 alumnos</span>
                 </div>
                 <span class="hint-text" id="hint-text">Listo para el análisis inteligente</span>
             </div>
@@ -93,14 +135,11 @@
                 <table class="students-table">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Alumno</th>
-                            <th>Asistencia</th>
                             <th>Media</th>
-                            <th>Participación</th>
-                            <th>% Éxito</th>
+                            <th>Asist.</th>
+                            <th>Prob. de aprobado</th>
                             <th>Riesgo</th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody id="students-tbody"></tbody>
@@ -113,87 +152,57 @@
     <!-- Drawer (Sheet) -->
     <div id="student-drawer" class="drawer-overlay">
         <div class="drawer-content">
+            <div class="sheet-grabber"></div>
             <div class="drawer-header">
-                <div>
-                    <h2 id="drawer-student-name">—</h2>
-                    <span class="subject-tag-sm">Programación</span>
+                <div class="drawer-id">
+                    <span class="drawer-avatar" id="drawer-avatar">—</span>
+                    <div>
+                        <h2 id="drawer-student-name">—</h2>
+                        <span class="subject-tag-sm">Programación</span>
+                    </div>
                 </div>
                 <button class="btn-close" onclick="closeDrawer()"><i data-lucide="x" style="width:20px;height:20px;"></i></button>
             </div>
 
             <div class="drawer-body">
-                <div class="metric-summary">
-                    <div class="metric-box">
-                        <span class="label">Predicción de Riesgo</span>
-                        <span class="value" id="drawer-risk">—</span>
+                <div class="prob-hero" id="prob-hero">
+                    <div class="prob-ring">
+                        <svg viewBox="0 0 120 120">
+                            <circle class="ring-track" cx="60" cy="60" r="52"></circle>
+                            <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="52"></circle>
+                        </svg>
+                        <div class="ring-center">
+                            <span class="ring-value" id="drawer-approval-big">—</span>
+                            <span class="ring-caption">aprobar</span>
+                        </div>
                     </div>
-                    <div class="metric-box">
-                        <span class="label">Probabilidad de Éxito</span>
-                        <span class="value" id="drawer-approval">—</span>
-                    </div>
-                    <div class="metric-box">
-                        <span class="label">Asistencia Actual</span>
-                        <span class="value" id="drawer-attendance">—</span>
-                    </div>
-                    <div class="metric-box">
-                        <span class="label">Nota Media</span>
-                        <span class="value" id="drawer-grade">—</span>
+                    <div class="prob-side">
+                        <span class="prob-side-title">Probabilidad de aprobar</span>
+                        <p class="prob-side-desc" id="prob-desc">Genera la predicción para ver el análisis completo.</p>
+                        <span class="prob-hero-risk badge-pending" id="drawer-risk-badge">Sin analizar</span>
                     </div>
                 </div>
-                <div class="ra-section">
-                    <h3 class="section-title">Resultados de Aprendizaje</h3>
-                    <div class="ra-list">
-                        <div class="ra-item">
-                            <span class="ra-label">RA1 · Estructura de programas</span>
-                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-1"></div></div>
-                            <span class="ra-value" id="ra-1-val">—</span>
+
+                <div class="metric-summary">
+                    <div class="metric-box">
+                        <span class="metric-icon"><i data-lucide="calendar-check" style="width:18px;height:18px;"></i></span>
+                        <div class="metric-data">
+                            <span class="label">Asistencia</span>
+                            <span class="value" id="drawer-attendance">—</span>
                         </div>
-                        <div class="ra-item">
-                            <span class="ra-label">RA2 · POO básica</span>
-                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-2"></div></div>
-                            <span class="ra-value" id="ra-2-val">—</span>
-                        </div>
-                        <div class="ra-item">
-                            <span class="ra-label">RA3 · Estructuras de datos</span>
-                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-3"></div></div>
-                            <span class="ra-value" id="ra-3-val">—</span>
-                        </div>
-                        <div class="ra-item">
-                            <span class="ra-label">RA4 · Algoritmos y eficiencia</span>
-                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-4"></div></div>
-                            <span class="ra-value" id="ra-4-val">—</span>
-                        </div>
-                        <div class="ra-item">
-                            <span class="ra-label">RA5 · Tratamiento de ficheros</span>
-                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-5"></div></div>
-                            <span class="ra-value" id="ra-5-val">—</span>
-                        </div>
-                        <div class="ra-item">
-                            <span class="ra-label">RA6 · Interfaces gráficas</span>
-                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-6"></div></div>
-                            <span class="ra-value" id="ra-6-val">—</span>
-                        </div>
-                        <div class="ra-item">
-                            <span class="ra-label">RA7 · Herencia y polimorfismo</span>
-                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-7"></div></div>
-                            <span class="ra-value" id="ra-7-val">—</span>
-                        </div>
-                        <div class="ra-item">
-                            <span class="ra-label">RA8 · Acceso a bases de datos</span>
-                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-8"></div></div>
-                            <span class="ra-value" id="ra-8-val">—</span>
-                        </div>
-                        <div class="ra-item">
-                            <span class="ra-label">RA9 · Desarrollo de proyectos</span>
-                            <div class="ra-bar-track"><div class="ra-bar-fill" id="ra-9"></div></div>
-                            <span class="ra-value" id="ra-9-val">—</span>
+                    </div>
+                    <div class="metric-box">
+                        <span class="metric-icon"><i data-lucide="graduation-cap" style="width:18px;height:18px;"></i></span>
+                        <div class="metric-data">
+                            <span class="label">Nota Media</span>
+                            <span class="value" id="drawer-grade">—</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="disclaimer">
-                    Las predicciones se basan en datos sintéticos y tienen carácter orientativo.
-                    La fiabilidad aumentará progresivamente al incorporar datos históricos reales.
+                <div class="ra-section">
+                    <h3 class="section-title">Resultados de Aprendizaje</h3>
+                    <div class="ra-grid" id="ra-grid"></div>
                 </div>
 
                 <div class="feedback-section" id="feedback-section">
@@ -201,12 +210,9 @@
                     <p class="feedback-text" id="drawer-feedback">—</p>
                 </div>
 
-                <div class="comments-section">
-                    <h3 class="section-title">Notas de Seguimiento</h3>
-                    <textarea placeholder="Añade una nota personalizada..."></textarea>
-                    <div style="display:flex; justify-content:flex-end;">
-                        <button class="btn-small">Guardar</button>
-                    </div>
+                <div class="disclaimer">
+                    Las predicciones se basan en datos sintéticos y tienen carácter orientativo.
+                    La fiabilidad aumentará progresivamente al incorporar datos históricos reales.
                 </div>
             </div>
         </div>
@@ -229,34 +235,91 @@
             return 'critical';
         }
 
+        function initials(name) {
+            const parts = (name || '').trim().split(/\s+/).filter(Boolean);
+            if (!parts.length) return '–';
+            return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+        }
+
+        function updateStats() {
+            const avg = arr => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
+            document.getElementById('stat-count').textContent = students.length;
+            document.getElementById('stat-grade').textContent = avg(students.map(s => s.nota_media)).toFixed(1);
+            document.getElementById('stat-att').textContent   = Math.round(avg(students.map(s => s.asistencia))) + '%';
+
+            const riskEl    = document.getElementById('stat-risk');
+            const predicted = students.some(s => s.approval !== null);
+            if (predicted) {
+                const atRisk = students.filter(s => s.risk === 'Alto' || s.risk === 'Crítico').length;
+                riskEl.textContent = atRisk;
+                riskEl.className   = 'stat-value ' + (atRisk > 0 ? 'risk' : 'ok');
+            } else {
+                riskEl.textContent = '—';
+                riskEl.className   = 'stat-value muted';
+            }
+        }
+
         // ── Parseo real del CSV ──────────────────────────────────────
+        function splitCSVLine(line) {
+            const out = [];
+            let cur = '', inQuotes = false;
+            for (let i = 0; i < line.length; i++) {
+                const c = line[i];
+                if (inQuotes) {
+                    if (c === '"') {
+                        if (line[i + 1] === '"') { cur += '"'; i++; }
+                        else inQuotes = false;
+                    } else cur += c;
+                } else {
+                    if (c === '"') inQuotes = true;
+                    else if (c === ',') { out.push(cur); cur = ''; }
+                    else cur += c;
+                }
+            }
+            out.push(cur);
+            return out.map(v => v.trim());
+        }
+
         function parseCSV(text) {
             const lines = text.trim().split('\n').map(l => l.trim()).filter(Boolean);
             if (lines.length < 2) return [];
-            const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+            const headers = splitCSVLine(lines[0]).map(h => h.toLowerCase());
             return lines.slice(1).map(line => {
-                const vals = line.split(',').map(v => v.trim());
+                const vals = splitCSVLine(line);
                 const obj = {};
                 headers.forEach((h, i) => obj[h] = vals[i] ?? '');
                 const raw_asistencia = parseFloat(obj['asistencia']) || 0;
                 const ratio_asistencia = raw_asistencia > 1 ? raw_asistencia / 100 : raw_asistencia;
+
+                const ras = [];
+                for (let n = 1; n <= 9; n++) {
+                    ras.push(parseFloat(obj['ra' + n] || obj['nota_ra' + n]) || null);
+                }
+                const nota_practicas = parseFloat(obj['nota_practicas']) || null;
+
+                // Media: columna explícita o, en su defecto, media de los RA disponibles
+                let nota_media = parseFloat(obj['nota_media'] || obj['media'] || obj['nota']) || 0;
+                if (!nota_media) {
+                    const conNota = ras.filter(v => v !== null);
+                    if (conNota.length) {
+                        nota_media = conNota.reduce((a, b) => a + b, 0) / conNota.length;
+                    } else if (nota_practicas !== null) {
+                        nota_media = nota_practicas;
+                    }
+                }
+                nota_media = Math.round(nota_media * 10) / 10;
+
                 return {
                     id:              obj['id'] || '',
                     nombre:          obj['nombre'] || obj['alumno'] || obj['name'] || '',
                     asistencia:      raw_asistencia,
                     ratio_asistencia: ratio_asistencia,
-                    nota_media:      parseFloat(obj['nota_media'] || obj['media'] || obj['nota']) || 0,
+                    nota_media:      nota_media,
                     participacion:   obj['participacion'] || obj['participación'] || 'Media',
-                    nota_practicas:  parseFloat(obj['nota_practicas'] || obj['nota_practicas']) || null,
-                    nota_ra1: parseFloat(obj['ra1'] || obj['nota_ra1']) || null,
-                    nota_ra2: parseFloat(obj['ra2'] || obj['nota_ra2']) || null,
-                    nota_ra3: parseFloat(obj['ra3'] || obj['nota_ra3']) || null,
-                    nota_ra4: parseFloat(obj['ra4'] || obj['nota_ra4']) || null,
-                    nota_ra5: parseFloat(obj['ra5'] || obj['nota_ra5']) || null,
-                    nota_ra6: parseFloat(obj['ra6'] || obj['nota_ra6']) || null,
-                    nota_ra7: parseFloat(obj['ra7'] || obj['nota_ra7']) || null,
-                    nota_ra8: parseFloat(obj['ra8'] || obj['nota_ra8']) || null,
-                    nota_ra9: parseFloat(obj['ra9'] || obj['nota_ra9']) || null,
+                    nota_practicas:  nota_practicas,
+                    nota_ra1: ras[0], nota_ra2: ras[1], nota_ra3: ras[2],
+                    nota_ra4: ras[3], nota_ra5: ras[4], nota_ra6: ras[5],
+                    nota_ra7: ras[6], nota_ra8: ras[7], nota_ra9: ras[8],
                     confianza:               obj['confianza'] !== '' ? parseInt(obj['confianza']) || null : null,
                     motivacion_escolar:      obj['motivacion'] !== '' ? parseInt(obj['motivacion'] || obj['motivacion_escolar']) || null : null,
                     recursos_casa:           obj['recursos'] !== '' ? parseInt(obj['recursos'] || obj['recursos_casa']) || null : null,
@@ -266,6 +329,31 @@
                     risk: null,
                 };
             });
+        }
+
+        function loadStudents(text) {
+            const parsed = parseCSV(text);
+            if (!parsed.length) {
+                showErrorModal('Archivo sin registros', 'El archivo CSV cargado no contiene filas de datos válidas o el formato está dañado.');
+                return false;
+            }
+
+            // Strict structure checking
+            if (parsed.every(s => !s.nombre)) {
+                showErrorModal('Estructura incorrecta', 'No se ha podido localizar la columna obligatoria "Alumno" o "Nombre". Revisa el formato sugerido.');
+                return false;
+            }
+
+            students = parsed;
+            document.getElementById('empty-state').style.display   = 'none';
+            document.getElementById('data-view').style.display     = 'block';
+            document.getElementById('controls-area').style.display = 'flex';
+            const hint = document.getElementById('hint-text');
+            hint.textContent = 'Listo para el análisis inteligente';
+            hint.classList.remove('done');
+            updateStats();
+            renderTable(students);
+            return true;
         }
 
         function handleFileUpload(input) {
@@ -281,32 +369,23 @@
             const reader = new FileReader();
             reader.onload = e => {
                 try {
-                    students = parseCSV(e.target.result);
-                    if (!students.length) {
-                        showErrorModal('Archivo sin registros', 'El archivo CSV cargado no contiene filas de datos válidas o el formato está dañado.');
-                        input.value = '';
-                        return;
-                    }
-
-                    // Strict structure checking
-                    const hasInvalidStructure = students.every(s => !s.nombre);
-                    if (hasInvalidStructure) {
-                        showErrorModal('Estructura incorrecta', 'No se ha podido localizar la columna obligatoria "Alumno" o "Nombre". Revisa el formato sugerido.');
-                        input.value = '';
-                        return;
-                    }
-
-                    document.getElementById('empty-state').style.display   = 'none';
-                    document.getElementById('data-view').style.display     = 'block';
-                    document.getElementById('controls-area').style.display = 'flex';
-                    document.getElementById('student-count').textContent   = students.length + ' alumnos';
-                    renderTable(students);
+                    loadStudents(e.target.result);
                 } catch (err) {
                     showErrorModal('Error de lectura', 'Ocurrió un fallo al intentar interpretar el archivo: ' + err.message);
-                    input.value = '';
                 }
+                input.value = '';
             };
             reader.readAsText(file, 'UTF-8');
+        }
+
+        async function loadSampleCSV() {
+            try {
+                const res = await fetch('/static/samples/alumnos_2dam.csv');
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                loadStudents(await res.text());
+            } catch (err) {
+                showErrorModal('No se pudo cargar el ejemplo', 'Ocurrió un fallo al obtener el CSV de ejemplo: ' + err.message);
+            }
         }
 
         // ── Render ───────────────────────────────────────────────────
@@ -316,7 +395,7 @@
             data.forEach((s, i) => {
                 const riskBadge = s.risk
                     ? `<span class="badge badge-${riskSlug(s.risk)}">${s.risk}</span>`
-                    : '<span class="badge badge-pending">—</span>';
+                    : '<span class="badge badge-pending">Pendiente</span>';
 
                 const ac = approvalClass(s.approval);
                 const approvalCell = s.approval !== null
@@ -326,24 +405,28 @@
                            </div>
                            <span class="approval-label ${ac}">${s.approval}%</span>
                        </div>`
-                    : '<span class="text-muted">—</span>';
+                    : `<div class="approval-bar">
+                           <div class="approval-track"></div>
+                           <span class="approval-label pending">—</span>
+                       </div>`;
 
-                const partSlug = (s.participacion || '').toLowerCase();
+                const slug = riskSlug(s.risk);
                 const tr = document.createElement('tr');
                 tr.className = 'row-in';
                 tr.style.animationDelay = `${i * 35}ms`;
                 tr.onclick = () => openDrawer(i);
                 tr.innerHTML = `
-                    <td class="text-muted">${s.id}</td>
-                    <td class="font-medium">${s.nombre}</td>
-                    <td>${s.asistencia}%</td>
-                    <td>${s.nota_media}</td>
-                    <td><span class="part-badge part-${partSlug}">${s.participacion}</span></td>
+                    <td>
+                        <div class="cell-student">
+                            <span class="risk-accent accent-${slug || 'pending'}"></span>
+                            <span class="student-avatar">${initials(s.nombre)}</span>
+                            <span class="student-name">${s.nombre}</span>
+                        </div>
+                    </td>
+                    <td class="cell-num">${s.nota_media}</td>
+                    <td class="cell-num">${s.asistencia}%</td>
                     <td>${approvalCell}</td>
                     <td>${riskBadge}</td>
-                    <td><button class="btn-icon" onclick="event.stopPropagation();openDrawer(${i})">
-                        <i data-lucide="chevron-right" style="width:18px;height:18px;"></i>
-                    </button></td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -404,7 +487,10 @@
                         }
                     });
                     const now = new Date().toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit' });
-                    document.getElementById('hint-text').textContent = `Análisis completado · ${now}`;
+                    const hint = document.getElementById('hint-text');
+                    hint.textContent = `Análisis completado · ${now}`;
+                    hint.classList.add('done');
+                    updateStats();
                     renderTable(students);
                     btn.disabled = false;
                 }, 400);
@@ -418,41 +504,73 @@
         });
 
         // ── Drawer ───────────────────────────────────────────────────
-        function setRA(id, value) {
-            const pct = value > 0 ? (value / 10) * 100 : 0;
-            const fill = document.getElementById(id);
-            const val  = document.getElementById(id + '-val');
-            if (!fill || !val) return;
-            fill.style.width = pct + '%';
-            fill.className = 'ra-bar-fill ' + (value >= 7 ? 'ra-high' : value >= 5 ? 'ra-med' : value > 0 ? 'ra-low' : 'ra-none');
-            val.textContent = value > 0 ? value : '—';
+        const RA_LABELS = [
+            'Estructura de programas', 'POO básica', 'Estructuras de datos',
+            'Algoritmos y eficiencia', 'Tratamiento de ficheros', 'Interfaces gráficas',
+            'Herencia y polimorfismo', 'Acceso a bases de datos', 'Desarrollo de proyectos'
+        ];
+
+        function renderRABars(s) {
+            const grid   = document.getElementById('ra-grid');
+            const scores = [
+                s.nota_ra1, s.nota_ra2, s.nota_ra3, s.nota_ra4, s.nota_ra5,
+                s.nota_ra6, s.nota_ra7, s.nota_ra8, s.nota_ra9
+            ];
+            grid.innerHTML = scores.map((v, idx) => {
+                const score = v || 0;
+                const pct   = score > 0 ? (score / 10) * 100 : 0;
+                const cls   = score >= 7 ? 'ra-high' : score >= 5 ? 'ra-med' : score > 0 ? 'ra-low' : 'ra-none';
+                return `<div class="ra-row" title="RA${idx + 1} · ${RA_LABELS[idx]}">
+                            <div class="ra-head">
+                                <span class="ra-name">RA${idx + 1} · ${RA_LABELS[idx]}</span>
+                                <span class="ra-score ${cls}">${score > 0 ? score.toFixed(1) : '—'}</span>
+                            </div>
+                            <div class="ra-track">
+                                <div class="ra-fill ${cls}" style="width:${pct}%"></div>
+                            </div>
+                        </div>`;
+            }).join('');
         }
 
+        const RING_C = 2 * Math.PI * 52;
+        const RISK_DESC = {
+            'Bajo':    'Buen rendimiento general. Mantiene una trayectoria sólida.',
+            'Medio':   'Evolución irregular. Conviene reforzar los RA pendientes.',
+            'Alto':    'Riesgo alto de suspender. Se recomienda intervención temprana.',
+            'Crítico': 'Situación crítica. Requiere un plan de refuerzo inmediato.'
+        };
+
         function openDrawer(i) {
-            const s = students[i];
+            const s    = students[i];
+            const slug = riskSlug(s.risk);
+            const ac   = approvalClass(s.approval);
+
             document.getElementById('drawer-student-name').textContent = s.nombre;
+            document.getElementById('drawer-avatar').textContent       = initials(s.nombre);
 
-            const riskEl = document.getElementById('drawer-risk');
-            riskEl.textContent = s.risk || 'Sin analizar';
-            riskEl.className   = `value ${riskSlug(s.risk)}`;
+            document.getElementById('prob-hero').className = `prob-hero ${ac}`;
 
-            const approvalEl = document.getElementById('drawer-approval');
-            approvalEl.textContent = s.approval !== null ? s.approval + '%' : '—';
-            approvalEl.className   = `value ${approvalClass(s.approval)}`;
+            const bigEl = document.getElementById('drawer-approval-big');
+            bigEl.textContent = s.approval !== null ? s.approval + '%' : '—';
+            bigEl.className   = `ring-value ${ac}`;
+
+            const ring = document.getElementById('ring-fill');
+            ring.setAttribute('class', `ring-fill ${ac}`);
+            ring.style.strokeDashoffset = s.approval !== null
+                ? RING_C * (1 - s.approval / 100)
+                : RING_C;
+
+            document.getElementById('prob-desc').textContent =
+                RISK_DESC[s.risk] || 'Genera la predicción para ver el análisis completo.';
+
+            const riskBadgeEl = document.getElementById('drawer-risk-badge');
+            riskBadgeEl.textContent = s.risk ? 'Riesgo ' + s.risk.toLowerCase() : 'Sin analizar';
+            riskBadgeEl.className    = `prob-hero-risk badge-${slug || 'pending'}`;
 
             document.getElementById('drawer-attendance').textContent = s.asistencia + '%';
             document.getElementById('drawer-grade').textContent      = s.nota_media;
 
-            // RA1-RA9
-            setRA('ra-1', s.nota_ra1 || 0);
-            setRA('ra-2', s.nota_ra2 || 0);
-            setRA('ra-3', s.nota_ra3 || 0);
-            setRA('ra-4', s.nota_ra4 || 0);
-            setRA('ra-5', s.nota_ra5 || 0);
-            setRA('ra-6', s.nota_ra6 || 0);
-            setRA('ra-7', s.nota_ra7 || 0);
-            setRA('ra-8', s.nota_ra8 || 0);
-            setRA('ra-9', s.nota_ra9 || 0);
+            renderRABars(s);
 
             // Feedback
             const fbSection = document.getElementById('feedback-section');
@@ -465,10 +583,12 @@
             }
 
             document.getElementById('student-drawer').classList.add('open');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeDrawer() {
             document.getElementById('student-drawer').classList.remove('open');
+            document.body.style.overflow = '';
         }
 
         document.getElementById('student-drawer').addEventListener('click', e => {
@@ -489,6 +609,38 @@
 
         document.getElementById('error-modal').addEventListener('click', e => {
             if (e.target === document.getElementById('error-modal')) closeErrorModal();
+        });
+
+        // ── Usuario y menú contextual ────────────────────────────────
+        (function initUserProfile() {
+            const nameEl = document.getElementById('user-name');
+            const raw    = (nameEl.textContent || '').trim();
+            let   name   = raw;
+            // Si llega un slug de email (sin nombre asociado), se embellece
+            const wasSlug = raw.includes('@') || /[._-]/.test(raw);
+            if (raw.includes('@')) name = raw.split('@')[0];
+            if (wasSlug) {
+                name = name.replace(/[._-]+/g, ' ').trim();
+                name = name.replace(/\b\w/g, c => c.toUpperCase());
+            }
+            nameEl.textContent = name || 'Profesor';
+            document.getElementById('user-avatar').textContent = initials(name || 'P');
+        })();
+
+        const userProfile = document.getElementById('user-profile');
+        const userMenu    = document.getElementById('user-menu');
+
+        userProfile.addEventListener('click', e => {
+            if (e.target.closest('.user-menu')) return;
+            userMenu.classList.toggle('open');
+        });
+
+        document.addEventListener('click', e => {
+            if (!userProfile.contains(e.target)) userMenu.classList.remove('open');
+        });
+
+        document.getElementById('btn-import').addEventListener('click', () => {
+            document.getElementById('csv-input').click();
         });
     </script>
 </body>

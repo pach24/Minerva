@@ -91,22 +91,25 @@ footer {
 
 .download-app-icon {
   position: absolute;
-  top: 24px;
-  left: 28px;
-  width: 54px;
-  height: 54px;
+  top: 18px;
+  left: 20px;
+  width: 36px;
+  height: 36px;
   background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  border: 1px solid rgba(209, 213, 219, 0.55);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .download-app-icon img {
-  width: 40px;
-  height: 40px;
+  width: 92%;
+  height: 92%;
   object-fit: contain;
+  display: block;
 }
 
 .download-info {

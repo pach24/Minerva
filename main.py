@@ -52,7 +52,14 @@ def login_page(request: Request):
 async def login_submit(request: Request, email: str = Form(...), password: str = Form(...)):
     try:
         res = supabase.auth.sign_in_with_password({"email": email, "password": password})
-        request.session["user"] = res.user.email
+        meta = res.user.user_metadata or {}
+        display_name = (
+            meta.get("display_name")
+            or meta.get("full_name")
+            or meta.get("name")
+            or res.user.email.split("@")[0]
+        )
+        request.session["user"] = display_name
         return RedirectResponse(url="/demo", status_code=303)
     except Exception as e:
         return templates.TemplateResponse("login.html", {
