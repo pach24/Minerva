@@ -4,11 +4,17 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -24,7 +30,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -202,16 +210,58 @@ private fun CsvLoadedContent(
 
 @Composable
 private fun PredictingContent() {
+    // Logo "respirando": escala y resplandor pulsan en bucle, como el overlay
+    // de carga de la web (intelligence-glow).
+    val breath = rememberInfiniteTransition(label = "breathing")
+    val scale by breath.animateFloat(
+        initialValue = 1f,
+        targetValue = 1.06f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1500, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "breathScale"
+    )
+    val glowAlpha by breath.animateFloat(
+        initialValue = 0.25f,
+        targetValue = 0.55f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1500, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "breathGlow"
+    )
+
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(bottom = 40.dp)
         ) {
-            CircularProgressIndicator(color = MinervaAccent, strokeWidth = 3.dp)
-            Spacer(Modifier.height(18.dp))
+            Box(
+                modifier = Modifier
+                    .size(88.dp)
+                    .graphicsLayer { scaleX = scale; scaleY = scale }
+                    .shadow(
+                        elevation = 24.dp,
+                        shape = RoundedCornerShape(22.dp),
+                        ambientColor = MinervaAccent.copy(alpha = glowAlpha),
+                        spotColor = MinervaAccent.copy(alpha = glowAlpha)
+                    )
+                    .clip(RoundedCornerShape(22.dp))
+                    .background(MaterialTheme.colorScheme.surface),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.mi_logo),
+                    contentDescription = null,
+                    modifier = Modifier.size(56.dp)
+                )
+            }
+            Spacer(Modifier.height(28.dp))
             Text(
                 "Analizando estudiantes…",
                 style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(Modifier.height(4.dp))
