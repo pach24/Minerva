@@ -44,7 +44,6 @@ import com.minerva.app.R
 import com.minerva.app.domain.model.Prediction
 import com.minerva.app.domain.model.RiskLevel
 import com.minerva.app.presentation.prediction.PredictionUiState
-import com.minerva.app.presentation.prediction.PredictionViewModel
 import com.minerva.app.presentation.theme.MinervaAccent
 import com.minerva.app.presentation.theme.MinervaBlueDark
 import com.minerva.app.presentation.theme.RiskAlto
@@ -52,7 +51,6 @@ import com.minerva.app.presentation.theme.RiskBajo
 import com.minerva.app.presentation.theme.RiskCritico
 import com.minerva.app.presentation.theme.scaleOnPress
 import com.minerva.app.presentation.theme.staggeredEnter
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -60,11 +58,9 @@ import java.util.Locale
 @Composable
 fun HomeScreen(
     userName: String,
-    predictionViewModel: PredictionViewModel,
+    predictionState: PredictionUiState,
     onEvaluarClick: () -> Unit,
 ) {
-    val uiState by predictionViewModel.uiState.collectAsStateWithLifecycle()
-
     var visible by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) { visible = true }
 
@@ -101,7 +97,7 @@ fun HomeScreen(
 
         Spacer(Modifier.height(20.dp))
 
-        when (val state = uiState) {
+        when (val state = predictionState) {
             is PredictionUiState.Results -> LastEvaluationCard(
                 predictions = state.predictions,
                 onClick = onEvaluarClick,

@@ -10,3 +10,9 @@ MINERVA_BASE_URL=https://your-minerva-app.onrender.com/
 # Supabase project URL and anon (public) key
 SUPABASE_URL=https://xxxx.supabase.co
 SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+# Release signing (never commit real values)
+MINERVA_KEYSTORE_FILE=minerva.jks
+MINERVA_KEYSTORE_PASSWORD=changeme
+MINERVA_KEY_ALIAS=minerva
+MINERVA_KEY_PASSWORD=changeme

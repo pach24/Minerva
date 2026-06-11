@@ -48,7 +48,6 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.minerva.app.domain.model.Prediction
 import com.minerva.app.domain.model.RiskLevel
 import com.minerva.app.domain.model.Student
@@ -63,13 +62,9 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StudentDetailScreen(
-    index: Int,
-    viewModel: PredictionViewModel,
+    prediction: Prediction?,
     onBack: () -> Unit,
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val prediction = (uiState as? PredictionUiState.Results)?.predictions?.getOrNull(index)
-
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {

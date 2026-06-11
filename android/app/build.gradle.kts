@@ -36,10 +36,17 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = rootProject.file("minerva.jks")
-            storePassword = "minerva2025"
-            keyAlias = "minerva"
-            keyPassword = "minerva2025"
+            // Credenciales de firma fuera del control de versiones:
+            // local.properties (local) o variables de entorno (CI).
+            storeFile = rootProject.file(
+                localProps.getProperty("MINERVA_KEYSTORE_FILE")
+                    ?: System.getenv("MINERVA_KEYSTORE_FILE") ?: "minerva.jks")
+            storePassword = localProps.getProperty("MINERVA_KEYSTORE_PASSWORD")
+                ?: System.getenv("MINERVA_KEYSTORE_PASSWORD")
+            keyAlias = localProps.getProperty("MINERVA_KEY_ALIAS")
+                ?: System.getenv("MINERVA_KEY_ALIAS") ?: "minerva"
+            keyPassword = localProps.getProperty("MINERVA_KEY_PASSWORD")
+                ?: System.getenv("MINERVA_KEY_PASSWORD")
         }
     }
 

@@ -28,14 +28,20 @@ RA_NAMES = {
     "nota_ra9": "RA9 · Desarrollo de proyectos",
 }
 
+# Caché por proceso del modelo, invalidada por la fecha de modificación del
+# .pkl: si otro worker (o /api/entrenar) reescribe el archivo, cada proceso
+# detecta el cambio y recarga, evitando servir un modelo obsoleto.
 _model = None
+_model_mtime = None
 
 
 def _load() -> dict:
-    global _model
-    if _model is None:
+    global _model, _model_mtime
+    mtime = os.path.getmtime(MODEL_PATH)
+    if _model is None or mtime != _model_mtime:
         with open(MODEL_PATH, "rb") as f:
             _model = pickle.load(f)
+        _model_mtime = mtime
     return _model
 
 
@@ -124,7 +130,6 @@ def predict_students(students: list[dict]) -> list[dict]:
 
 def partial_update(labeled_students: list[dict]) -> None:
     """Actualiza el modelo incremental SGD con partial_fit."""
-    global _model
     data    = _load()
     imputer = data["imputer"]
     scaler  = data["scaler"]
@@ -140,4 +145,4 @@ def partial_update(labeled_students: list[dict]) -> None:
     data["clf_sgd"] = clf_sgd
     with open(MODEL_PATH, "wb") as f:
         pickle.dump(data, f)
-    _model = None
+    # No hace falta invalidar la caché a mano: _load() detecta el nuevo mtime.

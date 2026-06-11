@@ -38,7 +38,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.minerva.app.R
 import com.minerva.app.domain.model.Prediction
 import com.minerva.app.domain.model.RiskLevel
@@ -48,10 +47,12 @@ import com.minerva.app.presentation.theme.MinervaAccent
 
 @Composable
 fun PredictionScreen(
-    viewModel: PredictionViewModel,
+    uiState: PredictionUiState,
+    onLoadCsv: (String) -> Unit,
+    onPredict: (List<Student>) -> Unit,
+    onReset: () -> Unit,
     onOpenDetail: (Int) -> Unit,
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -60,7 +61,7 @@ fun PredictionScreen(
     ) { uri: Uri? ->
         uri ?: return@rememberLauncherForActivityResult
         val text = context.contentResolver.openInputStream(uri)?.bufferedReader()?.readText()
-        if (text != null) viewModel.loadCsv(text)
+        if (text != null) onLoadCsv(text)
     }
     val launchPicker = { pickCsv.launch("*/*") }
 
@@ -111,18 +112,18 @@ fun PredictionScreen(
                         IdleContent(onPickCsv = launchPicker)
 
                     is PredictionUiState.CsvLoaded ->
-                        CsvLoadedContent(state.students, launchPicker) { viewModel.predict(state.students) }
+                        CsvLoadedContent(state.students, launchPicker) { onPredict(state.students) }
 
                     is PredictionUiState.Predicting ->
                         PredictingContent()
 
                     is PredictionUiState.Results ->
-                        ResultsContent(state.predictions, onReset = { viewModel.reset() }, onOpenDetail = onOpenDetail)
+                        ResultsContent(state.predictions, onReset = onReset, onOpenDetail = onOpenDetail)
 
                     is PredictionUiState.Error -> {
                         val prev = state.prevStudents
                         if (prev != null)
-                            CsvLoadedContent(prev, launchPicker) { viewModel.predict(prev) }
+                            CsvLoadedContent(prev, launchPicker) { onPredict(prev) }
                         else
                             IdleContent(onPickCsv = launchPicker)
                     }

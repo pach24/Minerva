@@ -16,6 +16,9 @@ from supabase import create_client
 from ml.predict import predict_students
 import jwt
 from jwt import PyJWKClient
+import logging
+
+logger = logging.getLogger("minerva")
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
@@ -133,7 +136,9 @@ async def api_predecir(request: Request):
         } for r in results]
         supabase.table("predicciones").insert(rows).execute()
     except Exception:
-        pass
+        # La predicción sigue siendo válida aunque falle el histórico: se
+        # devuelve igualmente, pero el fallo queda registrado para diagnóstico.
+        logger.exception("Fallo al persistir predicciones en Supabase (tabla 'predicciones')")
 
     return JSONResponse(results)
 
@@ -145,9 +150,8 @@ async def api_entrenar(request: Request):
     if not user:
         return JSONResponse({"error": "No autorizado"}, status_code=401)
     from ml.train import train
-    import ml.predict as mp
     acc = train()
-    mp._model = None  # invalida caché
+    # ml.predict recarga el modelo automáticamente al detectar el nuevo mtime del .pkl.
     return JSONResponse({"accuracy": round(acc, 3), "ok": True})
 
 

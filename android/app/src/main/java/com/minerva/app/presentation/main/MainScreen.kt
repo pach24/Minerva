@@ -30,6 +30,7 @@ import com.minerva.app.presentation.main.components.BottomTab
 import com.minerva.app.presentation.main.components.MinervaBottomBar
 import com.minerva.app.presentation.navigation.Routes
 import com.minerva.app.presentation.prediction.PredictionScreen
+import com.minerva.app.presentation.prediction.PredictionUiState
 import com.minerva.app.presentation.prediction.PredictionViewModel
 import com.minerva.app.presentation.prediction.StudentDetailScreen
 import com.minerva.app.presentation.profile.ProfileScreen
@@ -39,6 +40,10 @@ import com.minerva.app.presentation.profile.ProfileScreen
  * `NavHost` interno. El [PredictionViewModel] se eleva aquí (scope = entrada
  * MAIN del nav externo) para que Inicio, Evaluar y el detalle de alumno
  * compartan el mismo estado de evaluación y sobreviva al cambio de pestaña.
+ *
+ * Las pantallas hijas no reciben el ViewModel: se les pasa el [PredictionUiState]
+ * y callbacks (state hoisting), de modo que siguen siendo previsualizables y
+ * desacopladas de la implementación concreta del estado.
  */
 @Composable
 fun MainScreen(
@@ -46,6 +51,7 @@ fun MainScreen(
     shellViewModel: MainShellViewModel = hiltViewModel(),
 ) {
     val predictionViewModel: PredictionViewModel = hiltViewModel()
+    val predictionState by predictionViewModel.uiState.collectAsStateWithLifecycle()
     val innerNav = rememberNavController()
 
     val loggedOut by shellViewModel.loggedOut.collectAsStateWithLifecycle()
@@ -91,13 +97,16 @@ fun MainScreen(
             composable(Routes.HOME) {
                 HomeScreen(
                     userName = userName,
-                    predictionViewModel = predictionViewModel,
+                    predictionState = predictionState,
                     onEvaluarClick = { innerNav.navigateToTab(Routes.EVALUAR) }
                 )
             }
             composable(Routes.EVALUAR) {
                 PredictionScreen(
-                    viewModel = predictionViewModel,
+                    uiState = predictionState,
+                    onLoadCsv = predictionViewModel::loadCsv,
+                    onPredict = predictionViewModel::predict,
+                    onReset = predictionViewModel::reset,
                     onOpenDetail = { index -> innerNav.navigate(Routes.detail(index)) }
                 )
             }
@@ -113,9 +122,10 @@ fun MainScreen(
                 popExitTransition = { slideOutHorizontally(tween(300)) { it } + fadeOut(tween(300)) },
             ) { entry ->
                 val index = entry.arguments?.getInt(Routes.DETAIL_ARG_INDEX) ?: 0
+                val prediction = (predictionState as? PredictionUiState.Results)
+                    ?.predictions?.getOrNull(index)
                 StudentDetailScreen(
-                    index = index,
-                    viewModel = predictionViewModel,
+                    prediction = prediction,
                     onBack = { innerNav.popBackStack() }
                 )
             }
