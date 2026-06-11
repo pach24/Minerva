@@ -39,6 +39,17 @@ El sistema ofrece dos clientes:
 El backend combina un modelo **RandomForest** optimizado con GridSearchCV (más un SGDClassifier paralelo para actualización incremental), un pipeline de NLP ligero para interpretar el feedback del docente, persistencia del historial de predicciones en Supabase y una API REST compartida por ambos clientes.
 
 ---
+## 📺 Visual Showcase
+
+Descubre la experiencia de uso de **Minerva** en sus diferentes plataformas. Una interfaz diseñada siguiendo estándares modernos de usabilidad y feedback visual.
+
+
+| Login | Pestañas / Modo oscuro | Funcionamiento |
+| :----------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: |
+| <img src="https://github.com/user-attachments/assets/5dac85ab-50d5-4faf-aa63-a0d6098c44df" width="200" alt="Web Dashboard"/> | <img src="https://github.com/user-attachments/assets/e6de3132-92b2-451d-b986-0c3b2e7108d7" width="200" alt="Android App"/> | <img src="https://github.com/user-attachments/assets/f17e73ad-24c4-4482-ade5-a6d0011c88ce" width="200" alt="Detalle ML"/> |
+
+
+---
 
 ## Características
 
