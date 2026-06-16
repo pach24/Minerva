@@ -271,17 +271,13 @@
         <div class="pipe-step"><div class="n">1</div><div class="txt"><b>Generación sintética</b><span>1.000 alumnos · NumPy · semilla fija</span></div></div>
         <div class="pipe-step"><div class="n">2</div><div class="txt"><b>Preprocesado</b><span>split 80/20 estratificado · imputación por mediana · StandardScaler</span></div></div>
         <div class="pipe-step"><div class="n">3</div><div class="txt"><b>Optimización</b><span>GridSearchCV · validación cruzada estratificada k=5 · métrica F1</span></div></div>
-        <div class="pipe-step"><div class="n">4</div><div class="txt"><b>Entrenamiento dual</b><span>RandomForest principal + SGDClassifier para aprendizaje incremental</span></div></div>
-        <div class="pipe-step"><div class="n">5</div><div class="txt"><b>Autoevaluación PASS / FAIL</b><span>umbrales mínimos validados · métricas a model_metrics.json</span></div></div>
+        <div class="pipe-step"><div class="n">4</div><div class="txt"><b>Autoevaluación PASS / FAIL</b><span>umbrales mínimos validados · métricas a model_metrics.json</span></div></div>
       </div>
       <div style="display:flex;flex-direction:column;gap:18px;">
         <div class="feat-block pop d3"><div class="count">9</div><div><b>Notas de RA</b><span>Resultados de Aprendizaje del módulo de Programación</span></div></div>
         <div class="feat-block pop d4"><div class="count">3</div><div><b>Académicas base</b><span>asistencia · prácticas · feedback del profesor (NLP)</span></div></div>
         <div class="feat-block pop d5"><div class="count">7</div><div><b>Derivadas calculadas</b><span>media, % RAs superados, tendencia, gap teoría-práctica…</span></div></div>
         <div class="feat-block pop d6"><div class="count">4</div><div><b>Contexto opcionales</b><span>motivación, confianza, recursos y nivel educativo familiar</span></div></div>
-        <div class="caveat pop d7" style="background:var(--accent-soft);color:var(--accent);">
-          <span class="ic">↻</span><span>El SGDClassifier permite actualizar el modelo con <i>partial_fit</i>, sin reentrenar desde cero.</span>
-        </div>
       </div>
     </div>
   </section>
@@ -400,6 +396,7 @@
           <li class="rise d4"><div class="bi">⟳</div><div><b>Resiliencia de red</b><span>Renovación automática del token (single-flight) y timeouts holgados para el cold start.</span></div></li>
           <li class="rise d5"><div class="bi">⇣</div><div><b>v0.1.0-alpha publicada</b><span>APK firmado · GitHub Releases · QR en la web · Android 8.0+.</span></div></li>
         </ul>
+        <div class="teaser pop d7" style="margin-top:40px;"><span class="em">🙃</span><span>Clean Architecture con tres capas… una decisión que al principio parecía excesiva para un proyecto de DAM, y que al final el propio proyecto nos justificó.</span></div>
       </div>
       <div style="display:flex;gap:44px;justify-content:center;align-items:center;">
         <div class="phone-frame pop d3" style="transform:rotate(-2deg);padding:0;background:none;">
@@ -478,7 +475,7 @@
   <!-- ============ 14 · CIERRE ============ -->
   <section data-label="Gracias" class="dark" style="align-items:center;justify-content:center;text-align:center;">
     <p class="kicker rise">Conclusión</p>
-    <h2 class="display rise d1" style="font-size:150px;">Listo para el piloto<span class="dot">.</span></h2>
+    <h2 class="display rise d1" style="font-size:110px;">El modelo aprendió.<br>Nosotros también<span class="dot">.</span></h2>
     <p class="sub rise d2" style="margin-top:36px;max-width:1240px;">Un sistema funcional, seguro y documentado, preparado para validarse con datos reales en un centro educativo. La predicción apoya al docente; la decisión sigue siendo suya.</p>
     <div class="rise d3" style="display:flex;gap:18px;margin-top:70px;">
       <span class="pill">github.com/pach24/Minerva</span>
