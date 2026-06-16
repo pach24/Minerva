@@ -1,0 +1,101 @@
+ID,Nombre,Asistencia,Nota_Practicas,RA1,RA2,RA3,RA4,RA5,RA6,RA7,RA8,RA9,Feedback,Confianza,Motivacion,Recursos,Nivel_Educativo
+1,Ana Garcia,97.7,4.1,9.3,9.1,4.0,8.0,3.7,3.8,9.1,4.1,5.0,"Muy buen rendimiento, participa activamente",,,,
+2,Bruno Martinez,91.7,8.5,6.6,7.2,8.5,7.2,7.2,7.1,6.3,8.6,8.8,Mejora notable respecto al trimestre anterior,,,,
+3,Carla Lopez,89.3,6.3,7.1,5.6,6.8,5.3,6.7,5.8,6.9,6.8,6.8,Entrega las practicas tarde pero con buena calidad,,,,
+4,David Sanchez,95.0,7.6,7.3,8.9,6.8,7.5,8.7,8.6,8.4,7.6,8.8,Excelente actitud y dedicacion fuera del aula,,,,
+5,Elena Rodriguez,88.2,7.9,7.8,6.8,8.0,7.8,9.0,8.0,7.3,7.1,8.7,"Falta motivacion, ausencias frecuentes sin justificar",2,3,0,6
+6,Fernando Torres,85.4,4.7,4.4,5.0,6.1,6.0,4.9,6.5,5.8,3.5,5.3,,1,2,1,2
+7,Gloria Diaz,50.0,,,,,,,,,,,Mejora notable respecto al trimestre anterior,1,3,0,6
+8,Hector Fernandez,60.8,6.9,5.8,6.5,7.4,6.0,5.9,6.4,7.4,6.5,5.7,Mejora notable respecto al trimestre anterior,,,,
+9,Isabel Jimenez,55.1,4.3,2.6,2.6,2.7,4.2,6.3,5.5,4.1,6.8,2.9,Excelente actitud y dedicacion fuera del aula,,,,
+10,Javier Moreno,77.6,6.2,5.9,4.1,6.7,7.0,5.5,5.7,6.7,5.8,6.9,Entrega las practicas tarde pero con buena calidad,2,1,0,3
+11,Karen Ruiz,90.3,5.8,6.6,5.0,6.7,5.7,5.0,5.8,5.7,5.3,7.3,"Muy buen rendimiento, participa activamente",,,,
+12,Luis Navarro,73.0,5.8,6.9,5.4,6.1,6.7,6.0,7.0,5.3,5.4,5.7,,,,,
+13,Marta Perez,74.9,2.3,1.8,2.6,5.3,3.4,4.3,1.5,1.6,1.6,3.5,,2,4,0,3
+14,Nicolas Alonso,93.1,,,,,,,,,,,Progresa adecuadamente aunque con dificultades puntuales,1,1,1,6
+15,Olivia Romero,76.6,6.0,8.7,6.9,4.9,8.1,5.8,3.7,9.3,5.4,5.3,Entrega las practicas tarde pero con buena calidad,,,,
+16,Pablo Gonzalez,94.7,6.2,8.7,8.6,6.5,8.7,6.5,7.3,6.8,7.8,7.8,Progresa adecuadamente aunque con dificultades puntuales,,,,
+17,Queralt Vidal,65.0,8.4,4.4,5.2,7.4,5.0,8.9,6.6,4.0,8.6,9.0,"Muy buen rendimiento, participa activamente",,,,
+18,Roberto Castro,74.3,8.1,4.2,4.0,8.5,5.8,9.3,8.7,4.8,8.6,8.8,Mejora notable respecto al trimestre anterior,,,,
+19,Sara Iglesias,99.8,6.9,7.9,6.5,7.7,7.3,7.7,6.1,6.6,8.7,6.5,Excelente actitud y dedicacion fuera del aula,,,,
+20,Tomas Molina,83.7,7.2,6.4,8.8,6.1,7.2,9.0,7.3,6.5,6.7,7.3,Necesita refuerzo en practicas de laboratorio,1,2,0,6
+21,Ursula Blanco,81.8,,,,,,,,,,,Necesita refuerzo en practicas de laboratorio,,,,
+22,Victor Serrano,88.7,9.7,9.5,7.8,9.3,8.1,9.6,8.1,9.1,9.2,8.8,,,,,
+23,Wendy Nunez,62.9,4.8,4.3,6.0,4.9,5.5,4.3,4.6,5.5,5.2,3.8,"Muy buen rendimiento, participa activamente",,,,
+24,Xavier Herrera,88.7,6.2,8.8,8.0,6.6,8.7,8.0,6.0,7.6,6.6,7.1,Mejora notable respecto al trimestre anterior,,,,
+25,Yolanda Medina,45.4,4.2,1.9,4.3,6.7,2.1,3.2,5.0,6.2,3.9,3.8,Mejora notable respecto al trimestre anterior,,,,
+26,Adrian Ortega,69.3,5.4,5.2,5.1,5.5,5.9,5.6,7.4,6.6,6.1,6.6,"Falta motivacion, ausencias frecuentes sin justificar",,,,
+27,Beatriz Ramos,58.9,2.7,2.3,4.8,5.2,3.6,3.7,2.6,4.7,2.3,2.2,Necesita refuerzo en practicas de laboratorio,,,,
+28,Carlos Suarez,70.3,,,,,,,,,,,Dificultades con conceptos avanzados de POO,,,,
+29,Diana Vargas,48.1,2.8,3.3,3.7,2.2,4.5,1.5,1.1,3.2,5.2,4.6,"Falta motivacion, ausencias frecuentes sin justificar",2,2,0,3
+30,Eduardo Cano,88.0,8.4,9.0,8.2,9.4,8.3,9.0,9.2,7.6,7.7,7.8,Mejora notable respecto al trimestre anterior,,,,
+31,Fiona Reyes,97.7,9.0,8.9,7.5,9.5,8.0,9.2,10.0,7.5,8.6,9.8,Progresa adecuadamente aunque con dificultades puntuales,2,3,0,6
+32,Gonzalo Mora,75.8,6.3,4.1,5.0,5.7,3.8,6.8,4.6,6.5,6.0,6.1,"Muy buen rendimiento, participa activamente",,,,
+33,Helena Delgado,68.4,3.6,2.1,2.8,5.0,3.7,2.0,5.5,4.5,2.4,3.0,Progresa adecuadamente aunque con dificultades puntuales,1,3,0,2
+34,Ignacio Guerrero,72.5,5.4,5.3,5.6,5.6,3.7,5.4,6.2,5.5,4.7,6.2,Necesita refuerzo en practicas de laboratorio,,,,
+35,Julia Ibanez,80.2,,,,,,,,,,,Entrega las practicas tarde pero con buena calidad,,,,
+36,Kevin Aguilar,64.1,5.5,7.2,5.2,5.6,5.5,5.4,5.6,5.8,7.1,6.7,Necesita refuerzo en practicas de laboratorio,,,,
+37,Laura Dominguez,72.3,6.5,5.5,6.0,6.3,6.1,7.4,6.2,6.5,5.5,5.3,,2,2,0,6
+38,Marcos Fuentes,90.5,7.9,8.7,7.9,8.4,7.9,8.8,9.5,8.3,7.5,9.0,Mejora notable respecto al trimestre anterior,,,,
+39,Nadia Cabrera,80.9,9.4,9.9,8.9,9.6,7.9,8.3,9.9,9.2,9.3,8.2,"Falta motivacion, ausencias frecuentes sin justificar",,,,
+40,Oscar Santos,88.5,8.0,7.6,9.1,8.7,8.6,8.9,8.4,9.0,9.6,8.4,Dificultades con conceptos avanzados de POO,,,,
+41,Patricia Bravo,97.3,7.1,5.2,6.7,7.3,5.9,5.8,5.6,5.3,6.7,5.7,Mejora notable respecto al trimestre anterior,,,,
+42,Quentin Guzman,94.0,,,,,,,,,,,Progresa adecuadamente aunque con dificultades puntuales,,,,
+43,Raquel Carmona,50.9,3.4,3.7,6.3,2.1,4.5,3.3,3.2,4.6,2.6,3.5,Necesita refuerzo en practicas de laboratorio,1,1,1,2
+44,Sebastian Pena,78.2,5.5,6.6,4.3,5.3,3.6,5.1,6.3,6.7,5.5,4.0,"Falta motivacion, ausencias frecuentes sin justificar",,,,
+45,Teresa Rojas,95.5,5.9,6.1,6.0,6.6,8.2,6.0,6.6,7.6,7.4,7.9,"Muy buen rendimiento, participa activamente",,,,
+46,Ulises Flores,63.1,3.7,3.9,1.8,1.6,4.9,4.6,3.1,4.8,1.1,4.7,Excelente actitud y dedicacion fuera del aula,,,,
+47,Valentina Cruz,62.1,5.5,5.6,6.0,5.9,6.9,6.9,5.7,5.9,7.2,6.7,"Falta motivacion, ausencias frecuentes sin justificar",,,,
+48,William Paredes,61.9,3.6,4.8,4.0,5.3,2.2,3.3,3.2,1.4,4.2,4.2,Excelente actitud y dedicacion fuera del aula,,,,
+49,Xenia Soto,89.6,,,,,,,,,,,"Muy buen rendimiento, participa activamente",,,,
+50,Yago Contreras,66.7,3.8,5.1,4.9,4.2,1.1,3.4,2.0,2.2,2.8,2.8,"Falta motivacion, ausencias frecuentes sin justificar",,,,
+51,Alicia Vega,95.7,8.7,8.9,8.7,9.3,8.7,8.3,9.1,8.3,7.9,9.0,,,,,
+52,Borja Mendez,85.4,4.3,6.8,4.2,3.9,5.9,6.9,6.2,5.4,4.6,4.3,Dificultades con conceptos avanzados de POO,,,,
+53,Cristina Lara,97.0,6.4,7.0,6.0,7.4,6.8,7.4,5.6,5.2,5.1,5.1,Mejora notable respecto al trimestre anterior,0,3,1,3
+54,Daniel Cortes,90.1,7.3,8.0,9.0,7.3,8.6,7.3,6.8,8.9,7.9,6.4,Progresa adecuadamente aunque con dificultades puntuales,1,4,1,2
+55,Esther Marin,77.3,5.4,6.5,5.7,6.1,6.2,5.2,5.1,7.3,6.7,5.5,"Muy buen rendimiento, participa activamente",,,,
+56,Federico Gimenez,74.5,,,,,,,,,,,"Falta motivacion, ausencias frecuentes sin justificar",0,2,0,1
+57,Gabriela Nieto,95.5,4.5,6.8,6.8,7.0,3.5,3.9,6.1,4.0,4.3,6.2,"Muy buen rendimiento, participa activamente",,,,
+58,Hugo Duran,96.4,4.9,3.6,4.3,5.6,4.2,5.3,3.5,5.1,5.2,6.4,"Falta motivacion, ausencias frecuentes sin justificar",0,3,0,6
+59,Irene Pascual,89.0,7.7,8.9,8.5,8.8,6.6,8.6,8.7,6.8,8.4,7.1,Entrega las practicas tarde pero con buena calidad,,,,
+60,Jose Rubio,86.7,7.9,7.9,7.9,6.0,6.1,7.6,6.3,6.3,8.8,8.9,"Falta motivacion, ausencias frecuentes sin justificar",,,,
+61,Kristina Millan,66.2,4.6,1.0,3.9,3.8,3.7,3.3,3.6,5.7,6.7,6.6,Dificultades con conceptos avanzados de POO,2,3,0,1
+62,Lorenzo Campos,93.4,8.9,7.7,8.0,8.4,9.7,9.9,9.6,7.6,7.8,8.1,Progresa adecuadamente aunque con dificultades puntuales,,,,
+63,Mercedes Crespo,92.0,,,,,,,,,,,"Falta motivacion, ausencias frecuentes sin justificar",,,,
+64,Nacho Santamaria,71.9,5.8,6.2,7.0,5.4,6.8,7.0,6.7,6.6,5.4,5.8,Progresa adecuadamente aunque con dificultades puntuales,,,,
+65,Patricia Gil,81.2,8.1,8.4,8.1,8.3,8.1,8.1,8.6,7.8,9.0,9.5,Dificultades con conceptos avanzados de POO,,,,
+66,Quim Espinosa,72.0,9.0,3.9,5.3,9.4,5.8,7.1,7.8,5.0,7.3,9.4,Entrega las practicas tarde pero con buena calidad,,,,
+67,Rosa Cano,95.8,5.1,5.7,5.1,5.5,5.8,6.2,6.8,5.3,6.8,5.1,Dificultades con conceptos avanzados de POO,1,4,0,1
+68,Samuel Rivas,63.3,5.2,3.8,3.8,3.8,6.0,6.7,6.3,6.4,6.2,4.1,"Muy buen rendimiento, participa activamente",,,,
+69,Tania Prieto,56.3,3.6,2.8,3.6,2.4,2.9,3.6,6.1,5.0,5.2,5.4,,,,,
+70,Unai Zapatero,72.0,,,,,,,,,,,Entrega las practicas tarde pero con buena calidad,0,3,1,6
+71,Veronica Esteve,84.2,8.2,8.7,7.8,9.4,8.0,7.9,8.6,7.7,9.8,9.6,Dificultades con conceptos avanzados de POO,,,,
+72,Wissal Benali,67.9,6.1,7.3,5.0,6.5,6.7,6.1,5.7,6.4,5.6,6.1,Entrega las practicas tarde pero con buena calidad,,,,
+73,Xabi Urrutia,80.4,7.1,5.8,5.8,8.9,5.3,6.8,6.9,6.1,8.4,7.0,,0,4,1,1
+74,Yolanda Ferrer,70.7,5.6,4.8,6.7,3.7,5.6,6.1,6.1,4.8,6.8,5.7,Entrega las practicas tarde pero con buena calidad,,,,
+75,Zurine Etxebarria,99.1,6.6,8.0,6.6,6.8,6.7,7.5,6.3,8.4,8.1,6.4,Excelente actitud y dedicacion fuera del aula,,,,
+76,Alejandro Bernal,57.5,3.2,1.6,6.6,3.5,2.1,4.3,2.1,3.8,5.9,3.9,,1,1,0,4
+77,Belen Montes,88.9,,,,,,,,,,,Progresa adecuadamente aunque con dificultades puntuales,2,3,0,2
+78,Camilo Aranda,91.4,8.0,5.3,5.3,7.2,5.8,6.3,7.3,6.9,7.2,6.9,Necesita refuerzo en practicas de laboratorio,1,3,0,3
+79,Debora Herrero,86.5,6.9,6.1,8.9,8.4,8.2,8.1,8.7,6.6,6.7,7.4,Dificultades con conceptos avanzados de POO,1,4,1,6
+80,Emilio Lozano,42.2,2.1,1.4,2.7,3.4,4.1,1.7,3.6,5.0,4.6,1.4,"Falta motivacion, ausencias frecuentes sin justificar",,,,
+81,Florencia Parra,69.8,3.5,4.7,5.2,1.3,2.1,2.3,1.9,3.5,4.3,3.6,"Falta motivacion, ausencias frecuentes sin justificar",,,,
+82,Guillermo Acosta,87.8,4.9,6.1,4.0,5.1,4.4,4.8,4.8,3.8,5.3,4.2,,,,,
+83,Helena Rios,60.8,7.6,4.8,3.7,7.2,3.8,8.3,8.4,4.9,7.1,6.7,Mejora notable respecto al trimestre anterior,0,2,0,3
+84,Isidro Valdes,74.6,,,,,,,,,,,"Falta motivacion, ausencias frecuentes sin justificar",2,1,1,1
+85,Jana Bosch,68.7,2.7,2.8,4.6,4.4,1.0,2.4,2.4,2.2,1.5,3.1,Mejora notable respecto al trimestre anterior,,,,
+86,Kiko Gallardo,95.1,3.7,7.0,9.5,3.2,9.5,4.7,3.1,9.2,5.2,4.5,"Muy buen rendimiento, participa activamente",2,1,1,2
+87,Lola Vergara,46.0,1.9,3.9,2.5,1.9,2.2,3.2,3.6,4.3,1.2,3.7,,,,,
+88,Mateo Hidalgo,45.8,5.3,3.7,3.7,4.4,2.5,7.0,5.0,5.7,5.1,2.7,Progresa adecuadamente aunque con dificultades puntuales,,,,
+89,Noa Villar,54.9,3.2,2.1,5.1,1.6,1.6,2.2,2.6,4.6,2.7,3.5,Necesita refuerzo en practicas de laboratorio,2,4,0,6
+90,Pelayo Moya,74.1,7.1,5.3,5.0,7.0,5.3,6.3,5.9,6.1,7.1,7.0,"Falta motivacion, ausencias frecuentes sin justificar",,,,
+91,Queralt Puig,93.1,,,,,,,,,,,Necesita refuerzo en practicas de laboratorio,1,2,0,1
+92,Ramiro Estrada,96.2,8.7,8.5,8.3,9.8,9.7,7.9,7.7,9.1,8.2,8.8,Mejora notable respecto al trimestre anterior,,,,
+93,Silvia Calvo,90.4,8.3,6.3,8.6,6.7,8.2,8.5,7.1,6.3,8.9,6.8,Necesita refuerzo en practicas de laboratorio,,,,
+94,Teo Verges,68.1,6.3,6.5,6.2,5.5,6.6,6.4,5.7,7.5,6.2,6.6,Progresa adecuadamente aunque con dificultades puntuales,2,1,0,2
+95,Ursula Pons,86.9,8.2,6.7,7.8,8.2,7.2,7.3,6.6,7.8,6.9,8.4,"Muy buen rendimiento, participa activamente",,,,
+96,Valentin Saura,99.0,8.0,7.2,8.7,6.9,8.2,8.7,7.7,6.2,8.4,7.7,Dificultades con conceptos avanzados de POO,,,,
+97,Walter Gomez,46.9,2.2,5.3,1.9,3.6,4.3,1.0,1.1,2.9,2.2,2.7,Mejora notable respecto al trimestre anterior,0,3,0,1
+98,Ximena Bas,86.7,,,,,,,,,,,Necesita refuerzo en practicas de laboratorio,,,,
+99,Yurena Ojeda,62.9,6.9,5.1,7.1,6.0,5.6,6.4,5.2,6.5,7.2,5.9,Mejora notable respecto al trimestre anterior,0,3,1,2
+100,Zara Escudero,77.0,6.2,6.9,5.7,6.2,7.4,6.5,6.3,6.8,6.7,6.4,,,,,

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Defensa — Minerva</title>
+<link rel="stylesheet" href="/static/presentation/defensa-styles.css">
+<style>deck-stage:not(:defined){visibility:hidden}</style>
+</head>
+<body style="margin:0;background:#000;">
+
+<deck-stage width="1920" height="1080">
+
+  <!-- ============ 01 · PORTADA ============ -->
+  <section data-label="Portada" style="align-items:center;justify-content:center;text-align:center;">
+    <img src="/static/presentation/assets/logo-minerva.webp" alt="Logo Minerva" class="pop" style="width:150px;height:150px;margin-bottom:48px;border-radius:36px;object-fit:cover;display:block;">
+    <p class="kicker rise d1">Proyecto Final · 2º DAM · Junio 2026</p>
+    <h1 class="display rise d2">Minerva<span class="dot">.</span></h1>
+    <p class="sub rise d3" style="margin-top: 34px; max-width: 1100px; width: 1400px"><b style="color:var(--ink);">M</b>odelo de <b style="color:var(--ink);">I</b>nteligencia <b style="color:var(--ink);">N</b>euronal para <b style="color:var(--ink);">E</b>valuación del <b style="color:var(--ink);">R</b>endimiento y <b style="color:var(--ink);">V</b><span style="color:#6e6e73;">a</span>loración <b style="color:var(--ink);">A</b>cadémica</p>
+    <div class="rise d4" style="display:flex;gap:18px;margin-top:64px;">
+      <span class="pill">Predicción con Machine Learning</span>
+      <span class="pill">Web + Android</span>
+      <span class="pill">v0.1.0-alpha</span>
+    </div>
+    <p class="rise d5" style="font-size:27px;color:var(--ink-3);font-weight:550;margin:70px 0 0;">Francisco Pacheco Gómez · Daniel Flores Jiménez &nbsp;—&nbsp; IES Los Montecillos</p>
+  </section>
+
+  <!-- ============ 02 · EL PROBLEMA ============ -->
+  <section data-label="El problema">
+    <p class="kicker rise">El problema</p>
+    <h2 class="headline rise d1">La detección del riesgo<br>académico llega tarde.</h2>
+    <p class="sub rise d2">Cuando las calificaciones parciales revelan el problema, el margen para intervenir ya es mínimo.</p>
+    <div class="spacer"></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:28px;">
+      <div class="card pop d3">
+        <div class="icon-chip">⏱</div>
+        <h3>Seguimiento reactivo</h3>
+        <p>Notas parciales y observación directa detectan las dificultades cuando las medidas de apoyo ya tienen impacto limitado.</p>
+      </div>
+      <div class="card pop d4">
+        <div class="icon-chip">⊞</div>
+        <h3>Datos dispersos</h3>
+        <p>Calificaciones, asistencia y participación conviven sin un análisis conjunto que les dé sentido.</p>
+      </div>
+      <div class="card pop d5">
+        <div class="icon-chip">?</div>
+        <h3>Sin capacidad predictiva</h3>
+        <p>El profesorado carece de herramientas que anticipen qué alumnos van a necesitar ayuda.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 03 · LA SOLUCIÓN ============ -->
+  <section data-label="La solución" class="dark">
+    <p class="kicker rise">La solución</p>
+    <div style="display:flex;gap:80px;align-items:flex-start;">
+      <div style="flex:1;">
+        <h2 class="headline rise d1">Minerva anticipa el riesgo,<br>el profesor decide.</h2>
+        <p class="sub rise d2">Una plataforma que predice la probabilidad de aprobado de cada alumno mediante machine learning y la traduce a un nivel de riesgo accionable. Apoya el criterio pedagógico — nunca lo sustituye.</p>
+      </div>
+      <div class="pop d3" style="flex:none;background:#1f1f23;border-radius:var(--radius-lg);padding:30px;display:flex;flex-direction:column;align-items:center;gap:20px;">
+        <img src="/static/presentation/assets/qr-app.webp" alt="QR de descarga" style="width:250px;height:250px;display:block;background:#fff;border-radius:18px;object-fit:cover;">
+        <div style="text-align:center;">
+          <div style="font-size:25px;font-weight:700;color:#f5f5f7;">Descarga la app</div>
+          <div style="font-size:24px;font-weight:500;color:#98989d;margin-top:4px;">Android 8.0+ · v0.1.0-alpha</div>
+        </div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="risk-row">
+      <div class="risk pop d3" style="--c:var(--green);">
+        <div class="lvl">Bajo</div>
+        <div class="rng">probabilidad ≥ 70 %</div>
+      </div>
+      <div class="risk pop d4" style="--c:var(--yellow);">
+        <div class="lvl">Medio</div>
+        <div class="rng">50 – 69 %</div>
+      </div>
+      <div class="risk pop d5" style="--c:var(--orange);">
+        <div class="lvl">Alto</div>
+        <div class="rng">30 – 49 %</div>
+      </div>
+      <div class="risk pop d6" style="--c:var(--red);">
+        <div class="lvl">Crítico</div>
+        <div class="rng">&lt; 30 %</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 04 · OBJETIVOS ============ -->
+  <section data-label="Objetivos">
+    <p class="kicker rise">Objetivos</p>
+    <h2 class="headline rise d1" style="font-size:72px;">Predecir para intervenir a tiempo.</h2>
+    <div class="spacer" style="min-height:40px;"></div>
+    <div class="obj-grid">
+      <div class="obj pop d2">
+        <div class="num">01</div>
+        <h3>Modelo de predicción ML</h3>
+        <p>Analiza variables académicas y de comportamiento del alumno.</p>
+      </div>
+      <div class="obj pop d3">
+        <div class="num">02</div>
+        <h3>Generador de datos sintéticos</h3>
+        <p>Basado en RAs oficiales de la Junta de Andalucía y parámetros realistas.</p>
+      </div>
+      <div class="obj pop d4">
+        <div class="num">03</div>
+        <h3>Predicciones dinámicas</h3>
+        <p>Se actualizan conforme el alumno genera nuevos datos.</p>
+      </div>
+      <div class="obj pop d5">
+        <div class="num">04</div>
+        <h3>Interfaz comprensible</h3>
+        <p>Resultados claros para profesorado y dirección, sin jerga técnica.</p>
+      </div>
+      <div class="obj pop d6">
+        <div class="num">05</div>
+        <h3>Métricas y patrones</h3>
+        <p>Identifica qué factores influyen en el éxito o fracaso académico.</p>
+      </div>
+      <div class="obj pop d7">
+        <div class="num">06</div>
+        <h3>Acceso multiplataforma</h3>
+        <p>App web + app Android nativa sobre una misma API REST.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 05 · ARQUITECTURA ============ -->
+  <section data-label="Arquitectura">
+    <p class="kicker rise">Arquitectura</p>
+    <h2 class="headline rise d1" style="font-size:72px;">Un backend, dos clientes.</h2>
+    <div class="spacer" style="min-height:30px;"></div>
+    <div class="arch" style="position:relative;padding-top:96px;">
+      <svg class="arch-login pop d5" viewBox="0 0 1000 120" preserveAspectRatio="none" style="position:absolute;top:0;left:0;width:100%;height:96px;overflow:visible;pointer-events:none;">
+        <defs>
+          <marker id="loginArrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6 Z" fill="var(--accent)"></path>
+          </marker>
+        </defs>
+        <path d="M 130 112 L 130 26 Q 130 14 142 14 L 858 14 Q 870 14 870 26 L 870 110" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 7" marker-end="url(#loginArrow)"></path>
+      </svg>
+      <div class="arch-login-label pop d5">Login · Supabase Auth</div>
+      <div class="arch-node pop d2">
+        <div class="tag">Clientes</div>
+        <div class="name">Web · Android</div>
+        <div class="chips">
+          <span class="chip">HTML · CSS · JS</span>
+          <span class="chip">Jinja2</span>
+          <span class="chip">Kotlin · Compose</span>
+          <span class="chip">Parser CSV local</span>
+        </div>
+      </div>
+      <div class="arch-link pop d3">→</div>
+      <div class="arch-node hero pop d3">
+        <div class="tag">Backend</div>
+        <div class="name">API REST · FastAPI</div>
+        <div class="chips">
+          <span class="chip">Python</span>
+          <span class="chip">Modelo .pkl en caché</span>
+          <span class="chip">Verificación JWT local</span>
+          <span class="chip">Render</span>
+        </div>
+      </div>
+      <div class="arch-link pop d4">→</div>
+      <div class="arch-node pop d4">
+        <div class="tag">Datos</div>
+        <div class="name">Supabase</div>
+        <div class="chips">
+          <span class="chip">Auth · JWT ES256</span>
+          <span class="chip">PostgreSQL</span>
+          <span class="chip">Row Level Security</span>
+        </div>
+      </div>
+    </div>
+    <div class="spacer" style="min-height:30px;"></div>
+    <div class="flow-strip rise d5">
+      <b>Login</b> <span class="fa">→</span> token JWT <span class="fa">→</span> <b>POST /api/predecir</b> <span class="fa">→</span> predicción &lt; 1 s <span class="fa">→</span> histórico en BD
+    </div>
+    <div class="spacer" style="min-height:18px;"></div>
+    <div class="teaser rise d6"><span class="em">👀</span><span>Eso de la <b>verificación JWT local</b> tiene más miga de lo que parece…</span></div>
+  </section>
+
+  <!-- ============ 06 · STACK ============ -->
+  <section data-label="Stack tecnológico">
+    <p class="kicker rise">Stack tecnológico</p>
+    <h2 class="headline rise d1" style="font-size:72px;">100 % open source, coste cero.</h2>
+    <div style="min-height:40px;"></div>
+    <div class="stack-grid">
+      <div class="stack-card pop d2">
+        <h3>Backend</h3>
+        <div class="chips">
+          <span class="chip hl">Python</span><span class="chip hl">FastAPI</span><span class="chip">Uvicorn</span><span class="chip">Pandas</span><span class="chip">NumPy</span>
+        </div>
+      </div>
+      <div class="stack-card pop d3">
+        <h3>Machine Learning</h3>
+        <div class="chips">
+          <span class="chip hl">scikit-learn</span><span class="chip hl">RandomForest</span><span class="chip">GridSearchCV</span><span class="chip">SGDClassifier</span>
+        </div>
+      </div>
+      <div class="stack-card pop d4">
+        <h3>Base de datos</h3>
+        <div class="chips">
+          <span class="chip hl">Supabase</span><span class="chip hl">PostgreSQL</span><span class="chip">PostgREST</span><span class="chip">RLS</span>
+        </div>
+      </div>
+      <div class="stack-card pop d5">
+        <h3>Web</h3>
+        <div class="chips">
+          <span class="chip hl">HTML5 · CSS3</span><span class="chip">JavaScript</span><span class="chip">Jinja2</span><span class="chip">16 hojas modulares</span>
+        </div>
+      </div>
+      <div class="stack-card pop d6">
+        <h3>Android</h3>
+        <div class="chips">
+          <span class="chip hl">Kotlin 2.0</span><span class="chip hl">Jetpack Compose</span><span class="chip">Material 3</span><span class="chip">Hilt</span><span class="chip">Retrofit</span>
+        </div>
+      </div>
+      <div class="stack-card pop d7">
+        <h3>Infraestructura</h3>
+        <div class="chips">
+          <span class="chip hl">Render</span><span class="chip">GitHub · GitFlow</span><span class="chip">GitHub Releases</span><span class="chip">Licencia MIT</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 07 · DATOS SINTÉTICOS ============ -->
+  <section data-label="Datos sintéticos">
+    <p class="kicker rise">Datos</p>
+    <h2 class="headline rise d1" style="font-size:72px;">¿Por qué datos sintéticos?</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:48px;">
+      <div class="card pop d2">
+        <h3>Privacidad primero</h3>
+        <p>Los datos reales son datos sensibles de menores: consentimientos, DPO y anonimización (LOPDGDD / RGPD) quedan fuera del alcance del proyecto. Los datos sintéticos lo excluyen del ámbito de la norma.</p>
+      </div>
+      <div class="card pop d3">
+        <h3>1.000 alumnos generados con NumPy</h3>
+        <p>Reproducibles con semilla fija, con correlaciones realistas entre RAs y ~30 % de valores ausentes en las variables de contexto, simulando cuestionarios sin responder.</p>
+      </div>
+    </div>
+    <div class="spacer" style="min-height:34px;"></div>
+    <p class="rise d4" style="font-size:27px;font-weight:700;color:var(--ink);margin:0 0 22px;">Regla de etiquetado <span style="color:var(--ink-2);font-weight:500;">— según la normativa de FP. El modelo nunca la ve.</span></p>
+    <div class="rule-strip">
+      <div class="rule pop d5">
+        <div class="rv">≥ 5</div>
+        <div class="rl">nota media</div>
+      </div>
+      <div class="rule-amp pop d5">+</div>
+      <div class="rule pop d6">
+        <div class="rv">≥ 75 %</div>
+        <div class="rl">asistencia</div>
+      </div>
+      <div class="rule-amp pop d6">+</div>
+      <div class="rule pop d7">
+        <div class="rv">≥ 60 %</div>
+        <div class="rl">de RAs superados</div>
+      </div>
+    </div>
+    <div class="spacer" style="min-height:24px;"></div>
+    <div class="teaser pop d7"><span class="em">🙃</span><span>Lo curioso es que el modelo <b>nunca ve esta fórmula</b>… y aún así la aprende sola. Fijaos cuando lleguemos a las métricas.</span></div>
+  </section>
+
+  <!-- ============ 08 · MODELO ML ============ -->
+  <section data-label="Modelo ML">
+    <p class="kicker rise">Modelo</p>
+    <h2 class="headline rise d1" style="font-size:72px;">RandomForest sobre 23 features.</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-top:30px;flex:1;">
+      <div class="pipe rise d2">
+        <div class="pipe-step"><div class="n">1</div><div class="txt"><b>Generación sintética</b><span>1.000 alumnos · NumPy · semilla fija</span></div></div>
+        <div class="pipe-step"><div class="n">2</div><div class="txt"><b>Preprocesado</b><span>split 80/20 estratificado · imputación por mediana · StandardScaler</span></div></div>
+        <div class="pipe-step"><div class="n">3</div><div class="txt"><b>Optimización</b><span>GridSearchCV · validación cruzada estratificada k=5 · métrica F1</span></div></div>
+        <div class="pipe-step"><div class="n">4</div><div class="txt"><b>Entrenamiento dual</b><span>RandomForest principal + SGDClassifier para aprendizaje incremental</span></div></div>
+        <div class="pipe-step"><div class="n">5</div><div class="txt"><b>Autoevaluación PASS / FAIL</b><span>umbrales mínimos validados · métricas a model_metrics.json</span></div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:18px;">
+        <div class="feat-block pop d3"><div class="count">9</div><div><b>Notas de RA</b><span>Resultados de Aprendizaje del módulo de Programación</span></div></div>
+        <div class="feat-block pop d4"><div class="count">3</div><div><b>Académicas base</b><span>asistencia · prácticas · feedback del profesor (NLP)</span></div></div>
+        <div class="feat-block pop d5"><div class="count">7</div><div><b>Derivadas calculadas</b><span>media, % RAs superados, tendencia, gap teoría-práctica…</span></div></div>
+        <div class="feat-block pop d6"><div class="count">4</div><div><b>Contexto opcionales</b><span>motivación, confianza, recursos y nivel educativo familiar</span></div></div>
+        <div class="caveat pop d7" style="background:var(--accent-soft);color:var(--accent);">
+          <span class="ic">↻</span><span>El SGDClassifier permite actualizar el modelo con <i>partial_fit</i>, sin reentrenar desde cero.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 09 · MÉTRICAS ============ -->
+  <section data-label="Métricas" style="padding-top: 80px; padding-bottom: 170px; padding: 80px 140px 100px">
+    <p class="kicker rise">Resultados</p>
+    <h2 class="headline rise d1" style="font-size:64px;margin-bottom:32px;">El modelo aprendió la regla sin conocerla.</h2>
+    <div class="stat-row">
+      <div class="stat pop d2"><div class="v"><span data-count="99.5" data-decimals="1">99,5</span><small> %</small></div><div class="l">Accuracy en test</div></div>
+      <div class="stat pop d3"><div class="v"><span data-count="0.985" data-decimals="3">0,985</span></div><div class="l">F1 validación cruzada (k=5, ±0,009)</div></div>
+      <div class="stat pop d4"><div class="v"><span data-count="0.985" data-decimals="3">0,985</span></div><div class="l">Kappa de Cohen — acuerdo casi perfecto</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.25fr 1fr;gap:28px;margin-top:28px;flex:1;min-height:0;">
+      <div class="card rise d4" style="display: flex; flex-direction: column; justify-content: center; padding: 40px 48px 60px; min-height: 0">
+        <h3 style="margin-bottom:20px;">Importancia de características</h3>
+        <div class="bars">
+          <div class="bar-row"><span class="bl">ratio_asistencia</span><div class="bar-track"><div class="bar-fill" style="--w:100%;"></div></div><span class="bv">37,0 %</span></div>
+          <div class="bar-row"><span class="bl">pct_ras_superados</span><div class="bar-track"><div class="bar-fill" style="--w:33%;"></div></div><span class="bv">12,3 %</span></div>
+          <div class="bar-row"><span class="bl">nota_media</span><div class="bar-track"><div class="bar-fill" style="--w:31%;"></div></div><span class="bv">11,4 %</span></div>
+          <div class="bar-row"><span class="bl">media_ras_practicos</span><div class="bar-track"><div class="bar-fill" style="--w:22%;"></div></div><span class="bv">8,0 %</span></div>
+          <div class="bar-row"><span class="bl">media_ras_teoricos</span><div class="bar-track"><div class="bar-fill" style="--w:20%;"></div></div><span class="bv">7,4 %</span></div>
+        </div>
+        <p style="margin-top:20px;font-size:24px;">La asistencia emerge como la variable más determinante — exactamente el corte del 75 % que el modelo nunca vio. Esto valida el pipeline de aprendizaje.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:24px;min-height:0;">
+        <img src="/static/presentation/assets/grafico-modelo.webp" alt="Gráfico del modelo" class="pop d5" style="flex:1;width:100%;min-height:0;border-radius:24px;object-fit:contain;object-position:center;display:block;">
+        <div class="caveat rise d6">
+          <span class="ic">⚠</span><span>Métricas sobre datos sintéticos: con datos reales del centro se espera un 75–85 % (mejora M-04).</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 09b · POLARIZACIÓN ============ -->
+  <section data-label="Polarización" style="padding: 70px 140px 70px">
+    <p class="kicker rise">P-06 · Polarización</p>
+    <h2 class="headline rise d1" style="font-size: 60px; margin: 0px 0px 30px">¿Por qué el modelo nunca duda?</h2>
+    <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:28px;flex:1;min-height:0;">
+      <div class="card rise d2" style="position:relative;display:flex;flex-direction:column;">
+        <h3 style="margin-bottom:6px;">Distribución de las probabilidades predichas</h3>
+        <p style="font-size:24px;color:var(--ink-3);margin-bottom:26px;">% de alumnos por tramo de probabilidad de aprobado · ilustrativo</p>
+        <div class="hist-wrap" style="flex:1;min-height:0;">
+          <div class="hist">
+            <div class="hb"><div class="hbar" style="--h:92%;"></div></div>
+            <div class="hb"><div class="hbar" style="--h:14%;"></div></div>
+            <div class="hb mid"><div class="hbar" style="--h:6%;"></div></div>
+            <div class="hb mid"><div class="hbar" style="--h:4%;"></div></div>
+            <div class="hb mid"><div class="hbar" style="--h:3%;"></div></div>
+            <div class="hb mid"><div class="hbar" style="--h:3%;"></div></div>
+            <div class="hb mid"><div class="hbar" style="--h:4%;"></div></div>
+            <div class="hb mid"><div class="hbar" style="--h:6%;"></div></div>
+            <div class="hb"><div class="hbar" style="--h:16%;"></div></div>
+            <div class="hb"><div class="hbar" style="--h:84%;"></div></div>
+          </div>
+          <div class="hist-x">
+            <span>0–10</span><span>10–20</span><span>20–30</span><span>30–40</span><span>40–50</span><span>50–60</span><span>60–70</span><span>70–80</span><span>80–90</span><span>90–100</span>
+          </div>
+        </div>
+        <div class="hist-note rise d5">la zona gris está casi vacía</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:24px;min-height:0;">
+        <div class="card pop d3" style="padding:26px 36px;flex:1;min-height:0;">
+          <h3>Datos sintéticos: notas uniformes</h3>
+          <p style="font-size:24px;">Las calificaciones se reparten por todo el rango 0–10. Sin "casos frontera", el Random Forest separa las clases sin confusión y responde con ≈0 % o ≈100 %.</p>
+          <div class="mini-dist blue">
+            <i style="--h:62%;"></i><i style="--h:55%;"></i><i style="--h:60%;"></i><i style="--h:57%;"></i><i style="--h:63%;"></i><i style="--h:56%;"></i><i style="--h:61%;"></i><i style="--h:58%;"></i><i style="--h:60%;"></i><i style="--h:55%;"></i>
+          </div>
+        </div>
+        <div class="card pop d4" style="padding: 20px 40px 40px; flex: 1; min-height: 0">
+          <h3>Datos reales: campana sobre el 5</h3>
+          <p style="font-size:24px;">Las notas reales se concentran en torno al corte (4,5–5,5) y al límite del 75 % de asistencia. Esos casos ambiguos obligarán al modelo a dudar y calibrarán las probabilidades (M-04).</p>
+          <div class="mini-dist">
+            <i style="--h:8%;"></i><i style="--h:16%;"></i><i style="--h:34%;"></i><i class="hl" style="--h:68%;"></i><i class="hl" style="--h:100%;"></i><i class="hl" style="--h:74%;"></i><i style="--h:40%;"></i><i style="--h:22%;"></i><i style="--h:12%;"></i><i style="--h:7%;"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="teaser rise d6" style="margin-top:18px;"><span class="em">🤔</span><span>Y hay una <b>causa raíz</b> detrás de esto que va más allá de los datos sintéticos…</span></div>
+  </section>
+
+  <!-- ============ 10 · APP WEB ============ -->
+  <section data-label="Aplicación web" style="padding-bottom:120px;">
+    <div style="display:grid;grid-template-columns:1fr 1.15fr;gap:80px;align-items:center;flex:1;">
+      <div>
+        <p class="kicker rise">Cliente 1</p>
+        <h2 class="headline rise d1" style="font-size:72px;">Aplicación web.</h2>
+        <ul class="bullets" style="margin-top:46px;">
+          <li class="rise d2"><div class="bi">1</div><div><b>Carga del CSV en el navegador</b><span>Parser tolerante a alias de columnas, asistencia en 0–1 o 0–100.</span></div></li>
+          <li class="rise d3"><div class="bi">2</div><div><b>Predicción de todo el grupo</b><span>Tabla con código de color por riesgo y barra de probabilidad.</span></div></li>
+          <li class="rise d4"><div class="bi">3</div><div><b>Detalle por alumno</b><span>Drawer con desglose de los 9 RAs, asistencia y observaciones.</span></div></li>
+        </ul>
+        <p class="rise d5" style="font-size:25px;color:var(--ink-3);font-weight:600;margin:44px 0 0;">Flujo completo en menos de 3 pasos · responsive (RNF-01)</p>
+      </div>
+      <div class="browser-frame pop d2">
+        <div class="browser-bar">
+          <span class="b-dot" style="background:#ff5f57;"></span>
+          <span class="b-dot" style="background:#febc2e;"></span>
+          <span class="b-dot" style="background:#28c840;"></span>
+          <span class="url">minerva — dashboard de insights</span>
+        </div>
+        <img src="/static/presentation/assets/captura-web.webp" alt="Captura del dashboard web" style="width:100%;height:560px;display:block;object-fit:cover;object-position:center top;">
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 11 · APP ANDROID ============ -->
+  <section data-label="App Android">
+    <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:80px;align-items:center;flex:1;">
+      <div>
+        <p class="kicker rise">Cliente 2</p>
+        <h2 class="headline rise d1" style="font-size:72px;">App Android nativa.</h2>
+        <ul class="bullets" style="margin-top:46px;">
+          <li class="rise d2"><div class="bi">◇</div><div><b>Clean Architecture + MVVM</b><span>Tres capas (data · domain · presentation), Hilt, flujo unidireccional.</span></div></li>
+          <li class="rise d3"><div class="bi">✦</div><div><b>Kotlin 2.0 · Jetpack Compose · Material 3</b><span>Navegación con píldora animada, dark mode, animaciones Lottie.</span></div></li>
+          <li class="rise d4"><div class="bi">⟳</div><div><b>Resiliencia de red</b><span>Renovación automática del token (single-flight) y timeouts holgados para el cold start.</span></div></li>
+          <li class="rise d5"><div class="bi">⇣</div><div><b>v0.1.0-alpha publicada</b><span>APK firmado · GitHub Releases · QR en la web · Android 8.0+.</span></div></li>
+        </ul>
+      </div>
+      <div style="display:flex;gap:44px;justify-content:center;align-items:center;">
+        <div class="phone-frame pop d3" style="transform:rotate(-2deg);padding:0;background:none;">
+          <img src="/static/presentation/assets/captura-android-1.webp" alt="Captura: Evaluar" style="width:330px;height:700px;display:block;border-radius:40px;object-fit:cover;">
+        </div>
+        <div class="phone-frame pop d4" style="transform:rotate(2deg) translateY(26px);padding:0;background:none;">
+          <img src="/static/presentation/assets/captura-android-2.webp" alt="Captura: Detalle de alumno" style="width:330px;height:700px;display:block;border-radius:40px;object-fit:cover;">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 12 · PROBLEMAS ============ -->
+  <section data-label="Problemas encontrados">
+    <p class="kicker rise">Problemas encontrados</p>
+    <h2 class="headline rise d1" style="font-size:68px;">Cada problema, una decisión documentada.</h2>
+    <div style="min-height:40px;"></div>
+    <div class="prob-grid">
+      <div class="prob pop d2">
+        <div class="pid">P-06</div>
+        <h3>Probabilidades polarizadas</h3>
+        <p>Los datos sintéticos uniformes carecen de "casos frontera", así que el modelo predice con confianza extrema (≈0 % o ≈100 %).</p>
+        <div class="fix">→ <span>Se calibrará de forma natural con datos reales del centro (M-04).</span></div>
+      </div>
+      <div class="prob pop d3">
+        <div class="pid">P-02</div>
+        <h3>Cold start en Render</h3>
+        <p>El plan gratuito duerme el servidor: la primera petición tras inactividad tarda 50–60 s.</p>
+        <div class="fix">→ <span>Timeouts holgados en los clientes + indicador de carga animado.</span></div>
+      </div>
+      <div class="prob pop d4">
+        <div class="pid">P-01</div>
+        <h3>NLP básico del feedback</h3>
+        <p>Listas de palabras clave generan falsos neutros: "espectacular" puntúa 0,5 si no está en la lista.</p>
+        <div class="fix">→ <span>Aceptado en v0.1.0 por rendimiento; evolución a transformers (M-02).</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 13 · ROADMAP ============ -->
+  <section data-label="Roadmap">
+    <p class="kicker rise">Mejoras propuestas</p>
+    <h2 class="headline rise d1" style="font-size:68px;">Una hoja de ruta priorizada.</h2>
+    <div style="min-height:40px;"></div>
+    <div class="road-grid">
+      <div class="road pop d2">
+        <div class="ver">v0.2.0</div>
+        <div class="when">1–2 meses</div>
+        <ul>
+          <li><b>M-01</b><span>Exportación de informes PDF / CSV</span></li>
+          <li><b>M-08</b><span>Suite de tests con pytest</span></li>
+          <li><b>M-09</b><span>Documentación de código</span></li>
+        </ul>
+      </div>
+      <div class="road pop d3">
+        <div class="ver">v0.3.0</div>
+        <div class="when">2–3 meses</div>
+        <ul>
+          <li><b>M-05</b><span>Explicabilidad con SHAP / LIME</span></li>
+          <li><b>M-03</b><span>Integración Séneca / Moodle</span></li>
+          <li><b>M-06</b><span>Gráficos de evolución temporal</span></li>
+        </ul>
+      </div>
+      <div class="road pop d4">
+        <div class="ver">v1.0.0</div>
+        <div class="when">4–6 meses</div>
+        <ul>
+          <li><b>M-04</b><span>Validación con datos reales — el paso a producción</span></li>
+          <li><b>M-07</b><span>Google Play + modo offline</span></li>
+          <li><b>M-10</b><span>Dashboard de administrador</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 14 · CIERRE ============ -->
+  <section data-label="Gracias" class="dark" style="align-items:center;justify-content:center;text-align:center;">
+    <p class="kicker rise">Conclusión</p>
+    <h2 class="display rise d1" style="font-size:150px;">Listo para el piloto<span class="dot">.</span></h2>
+    <p class="sub rise d2" style="margin-top:36px;max-width:1240px;">Un sistema funcional, seguro y documentado, preparado para validarse con datos reales en un centro educativo. La predicción apoya al docente; la decisión sigue siendo suya.</p>
+    <div class="rise d3" style="display:flex;gap:18px;margin-top:70px;">
+      <span class="pill">github.com/pach24/Minerva</span>
+      <span class="pill">Licencia MIT</span>
+      <span class="pill">v0.1.0-alpha</span>
+    </div>
+    <p class="rise d4" style="font-size:34px;font-weight:700;color:#f5f5f7;margin:80px 0 0;">Gracias. ¿Preguntas?</p>
+  </section>
+
+</deck-stage>
+
+<script src="/static/presentation/deck-stage.js"></script>
+<script>
+// Contadores animados: anima los <span data-count> de la slide activa
+(function () {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fmt = (v, dec) => v.toFixed(dec).replace('.', ',');
+  function animate(el) {
+    const target = parseFloat(el.dataset.count);
+    const dec = parseInt(el.dataset.decimals || '0', 10);
+    if (reduced) { el.textContent = fmt(target, dec); return; }
+    const t0 = performance.now(), dur = 1100;
+    function tick(t) {
+      const p = Math.min((t - t0) / dur, 1);
+      const e = 1 - Math.pow(1 - p, 4); // ease-out quart
+      el.textContent = fmt(target * e, dec);
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const stage = document.querySelector('deck-stage');
+  stage.addEventListener('slidechange', (e) => {
+    e.detail.slide.querySelectorAll('[data-count]').forEach(animate);
+  });
+})();
+</script>
+</body>
+</html>
+
+<style id="__om-edit-overrides">
+.sub >b:nth-child(1) { color: rgb(29, 29, 31) !important }
+:is(h1,h2,h3,h4,h5,h6,p,li,dt,dd,blockquote,figcaption,label,span,a,em,strong,small,td,th,caption) >b:nth-child(6) { color: rgb(29, 29, 31) !important }
+</style>

@@ -15,7 +15,8 @@
   font-size: 20px;
   font-weight: 500;
   margin: 0 auto calc(var(--spacing-unit) * 4);
-  max-width: 700px;
+  max-width: 100%;
+  white-space: nowrap;
   color: var(--color-secondary);
 }
 
