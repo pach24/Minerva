@@ -510,6 +510,130 @@
   stage.addEventListener('slidechange', (e) => {
     e.detail.slide.querySelectorAll('[data-count]').forEach(animate);
   });
+
+  document.addEventListener('fullscreenchange', () => {
+    const presenting = !!document.fullscreenElement;
+    window.postMessage({ __omelette_presenting: presenting }, '*');
+  });
+})();
+</script>
+
+<!-- ── Botón toggle del panel de miniaturas ─────────────────────── -->
+<div id="rail-hotzone">
+  <button id="rail-btn" aria-label="Ocultar panel de diapositivas">
+    <!-- icono: sidebar visible → ocultar -->
+    <svg class="ic-hide" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="1.5" y="1.5" width="15" height="15" rx="2.5"/>
+      <line x1="6" y1="1.5" x2="6" y2="16.5"/>
+      <polyline points="4,7 2.5,9 4,11"/>
+    </svg>
+    <!-- icono: sidebar oculto → mostrar -->
+    <svg class="ic-show" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="1.5" y="1.5" width="15" height="15" rx="2.5"/>
+      <line x1="6" y1="1.5" x2="6" y2="16.5"/>
+      <polyline points="3,7 4.5,9 3,11"/>
+    </svg>
+  </button>
+</div>
+
+<style>
+  #rail-hotzone {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 110px;
+    height: 72px;
+    z-index: 2147483647;
+    display: flex;
+    align-items: flex-end;
+    padding: 0 0 14px 14px;
+    box-sizing: border-box;
+  }
+  #rail-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    background: rgba(18, 18, 20, 0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: rgba(255, 255, 255, 0.82);
+    border-radius: 10px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity 700ms ease, background 130ms ease, color 130ms ease;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.45);
+    flex-shrink: 0;
+  }
+  #rail-btn.faded {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 700ms ease 400ms;
+  }
+  /* Al hacer hover en la zona, el botón reaparece aunque esté faded */
+  #rail-hotzone:hover #rail-btn,
+  #rail-hotzone:hover #rail-btn.faded {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 180ms ease, background 130ms ease, color 130ms ease;
+  }
+  #rail-btn:hover { background: rgba(40, 40, 46, 0.92); color: #fff; }
+  #rail-btn:active { background: rgba(55, 55, 64, 0.95); }
+  #rail-btn svg { width: 17px; height: 17px; display: block; }
+  #rail-btn .ic-show { display: none; }
+  #rail-btn.rail-hidden .ic-hide { display: none; }
+  #rail-btn.rail-hidden .ic-show { display: block; }
+</style>
+
+<script>
+(function () {
+  const btn = document.getElementById('rail-btn');
+  let railVisible = true;
+  let fadeTimer;
+
+  /* Leer estado persistido por deck-stage en localStorage */
+  try {
+    if (localStorage.getItem('deck-stage.railVisible') === '0') {
+      railVisible = false;
+      btn.classList.add('rail-hidden');
+      btn.setAttribute('aria-label', 'Mostrar panel de diapositivas');
+    }
+  } catch (e) {}
+
+  function scheduleFade(delay) {
+    clearTimeout(fadeTimer);
+    fadeTimer = setTimeout(() => btn.classList.add('faded'), delay ?? 2200);
+  }
+
+  /* Mostrar el botón brevemente al cargar */
+  scheduleFade();
+
+  btn.addEventListener('click', () => {
+    railVisible = !railVisible;
+    window.postMessage({ type: '__deck_rail_visible', on: railVisible }, '*');
+    if (railVisible) {
+      btn.classList.remove('rail-hidden');
+      btn.setAttribute('aria-label', 'Ocultar panel de diapositivas');
+    } else {
+      btn.classList.add('rail-hidden');
+      btn.setAttribute('aria-label', 'Mostrar panel de diapositivas');
+    }
+    btn.classList.remove('faded');
+    scheduleFade(1800);
+  });
+
+  const zone = document.getElementById('rail-hotzone');
+  zone.addEventListener('mouseenter', () => {
+    clearTimeout(fadeTimer);
+    btn.classList.remove('faded');
+  });
+  zone.addEventListener('mouseleave', () => {
+    scheduleFade(1200);
+  });
 })();
 </script>
 </body>
